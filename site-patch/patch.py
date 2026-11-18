@@ -136,6 +136,16 @@ for p in sys.argv[1:]:
     if 'm' in d:
         c1='Ct=mt(1.3,dt+.65,9)'; c2='be.position.x=_e?-.65:.65'
         assert d['m'].count(c1)==1 and d['m'].count(c2)==1
+        t1='Be.addEventListener("pointerdown",B=>{Se='; t2='addEventListener("pointercancel",()=>{Se=null});'
+        assert d['m'].count(t1)==1 and d['m'].count(t2)==1
+        TOUCH=('{let T0=null;Be.addEventListener("touchstart",B=>{if(B.touches.length!==1){T0=null;return}let t=B.touches[0];T0={x:t.clientX,y:t.clientY,l:null};ne.mexeu=!0},{passive:!0});'
+               'Be.addEventListener("touchmove",B=>{if(!T0||B.touches.length!==1)return;let t=B.touches[0],dx=t.clientX-T0.x,dy=t.clientY-T0.y;if(!T0.l){if(Math.abs(dx)<6&&Math.abs(dy)<6)return;T0.l=Math.abs(dx)>Math.abs(dy)*.8?"h":"v"}if(T0.l!=="h")return;B.cancelable&&B.preventDefault();T0.x=t.clientX;T0.y=t.clientY;ne.ty=xe(ne.ty-dx*.0048,-le.yaw,le.yaw)},{passive:!1});'
+               'Be.addEventListener("touchend",()=>{T0=null});Be.addEventListener("touchcancel",()=>{T0=null})}')
+        d['m']=d['m'].replace(t1,'Be.addEventListener("pointerdown",B=>{if(B.pointerType==="touch")return;Se=').replace(t2,t2+TOUCH)
+        p1='h.position.set(f.x+Math.sin(ne.yaw)*Math.cos(ne.pitch)*ne.r,f.y+Math.sin(ne.pitch)*ne.r+.05,f.z+Math.cos(ne.yaw)*Math.cos(ne.pitch)*ne.r)'
+        p2='le={yaw:.55,'
+        assert d['m'].count(p1)==1 and d['m'].count(p2)==1
+        d['m']=d['m'].replace(p1,'((rr)=>h.position.set(f.x+Math.sin(ne.yaw)*Math.cos(ne.pitch)*rr,f.y+Math.sin(ne.pitch)*rr+.05,f.z+Math.cos(ne.yaw)*Math.cos(ne.pitch)*rr))(Math.min(ne.r,3.2/Math.max(.01,Math.abs(Math.sin(ne.yaw)))))').replace(p2,'le={yaw:1.15,')
         d['m']=d['m'].replace(c1,'Ct=mt(1.6,dt+.65,9)').replace(c2,'be.position.x=_e?.8:-.8').replace('let tt=re(1,.28,D.cort)','let tt=re(1,.2,D.cort)').replace('Math.min(.05,(B-ot)/1e3)','Math.min(.1,(B-ot)/1e3)').replace('D.cort=re(D.cort,C.cortina?1:0,Math.min(1,B*1.2))','D.cort=re(D.cort,C.cortina?1:0,Math.min(1,B*2.2))')
         mod=d.pop('m').encode()
         K3=[(i*73+29)%251 for i in range(64)]
@@ -143,7 +153,7 @@ for p in sys.argv[1:]:
         root=p.split('/')[0]; os.makedirs(root+'/assets',exist_ok=True)
         open(root+'/assets/s3d.bin','wb').write(enc3)
     OLDL="if(d.m){var ms=document.createElement('script');ms.type='module';ms.textContent=d.m;document.body.appendChild(ms);}"
-    NEWL=("var rm=document.getElementById('room');function L3(){if(L3.d)return;L3.d=1;fetch('/assets/s3d.bin?v=2').then(function(r){return r.arrayBuffer();}).then(function(a){var b=new Uint8Array(a),k=[];for(var i=0;i<64;i++)k.push((i*73+29)%251);"
+    NEWL=("var rm=document.getElementById('room');function L3(){if(L3.d)return;L3.d=1;fetch('/assets/s3d.bin?v=4').then(function(r){return r.arrayBuffer();}).then(function(a){var b=new Uint8Array(a),k=[];for(var i=0;i<64;i++)k.push((i*73+29)%251);"
           "for(var i=0;i<b.length;i++)b[i]^=k[i%64]^((i*37+11)&255);var ms=document.createElement('script');ms.type='module';ms.textContent=new TextDecoder().decode(b);document.body.appendChild(ms);});}"
           "var gl=false;try{var cv=document.createElement('canvas');gl=!!(cv.getContext('webgl2')||cv.getContext('webgl'));}catch(e){}"
           "if(rm&&gl){rm.classList.add('w3d');setTimeout(function(){if(!rm.classList.contains('has3d'))rm.classList.remove('w3d');},25000);}"
