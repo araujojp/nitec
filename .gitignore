@@ -7,3 +7,6 @@ cred.json
 out.json
 env.txt
 req.json
+out_hosp.json
+cred_hosp.json
+env_hosp.json

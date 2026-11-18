@@ -146,12 +146,12 @@ def flow(name, desc, trigger, options, ops):
 flow('Atualizar último contato do equipamento',
      'Quando um equipamento envia um sinal, grava o horário e a versão na instalação.',
      'event', {'type': 'action', 'scope': ['items.create'], 'collections': ['checkins']},
-     [{'name': 'Data e hora atual', 'key': 'agora', 'type': 'exec', 'options': {
-         'code': 'module.exports = async function () {\n  return { iso: new Date().toISOString() };\n};'}},
+     [{'name': 'Ler sinal recebido', 'key': 'sinal', 'type': 'item-read', 'options': {
+         'collection': 'checkins', 'permissions': '$full', 'key': '{{$trigger.key}}'}},
       {'name': 'Atualizar instalação', 'key': 'atualizar_instalacao', 'type': 'item-update', 'options': {
          'collection': 'instalacoes', 'permissions': '$full', 'emitEvents': False,
          'query': {'filter': {'codigo': {'_eq': '{{$trigger.payload.codigo_instalacao}}'}}},
-         'payload': {'ultimo_contato': '{{agora.iso}}', 'versao_instalada': '{{$trigger.payload.versao}}'}}}])
+         'payload': {'ultimo_contato': '{{sinal.date_created}}', 'versao_instalada': '{{$trigger.payload.versao}}'}}}])
 
 # ---------- dashboard ----------
 print('== Dashboard')
@@ -190,6 +190,7 @@ if not st:
     st = r['data']
 call('PATCH', '/settings', {'project_logo': st['id'], 'public_foreground': st['id'], 'public_note': 'Gestão de clientes · Neon Sistemas'})
 
-json.dump(OUT, open(os.path.join(S.HERE, 'out.json'), 'w'))
-os.chmod(os.path.join(S.HERE, 'out.json'), 0o600)
+OF = os.path.join(S.HERE, os.environ.get('OUT_FILE', 'out.json'))
+json.dump(OUT, open(OF, 'w'))
+os.chmod(OF, 0o600)
 print('ok', {k: v for k, v in OUT.items() if k != 'demo_token'})

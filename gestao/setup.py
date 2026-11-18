@@ -2,7 +2,7 @@ import json, os, sys, secrets, urllib.request, urllib.error, ssl
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 C = json.load(open(os.path.join(HERE, 'cred.json')))
-BASE = 'https://' + C['HOST']
+BASE = 'https://' + os.environ.get('GESTAO_HOST', C['HOST'])
 CTX = ssl.create_default_context(cafile='/root/.ccr/ca-bundle.crt')
 TOKEN = None
 LOG = []
@@ -11,6 +11,7 @@ def call(method, path, data=None, ok=(200, 201, 204), quiet=False, raw=None, cty
     body = raw if raw is not None else (json.dumps(data).encode() if data is not None else None)
     req = urllib.request.Request(BASE + path, data=body, method=method)
     req.add_header('Content-Type', ctype)
+    req.add_header('User-Agent', 'neon-gestao-setup/1.0')
     if TOKEN:
         req.add_header('Authorization', 'Bearer ' + TOKEN)
     try:

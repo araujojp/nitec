@@ -4,7 +4,7 @@ from setup import call
 from urllib.parse import quote
 
 S.login()
-OUT = json.load(open(os.path.join(S.HERE, 'out.json')))
+OUT = json.load(open(os.path.join(S.HERE, os.environ.get('OUT_FILE', 'out.json'))))
 demo = OUT.get('demo_token')
 assert demo, 'sem token demo'
 
@@ -29,15 +29,15 @@ q = ('/items/versoes?filter[produto][codigo][_eq]=neon-motel&filter[canal][_eq]=
      '&sort=-date_created&limit=1&fields=numero,obrigatoria,sha256,notas,arquivo.id,arquivo.filename_download,arquivo.filesize')
 s, r = call('GET', q); print('consulta versão:', s, json.dumps(r.get('data'), ensure_ascii=False)[:300])
 fid = r['data'][0]['arquivo']['id']
-req = urllib.request.Request(f'{S.BASE}/assets/{fid}?download', headers={'Authorization': 'Bearer ' + demo})
+req = urllib.request.Request(f'{S.BASE}/assets/{fid}?download', headers={'Authorization': 'Bearer ' + demo, 'User-Agent': 'neon-gestao-setup/1.0'})
 data = urllib.request.urlopen(req, context=S.CTX).read()
 print('download:', len(data), 'bytes, sha confere:', hashlib.sha256(data).hexdigest() == r['data'][0]['sha256'])
 s, r = call('GET', '/items/licencas?fields=chave,status,vencimento'); print('licenças visíveis:', s, len(r['data']))
 s, r = call('GET', '/items/instalacoes?fields=codigo,canal,versao_instalada'); print('instalações visíveis:', s, r['data'])
 s, r = call('POST', '/items/checkins', {'codigo_instalacao': 'DEMO-01', 'versao': '1.0.1', 'evento': 'atualizado', 'mensagem': 'Teste da instalação'}); print('sinal enviado:', s)
-for path in ['/items/clientes', '/items/cobrancas', '/items/chamados', '/users']:
+for path in ['/items/clientes', '/items/cobrancas', '/items/chamados', '/users', '/files?fields=title']:
     s, r = call('GET', path, quiet=True); print('bloqueado?', path, s, (len(r['data']) if isinstance(r, dict) else ''))
-s, r = call('GET', '/files?fields=id,title', quiet=True); print('arquivos visíveis ao equipamento:', [x['title'] for x in r['data']])
+s, r = call('GET', '/files?fields=id,filename_download', quiet=True); print('arquivos visíveis:', [x['filename_download'] for x in r['data']])
 
 # 3) admin confere a automação
 import time; time.sleep(3)

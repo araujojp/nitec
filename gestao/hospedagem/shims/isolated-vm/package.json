@@ -1,0 +1,1 @@
+{ "name": "isolated-vm", "version": "5.0.3", "main": "index.js", "description": "Substituto vazio: a hospedagem compartilhada não suporta o módulo nativo isolated-vm." }

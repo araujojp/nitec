@@ -1,0 +1,22 @@
+{
+  "name": "neon-gestao",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node -e \"console.log('ok')\"",
+    "start": "node server.cjs"
+  },
+  "dependencies": {
+    "directus": "11.17.4",
+    "mysql2": "^3.11.0",
+    "isolated-vm": "file:./shims/isolated-vm"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "overrides": {
+    "argon2": "0.41.1",
+    "isolated-vm": "$isolated-vm"
+  },
+  "main": "server.cjs"
+}
