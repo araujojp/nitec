@@ -33,12 +33,10 @@
     </div>
 
     <div class="totalbar" id="totalbar">
-      <div><small>Subtotal (itens com valor)</small><b id="tSub">—</b></div>
-      <div><small>Desconto</small><b id="tDesc">—</b></div>
-      <div><small>Impostos</small><b id="tImp">—</b></div>
-      <div class="big"><small>Total inicial</small><b id="tTot">—</b></div>
-      <div><small>Mensalidade</small><b id="tMens">—</b></div>
-      <div><small>Pendentes de valor</small><b id="tPend">0</b></div>
+      <div class="big"><small>Mensalidade</small><b id="tMens">—</b></div>
+      <div><small>Investimento inicial</small><b>a consultar</b></div>
+      <div><small>Itens sem valor</small><b id="tPend">0</b></div>
+    
     </div>
 
     <!-- 1. Identificação -->
@@ -152,6 +150,15 @@
     </div>
 
     <div id="memPainel" class="hidden">
+      <!-- estatísticas do site -->
+      <div class="card" id="stats">
+        <div class="st-top">
+          <h2>Estatísticas do site neonsistemas.com</h2>
+          <select id="statsDias" aria-label="Período"><option value="7">Últimos 7 dias</option><option value="30" selected>Últimos 30 dias</option><option value="90">Últimos 90 dias</option><option value="365">Último ano</option></select>
+        </div>
+        <p class="hint">Contagem sem cookies e sem guardar IP. Robôs de busca não entram na conta.</p>
+        <div id="statsBox"><p class="hint">Carregando…</p></div>
+      </div>
       <!-- modo admin: tabela de preços -->
       <div class="card" id="admin">
         <h2>Tabela de preços (modo admin)</h2>

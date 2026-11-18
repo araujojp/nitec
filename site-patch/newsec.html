@@ -1,0 +1,46 @@
+
+  <!-- CALCULADORA -->
+  <section class="sec" id="calculadora" style="padding-top:20px">
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow rv">Calculadora de ganho</span><h2 class="rv d1">Quanto o seu motel pode <span class="grad">ganhar por mês?</span></h2><p class="lead rv d2">Coloque os números do seu negócio e veja uma estimativa do retorno com os sistemas da Neon.</p></div>
+      <div class="calc rv">
+        <form class="calc-in" id="calcForm" onsubmit="return false">
+          <label><span>Número de suítes</span><input type="number" id="cSuites" min="1" max="500" value="20" inputmode="numeric"></label>
+          <label><span>Entradas por suíte, por dia</span><input type="number" id="cGiro" min="0" max="20" step="0.5" value="3" inputmode="decimal"></label>
+          <label><span>Consumo médio de frigobar por entrada (R$)</span><input type="number" id="cFrigo" min="0" max="2000" value="25" inputmode="decimal"></label>
+          <label><span>Conta de energia por mês (R$)</span><input type="number" id="cEnergia" min="0" max="1000000" value="8000" inputmode="decimal"></label>
+        </form>
+        <div class="calc-out">
+          <div class="co"><small>Economia de energia</small><b id="rEnergia">—</b><span>Ar, luzes e TV desligam sozinhos quando a suíte fica vazia.</span></div>
+          <div class="co"><small>Consumo recuperado</small><b id="rFrigo">—</b><span>Itens do frigobar lançados direto na conta, sem esquecimento.</span></div>
+          <div class="co"><small>Tempo poupado na recepção</small><b id="rHoras">—</b><span>Check-in e check-out em poucos toques.</span></div>
+          <div class="co total"><small>Ganho estimado por mês</small><b id="rTotal">—</b><span id="rAno">—</span></div>
+          <p class="calc-note">Estimativa ilustrativa: considera 15% de economia na conta de energia, 8% de consumo de frigobar que deixava de ser cobrado e 2 minutos poupados por entrada. Os valores reais dependem da sua operação.</p>
+          <a class="btn primary" id="calcWa" href="#contato" target="_blank" rel="noopener">Quero um estudo para o meu motel</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPARATIVO -->
+  <section class="sec" id="comparativo" style="padding-top:20px">
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow rv">Comparativo</span><h2 class="rv d1">Por que a Neon é <span class="grad">diferente.</span></h2></div>
+      <div class="cmp-wrap rv">
+        <table class="cmp">
+          <thead><tr><th>Recurso</th><th class="hl">Neon</th><th>Sistema comum</th><th>Planilha ou caderno</th></tr></thead>
+          <tbody>
+            <tr><td>Automação da suíte (luz, ar, TV e som) ligada ao sistema</td><td class="hl"><i class="y">✓</i></td><td><i class="n">✕</i></td><td><i class="n">✕</i></td></tr>
+            <tr><td>Cena de chegada automática no check-in</td><td class="hl"><i class="y">✓</i></td><td><i class="n">✕</i></td><td><i class="n">✕</i></td></tr>
+            <tr><td>Consumo do frigobar lançado direto na conta</td><td class="hl"><i class="y">✓</i></td><td><i class="p">Manual</i></td><td><i class="p">Manual</i></td></tr>
+            <tr><td>Ramais no celular da equipe (PABX VoIP)</td><td class="hl"><i class="y">✓</i></td><td><i class="n">✕</i></td><td><i class="n">✕</i></td></tr>
+            <tr><td>Aviso automático da governança no celular</td><td class="hl"><i class="y">✓</i></td><td><i class="n">✕</i></td><td><i class="n">✕</i></td></tr>
+            <tr><td>Estoque com baixa automática</td><td class="hl"><i class="y">✓</i></td><td><i class="y">✓</i></td><td><i class="n">✕</i></td></tr>
+            <tr><td>Caixa e relatórios em tempo real</td><td class="hl"><i class="y">✓</i></td><td><i class="y">✓</i></td><td><i class="n">✕</i></td></tr>
+            <tr><td>Continua funcionando sem internet</td><td class="hl"><i class="y">✓</i></td><td><i class="p">Depende</i></td><td><i class="y">✓</i></td></tr>
+            <tr><td>Atualizações automáticas e monitoramento remoto</td><td class="hl"><i class="y">✓</i></td><td><i class="p">Depende</i></td><td><i class="n">✕</i></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>

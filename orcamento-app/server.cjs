@@ -69,6 +69,16 @@ async function migrate() {
     CONSTRAINT fk_ov FOREIGN KEY (orcamento_id) REFERENCES orcamentos(id) ON DELETE CASCADE
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`);
   await migratePrecos();
+  await q(`CREATE TABLE IF NOT EXISTS site_eventos (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    criado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    tipo VARCHAR(20) NOT NULL,
+    pagina VARCHAR(5) NOT NULL,
+    dispositivo CHAR(1) NOT NULL,
+    origem VARCHAR(60) NOT NULL DEFAULT '',
+    extra VARCHAR(40) NOT NULL DEFAULT '',
+    INDEX (criado_em), INDEX (tipo)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`);
 }
 
 // ---------- tabela de preços (editável no modo admin) ----------
@@ -125,6 +135,45 @@ function exigeMemoria(req, res, next) {
   } catch (e) { /* sem sessão */ }
   res.status(401).json({ erro: 'Acesso restrito à memória. Informe a senha.' });
 }
+
+// ---------- estatísticas do site (sem cookies, sem IP gravado) ----------
+const SITE_ORIGEM = 'https://neonsistemas.com';
+const TIPOS = new Set(['visita', 'pagina', 'whatsapp', 'agendar', 'formulario', 'secao', 'calculadora']);
+const LINGUAS = new Set(['pt', 'en', 'es', 'fr', 'de', 'zh']);
+const statsLimiter = rateLimit({ windowMs: 10 * 60 * 1000, limit: 120, standardHeaders: false, legacyHeaders: false,
+  handler: (req, res) => res.status(204).end() });
+app.options('/api/stats', (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', SITE_ORIGEM);
+  res.setHeader('Access-Control-Allow-Methods', 'POST');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.status(204).end();
+});
+app.post('/api/stats', statsLimiter, express.text({ type: '*/*', limit: '2kb' }), async (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', SITE_ORIGEM);
+  try {
+    const o = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
+    const tipo = String(o.t || ''), pag = String(o.p || 'pt'), disp = o.d === 'm' ? 'm' : 'd';
+    if (!TIPOS.has(tipo)) return res.status(204).end();
+    const origem = String(o.r || '').toLowerCase().replace(/[^a-z0-9.\-_]/g, '').slice(0, 60);
+    const extra = String(o.x || '').replace(/[^\w\-]/g, '').slice(0, 40);
+    await q('INSERT INTO site_eventos (tipo, pagina, dispositivo, origem, extra) VALUES (?,?,?,?,?)',
+      [tipo, LINGUAS.has(pag) ? pag : 'pt', disp, origem, extra]);
+  } catch (e) { /* ignora */ }
+  res.status(204).end();
+});
+app.get('/api/memoria/stats', exigeMemoria, async (req, res) => {
+  const dias = Math.min(365, Math.max(1, parseInt(req.query.dias, 10) || 30));
+  const desde = `DATE_SUB(CURDATE(), INTERVAL ${dias - 1} DAY)`;
+  const [tipos, porDia, linguas, disp, origens, secoes] = await Promise.all([
+    q(`SELECT tipo, COUNT(*) n FROM site_eventos WHERE criado_em >= ${desde} GROUP BY tipo`),
+    q(`SELECT DATE(criado_em) dia, SUM(tipo='visita') visitas, SUM(tipo IN ('whatsapp','formulario')) contatos FROM site_eventos WHERE criado_em >= ${desde} GROUP BY DATE(criado_em) ORDER BY dia`),
+    q(`SELECT pagina k, COUNT(*) n FROM site_eventos WHERE tipo='visita' AND criado_em >= ${desde} GROUP BY pagina ORDER BY n DESC`),
+    q(`SELECT dispositivo k, COUNT(*) n FROM site_eventos WHERE tipo='visita' AND criado_em >= ${desde} GROUP BY dispositivo ORDER BY n DESC`),
+    q(`SELECT IF(origem='', 'direto', origem) k, COUNT(*) n FROM site_eventos WHERE tipo='visita' AND criado_em >= ${desde} GROUP BY k ORDER BY n DESC LIMIT 10`),
+    q(`SELECT extra k, COUNT(*) n FROM site_eventos WHERE tipo='secao' AND criado_em >= ${desde} GROUP BY extra ORDER BY n DESC`),
+  ]);
+  res.json({ dias, tipos, porDia, linguas, disp, origens, secoes });
+});
 
 // ---------- API ----------
 app.post('/api/memoria/entrar', memLimiter, async (req, res) => {

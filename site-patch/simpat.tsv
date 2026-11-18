@@ -1,0 +1,61 @@
+^Categoria (.+?)\. Escolha o período:$	Category @1. Choose the period:	Categoría @1. Elija el período:	Catégorie @1. Choisissez la durée :	Kategorie @1. Wählen Sie die Dauer:	@1类别。请选择时段：
+^Categoria (.+)$	Category @1	Categoría @1	Catégorie @1	Kategorie @1	@1类别
+^Check-in · Suíte (\d+)$	Check-in · Suite $1	Check-in · Suite $1	Check-in · Suite $1	Check-in · Suite $1	入住 · 客房 $1
+^Suíte (\d+) em limpeza$	Suite $1 being cleaned	Suite $1 en limpieza	Suite $1 en ménage	Suite $1 wird gereinigt	客房 $1 清洁中
+^(.+?) recebeu o aviso no celular\. Faltam (\d+) minutos\.$	@1 got the alert on the phone. $2 minutes left.	@1 recibió el aviso en el celular. Faltan $2 minutos.	@1 a reçu l'alerte sur son mobile. Il reste $2 minutes.	@1 wurde aufs Handy benachrichtigt. Noch $2 Minuten.	@1 已在手机收到通知。还剩 $2 分钟。
+^A governança$	Housekeeping	Limpieza	Le ménage	Housekeeping	保洁
+^Suíte (\d+)$	Suite $1	Suite $1	Suite $1	Suite $1	客房 $1
+^Suíte (\d+) · (.+)$	Suite $1 · @2	Suite $1 · @2	Suite $1 · @2	Suite $1 · @2	客房 $1 · @2
+^Cor (#[0-9a-fA-F]+)$	Color $1	Color $1	Couleur $1	Farbe $1	颜色 $1
+^Digitou (\d+)$	Dialed $1	Marcó $1	A composé $1	$1 gewählt	已拨 $1
+^Painel Neon: (\d+) suítes sincronizadas$	Painel Neon: $1 suites synced	Painel Neon: $1 suites sincronizadas	Painel Neon : $1 suites synchronisées	Painel Neon: $1 Suiten synchronisiert	Painel Neon：已同步 $1 间客房
+^Ramal (\d+)$	Extension $1	Extensión $1	Poste $1	Nebenstelle $1	分机 $1
+^ramal (\d+)$	ext. $1	ext. $1	poste $1	Nebenstelle $1	分机 $1
+^Repor \+(\d+)$	Restock +$1	Reponer +$1	Réassortir +$1	Auffüllen +$1	补货 +$1
+^Reserva online #(\d+)$	Online booking #$1	Reserva en línea #$1	Réservation en ligne n°$1	Online-Reservierung #$1	网上预订 #$1
+^tempo (\d+)× mais rápido$	time runs $1× faster	tiempo $1× más rápido	temps $1× plus rapide	Zeit $1× schneller	时间加速 $1 倍
+^entrada às (\d\d?:\d\d)$	checked in at $1	entrada a las $1	entrée à $1	Check-in um $1	$1 入住
+^(\d+) horas$	$1 hours	$1 horas	$1 heures	$1 Stunden	$1 小时
+^a partir de (.+)$	from $1	desde $1	à partir de $1	ab $1	$1 起
+^desde (\d\d?:\d\d)$	since $1	desde $1	depuis $1	seit $1	自 $1 起
+^ticket médio (.+)$	average ticket $1	ticket medio $1	ticket moyen $1	Ø-Bon $1	客单价 $1
+^volume (\d+)%$	volume $1%	volumen $1%	volume $1 %	Lautstärke $1 %	音量 $1%
+^(\d+) de (\d+) suítes$	$1 of $2 suites	$1 de $2 suites	$1 sur $2 suites	$1 von $2 Suiten	$1 / $2 间客房
+^(\d+) entradas$	$1 check-ins	$1 entradas	$1 entrées	$1 Check-ins	$1 次入住
+^(\d+) lançamentos$	$1 charges	$1 cargos	$1 écritures	$1 Buchungen	$1 笔记账
+^(\d+) ocupadas$	$1 occupied	$1 ocupadas	$1 occupées	$1 belegt	$1 间已入住
+^(\d+) livres$	$1 free	$1 libres	$1 libres	$1 frei	$1 间空闲
+^últimas (\d+) horas$	last $1 hours	últimas $1 horas	dernières $1 heures	letzte $1 Stunden	最近 $1 小时
+^Atendida pelo ramal (\d+) no celular$	Answered by extension $1 on the phone	Atendida por la extensión $1 en el celular	Répondu par le poste $1 sur mobile	Von Nebenstelle $1 am Handy angenommen	分机 $1 已在手机接听
+^Suíte (\d+) limpa por (.+)$	Suite $1 cleaned by @2	Suite $1 limpiada por @2	Suite $1 nettoyée par @2	Suite $1 gereinigt von @2	客房 $1 已由 @2 清洁
+^Suíte (\d+) liberada pela governança$	Suite $1 released by housekeeping	Suite $1 liberada por limpieza	Suite $1 libérée par le ménage	Suite $1 vom Housekeeping freigegeben	客房 $1 已由保洁放房
+^Suíte (\d+) liberada$	Suite $1 released	Suite $1 liberada	Suite $1 libérée	Suite $1 freigegeben	客房 $1 已解除
+^Cena (.+) ativada$	@1 scene on	Escena @1 activada	Scène @1 activée	Szene @1 aktiviert	@1 场景已启用
+^(.+) lançado na suíte (\d+)$	@1 charged to suite $2	@1 cargado a la suite $2	@1 facturé à la suite $2	@1 auf Suite $2 gebucht	@1 已记入客房 $2
+^Sangria de (.+) registrada$	Cash drop of $1 recorded	Retiro de $1 registrado	Retrait de $1 enregistré	Kassenentnahme von $1 erfasst	已登记取款 $1
+^Suíte (\d+) liga para a recepção$	Suite $1 calls the front desk	La suite $1 llama a la recepción	La suite $1 appelle la réception	Suite $1 ruft die Rezeption an	客房 $1 呼叫前台
+^URA transferiu para (.+) \(opção (\d+)\)$	IVR transferred to @1 (option $2)	IVR transfirió a @1 (opción $2)	Le SVI a transféré vers @1 (option $2)	IVR hat zu @1 weitergeleitet (Option $2)	语音导航已转接至 @1（选项 $2）
+^Reposição: (.+) \+(\d+)$	Restock: @1 +$2	Reposición: @1 +$2	Réassort : @1 +$2	Nachschub: @1 +$2	补货：@1 +$2
+^Suíte (\d+) → Recepção \(ramal (\d+)\)$	Suite $1 → Front desk (ext. $2)	Suite $1 → Recepción (ext. $2)	Suite $1 → Réception (poste $2)	Suite $1 → Rezeption (Nst. $2)	客房 $1 → 前台（分机 $2）
+^(\d+) custo de ligação$	$1 call cost	$1 costo de llamada	$1 coût d'appel	$1 Gesprächskosten	通话费用 $1
+^Canal: (.+)$	Channel: @1	Canal: @1	Chaîne : @1	Kanal: @1	频道：@1
+^Pedido de (.+) na suíte (\d+) \(pelo Painel Neon\)$	@1 ordered in suite $2 (via Painel Neon)	Pedido de @1 en la suite $2 (por Painel Neon)	Commande de @1 dans la suite $2 (via Painel Neon)	@1 bestellt in Suite $2 (über Painel Neon)	客房 $2 点了 @1（通过 Painel Neon）
+^Recepção atendeu a Suíte (\d+) no celular$	Front desk answered Suite $1 on the phone	Recepción atendió a la Suite $1 en el celular	La réception a répondu à la suite $1 sur mobile	Rezeption hat Suite $1 am Handy angenommen	前台已在手机接听客房 $1
+^Transferida para (.+) \(ramal (\d+)\)$	Transferred to @1 (ext. $2)	Transferida a @1 (ext. $2)	Transféré vers @1 (poste $2)	Weitergeleitet an @1 (Nst. $2)	已转接至 @1（分机 $2）
+^(.+) atendeu a Suíte (\d+)$	@1 answered Suite $2	@1 atendió a la Suite $2	@1 a répondu à la suite $2	@1 hat Suite $2 angenommen	@1 已接听客房 $2
+^Saída da suíte (\d+): (.+?) \((.+)\)$	Check-out suite $1: $2 (@3)	Salida de la suite $1: $2 (@3)	Départ suite $1 : $2 (@3)	Check-out Suite $1: $2 (@3)	客房 $1 退房：$2（@3）
+^(.+) avisada$	@1 notified	@1 avisada	@1 prévenue	@1 benachrichtigt	已通知 @1
+^Manutenção concluída na suíte (\d+)$	Maintenance completed in suite $1	Mantenimiento terminado en la suite $1	Maintenance terminée dans la suite $1	Wartung in Suite $1 abgeschlossen	客房 $1 维修完成
+^Entrada na suíte (\d+)$	Check-in at suite $1	Entrada en la suite $1	Entrée dans la suite $1	Check-in in Suite $1	客房 $1 入住
+^Painel Neon ativou a cena (.+)$	Painel Neon turned on the @1 scene	Painel Neon activó la escena @1	Painel Neon a activé la scène @1	Painel Neon hat die Szene @1 aktiviert	Painel Neon 已启用 @1 场景
+^Ar-condicionado (\d+) °C$	Air conditioning $1 °C	Aire acondicionado $1 °C	Climatisation $1 °C	Klimaanlage $1 °C	空调 $1 °C
+^Manutenção · ar-condicionado$	Maintenance · air conditioning	Mantenimiento · aire acondicionado	Maintenance · climatisation	Wartung · Klimaanlage	维修 · 空调
+^Recepção › (.+)$	Front desk › @1	Recepción › @1	Réception › @1	Rezeption › @1	前台 › @1
+^Nossas suítes começam em setenta e nove reais por duas horas\. A suíte hidro sai por cento e cinquenta e nove reais\. Digite (\d) para falar com a recepção\.$	Our suites start at seventy-nine reais for two hours. The hydro suite is one hundred fifty-nine reais. Press $1 to talk to the front desk.	Nuestras suites empiezan en setenta y nueve reales por dos horas. La suite hidro cuesta ciento cincuenta y nueve reales. Marque $1 para hablar con la recepción.	Nos suites commencent à soixante-dix-neuf reais pour deux heures. La suite balnéo est à cent cinquante-neuf reais. Tapez $1 pour parler à la réception.	Unsere Suiten gibt es ab neunundsiebzig Reais für zwei Stunden. Die Whirlpool-Suite kostet hundertneunundfünfzig Reais. Drücken Sie $1 für die Rezeption.	我们的客房两小时七十九雷亚尔起。按摩浴缸房一百五十九雷亚尔。按 $1 转前台。
+^(Opção inválida\. )?Olá! Você ligou para o Neon Motel\. Digite (\d) para reservas, (\d) para falar com a recepção, (\d) para ouvir nossos preços, ou (\d) para falar com a gerência\.$	&1Hello! You've reached Neon Motel. Press $2 for bookings, $3 for the front desk, $4 to hear our prices, or $5 for management.	&1¡Hola! Ha llamado al Neon Motel. Marque $2 para reservas, $3 para la recepción, $4 para escuchar nuestros precios, o $5 para la gerencia.	&1Bonjour ! Vous êtes bien au Neon Motel. Tapez $2 pour les réservations, $3 pour la réception, $4 pour nos tarifs, ou $5 pour la direction.	&1Hallo! Sie haben das Neon Motel angerufen. Drücken Sie $2 für Reservierungen, $3 für die Rezeption, $4 für unsere Preise oder $5 für die Geschäftsleitung.	&1您好！这里是霓虹汽车旅馆。预订请按 $2，前台请按 $3，查询价格请按 $4，经理请按 $5。
+^Opção inválida\. $	Invalid option. 	Opción no válida. 	Option invalide. 	Ungültige Auswahl. 	选项无效。
+^(\d+) min$	$1 min	$1 min	$1 min	$1 Min.	$1 分钟
+^(\d+) un\.$	$1 units	$1 uds.	$1 u.	$1 Stk.	$1 件
+^(.+?) · (\d+) un\.$	$1 · $2 units	$1 · $2 uds.	$1 · $2 u.	$1 · $2 Stk.	$1 · $2 件
+^(\d+)h: (.+)$	$1h: $2	$1h: $2	$1h : $2	$1 Uhr: $2	$1时：$2
+^(.+?): (.+)$	@1: @2	@1: @2	@1 : @2	@1: @2	@1：@2

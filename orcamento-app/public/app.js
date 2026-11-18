@@ -255,10 +255,6 @@
   }
   function atualizarTotais() {
     const r = calcular();
-    $('#tSub').textContent = BRL(r.sub);
-    $('#tDesc').textContent = BRL(r.desc);
-    $('#tImp').textContent = BRL(r.imp);
-    $('#tTot').textContent = r.sub > 0 ? BRL(r.tot) : 'a preencher';
     $('#tMens').textContent = r.mensal > 0 ? BRL(r.mensal) + ' /mês' : 'a preencher';
     $('#tPend').textContent = r.pend;
   }
@@ -314,9 +310,7 @@
     const linhas = (g) => itens.filter((i) => i.grupo === g).map((i) => {
       const sit = i.status === 'possui' ? '<span class="pill ok">Cliente já possui</span>' : '<span class="pill">Precisa</span>';
       const t = linhaTotal(i);
-      const vu = i.status === 'precisa' && i.valorUnit !== null && i.valorUnit !== '' ? BRL(i.valorUnit) : (i.status === 'possui' ? '—' : '<span class="blank">R$ ________</span>');
-      const tt = t !== null ? BRL(t) : (i.status === 'possui' ? '—' : '<span class="blank">R$ ________</span>');
-      return `<tr><td><b>${esc(i.nome)}</b><br><span class="sm">${esc(i.espec || '')}</span></td><td>${sit}</td><td class="c">${esc(i.qtd)} ${esc(i.unidade)}</td><td class="r">${vu}</td><td class="r">${tt}</td></tr>`;
+      return `<tr><td><b>${esc(i.nome)}</b><br><span class="sm">${esc(i.espec || '')}</span></td><td>${sit}</td><td class="c">${esc(i.qtd)} ${esc(i.unidade)}</td></tr>`;
     }).join('');
     const ambRows = AMB.map((p) => { const v = (d.ambiente || {})[p.k]; return `<tr><td>${esc(p.q)}</td><td>${esc(v === 'sim' ? 'Sim' : v === 'nao' ? 'Não' : (v || '—'))}</td></tr>`; }).join('');
     return `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>${esc(d.titulo || 'Pré-orçamento')}</title>
@@ -367,17 +361,14 @@ ul{margin:1mm 0 2mm 4mm;padding:0}li{margin:.6mm 0}
 <table><tr><th>Pergunta</th><th>Resposta</th></tr>${ambRows}</table>
 
 <h2>3. Equipamentos, sistemas e serviços</h2>
-${grupos.map((g) => `<div class="grp">${esc(g)}</div><table><tr><th>Item</th><th>Situação</th><th class="c">Qtd</th><th class="r">Unitário</th><th class="r">Total</th></tr>${linhas(g)}</table>`).join('')}
+${grupos.map((g) => `<div class="grp">${esc(g)}</div><table><tr><th>Item</th><th>Situação</th><th class="c">Qtd</th></tr>${linhas(g)}</table>`).join('')}
 
 <h2>4. Investimento</h2>
 <div class="tot">
-<div><span>Investimento inicial</span><span>${r.sub > 0 ? BRL(r.sub) : '<span class="blank">R$ ________</span>'}</span></div>
-<div><span>Desconto (${esc(d.descontoPct || 0)}%)</span><span>${r.desc > 0 ? BRL(r.desc) : '—'}</span></div>
-<div><span>Impostos (${esc(d.impostoPct || 0)}%)</span><span>${r.imp > 0 ? BRL(r.imp) : '—'}</span></div>
-<div class="g"><span>Total inicial</span><span>${r.sub > 0 ? BRL(r.tot) : '<span class="blank">R$ ________</span>'}</span></div>
-<div><span>Mensalidade (por mês)</span><span>${r.mensal > 0 ? BRL(r.mensal) : '<span class="blank">R$ ________</span>'}</span></div>
+<div><span>Investimento inicial</span><span>a consultar</span></div>
+<div class="g"><span>Mensalidade</span><span>${r.mensal > 0 ? BRL(r.mensal) + ' /mês' : 'a consultar'}</span></div>
 </div>
-<p class="sm">Itens sem valor preenchido: ${r.pend}. Impostos, frete, projeto executivo e obras civis não estão incluídos, salvo indicação.</p>
+<p class="sm">Valores do investimento inicial serão apresentados após a visita técnica. Impostos, frete, projeto executivo e obras civis não estão incluídos, salvo indicação.</p>
 
 <h2>5. Condições</h2>
 <ul>
@@ -406,15 +397,52 @@ ${d.condicoes ? `<li>${esc(d.condicoes)}</li>` : ''}
       const j = await api('/api/memoria/lista');
       MEM = j.data || [];
       $('#memLogin').classList.add('hidden'); $('#memPainel').classList.remove('hidden');
-      memRender(); admCarregar();
+      memRender(); admCarregar(); statsCarregar();
     } catch (e) { $('#memPainel').classList.add('hidden'); $('#memLogin').classList.remove('hidden'); }
+  }
+  /* ---------- estatísticas do site ---------- */
+  const NOME_LINGUA = { pt: 'Português', en: 'Inglês', es: 'Espanhol', fr: 'Francês', de: 'Alemão', zh: 'Chinês' };
+  const NOME_SECAO = { 'painel-neon': 'Simulação Painel Neon', 'neon-motel': 'Simulação Neon Motel', 'pabx-neon': 'Simulação PABX Neon', calculadora: 'Calculadora de ganho', comparativo: 'Comparativo', perguntas: 'Perguntas frequentes', contato: 'Contato' };
+  async function statsCarregar() {
+    const box = $('#statsBox'); if (!box) return;
+    const dias = +($('#statsDias') && $('#statsDias').value) || 30;
+    try {
+      const s = await api('/api/memoria/stats?dias=' + dias);
+      const t = Object.fromEntries((s.tipos || []).map((x) => [x.tipo, +x.n]));
+      const vis = t.visita || 0, cont = (t.whatsapp || 0) + (t.formulario || 0);
+      const taxa = vis ? (cont / vis * 100).toLocaleString('pt-BR', { maximumFractionDigits: 1 }) + '%' : '—';
+      const n = (v) => (+v || 0).toLocaleString('pt-BR');
+      // série diária completa (dias sem visita = 0)
+      const mapa = Object.fromEntries((s.porDia || []).map((d) => [String(d.dia).slice(0, 10), d]));
+      const serie = [];
+      for (let i = dias - 1; i >= 0; i--) { const dt = new Date(); dt.setDate(dt.getDate() - i); const k = dt.toISOString().slice(0, 10); const d = mapa[k] || {}; serie.push({ k, v: +d.visitas || 0, c: +d.contatos || 0 }); }
+      const max = Math.max(1, ...serie.map((x) => x.v));
+      const lista = (arr, nomes) => (arr && arr.length) ? arr.map((x) => `<li><span>${esc(nomes ? (nomes[x.k] || x.k) : x.k)}</span><b>${n(x.n)}</b></li>`).join('') : '<li class="vz">Sem dados ainda</li>';
+      box.innerHTML = `
+        <div class="st-kpis">
+          <div><small>Visitas</small><b>${n(vis)}</b></div>
+          <div><small>Páginas vistas</small><b>${n(vis + (t.pagina || 0))}</b></div>
+          <div><small>Cliques no WhatsApp e formulário</small><b>${n(cont)}</b></div>
+          <div><small>Taxa de contato</small><b>${taxa}</b></div>
+          <div><small>Usos da calculadora</small><b>${n(t.calculadora)}</b></div>
+        </div>
+        <h3 class="st-h">Visitas por dia</h3>
+        <div class="st-bars" role="img" aria-label="Visitas por dia nos últimos ${dias} dias">${serie.map((x) => `<i style="height:${(x.v / max * 100).toFixed(1)}%" title="${x.k.split('-').reverse().join('/')}: ${x.v} visita(s), ${x.c} contato(s)"></i>`).join('')}</div>
+        <div class="st-axis"><span>${serie[0].k.split('-').reverse().join('/')}</span><span>pico: ${n(max)}</span><span>hoje</span></div>
+        <div class="st-grid">
+          <div><h3 class="st-h">De onde vieram</h3><ul class="st-list">${lista(s.origens)}</ul></div>
+          <div><h3 class="st-h">Idioma</h3><ul class="st-list">${lista(s.linguas, NOME_LINGUA)}</ul></div>
+          <div><h3 class="st-h">Aparelho</h3><ul class="st-list">${lista(s.disp, { m: 'Celular', d: 'Computador' })}</ul></div>
+          <div><h3 class="st-h">O que mais viram</h3><ul class="st-list">${lista(s.secoes, NOME_SECAO)}</ul></div>
+        </div>`;
+    } catch (e) { box.innerHTML = '<p class="hint">Não foi possível carregar as estatísticas.</p>'; }
   }
   function memRender() {
     const q = ($('#memBusca').value || '').toLowerCase();
     const rows = MEM.filter((o) => !q || [o.titulo, o.cliente, o.status].join(' ').toLowerCase().includes(q));
     $('#memBody').innerHTML = rows.length ? rows.map((o) => `<tr><td>#${o.id}</td><td>${esc(o.titulo)}</td><td>${esc(o.cliente || '—')}</td>
       <td><span class="badge ${o.status === 'aprovado' ? 'b-ok' : o.status === 'recusado' ? 'b-bad' : 'b-mid'}">${esc(o.status)}</span></td>
-      <td class="r">${o.total ? BRL(o.total) : '—'}</td><td>${fmtDT(o.atualizado_em)}</td>
+      <td class="r">—</td><td>${fmtDT(o.atualizado_em)}</td>
       <td><button class="btn ghost" data-abrir="${o.id}" type="button">Abrir</button></td></tr>`).join('') : '<tr><td colspan="7" class="c">Nenhum orçamento salvo.</td></tr>';
     $$('#memBody [data-abrir]').forEach((b) => b.addEventListener('click', () => memAbrir(+b.dataset.abrir)));
   }
@@ -423,7 +451,7 @@ ${d.condicoes ? `<li>${esc(d.condicoes)}</li>` : ''}
       const o = await api('/api/memoria/' + id);
       const det = $('#memDetalhe'); det.classList.remove('hidden');
       det.innerHTML = `<h2>#${o.id} · ${esc(o.titulo)}</h2>
-        <p class="hint">Cliente: <b>${esc(o.cliente || '—')}</b> · Status: <b>${esc(o.status)}</b> · Total inicial: <b>${o.total ? BRL(o.total) : 'a preencher'}</b> · Versão ${o.versao} · atualizado em ${fmtDT(o.atualizado_em)}</p>
+        <p class="hint">Cliente: <b>${esc(o.cliente || '—')}</b> · Status: <b>${esc(o.status)}</b> · Versão ${o.versao} · atualizado em ${fmtDT(o.atualizado_em)}</p>
         <div class="detalhe-acoes">
           <button class="btn primary" id="memEditar" type="button">Editar este orçamento</button>
           <button class="btn" id="memPdf" type="button">Gerar PDF</button>
@@ -546,6 +574,7 @@ ${d.condicoes ? `<li>${esc(d.condicoes)}</li>` : ''}
     });
     $('#memSair').addEventListener('click', async () => { await api('/api/memoria/sair', { method: 'POST' }); $('#memPainel').classList.add('hidden'); $('#memLogin').classList.remove('hidden'); });
     $('#memBusca').addEventListener('input', memRender);
+    if ($('#statsDias')) $('#statsDias').addEventListener('change', statsCarregar);
     $('#admSalvar').addEventListener('click', admSalvar);
     $('#admRestaurar').addEventListener('click', async () => {
       if (!confirm('Restaurar a tabela de preços padrão? Os valores atuais serão substituídos.')) return;
