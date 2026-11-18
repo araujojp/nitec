@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Gerador de orçamento · Neon Sistemas</title>
+<link rel="icon" type="image/png" href="/assets/icon-512.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/app.css">
+</head>
+<body>
+<header class="top">
+  <div class="wrap bar">
+    <a class="brand" href="/"><img src="/assets/logo-neon.png" alt="Neon Sistemas"></a>
+    <nav>
+      <a href="#editor" class="on" data-go="editor">Orçamento</a>
+      <a href="#memoria" data-go="memoria">Memória</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- ============ EDITOR ============ -->
+  <section id="editor" class="view on">
+    <div class="intro">
+      <span class="eyebrow">Gerador de orçamento</span>
+      <h1>Monte o orçamento do seu cliente</h1>
+      <p>Preencha o que for preciso. Marque o que o cliente <b>já possui</b>, ajuste as quantidades, digite os valores quando tiver. Tudo se recalcula na hora e você exporta em <b>PDF, Excel ou Word</b>.</p>
+      <div class="notice">Este documento é um <b>pré-orçamento</b>, não um orçamento oficial. Os valores em branco são preenchidos depois da revisão técnica.</div>
+    </div>
+
+    <div class="totalbar" id="totalbar">
+      <div><small>Subtotal (itens com valor)</small><b id="tSub">—</b></div>
+      <div><small>Desconto</small><b id="tDesc">—</b></div>
+      <div><small>Impostos</small><b id="tImp">—</b></div>
+      <div class="big"><small>Total estimado</small><b id="tTot">—</b></div>
+      <div><small>Pendentes de valor</small><b id="tPend">0</b></div>
+    </div>
+
+    <!-- 1. Identificação -->
+    <article class="card" id="s-cliente">
+      <h2><span>1</span> Identificação</h2>
+      <div class="grid3">
+        <label class="span2">Título do orçamento<input data-k="titulo" placeholder="Ex.: Motel Lua Cheia · Neon Motel + Painel + PABX"></label>
+        <label>Data<input type="date" data-k="data"></label>
+        <label>Validade (dias)<input type="number" data-k="validade" min="1" placeholder="15"></label>
+        <label class="span2">Nome do cliente / estabelecimento<input data-c="nome" placeholder="Razão social ou nome fantasia"></label>
+        <label>Tipo<select data-c="tipo"><option value="">—</option><option>Motel</option><option>Hotel</option><option>Pousada</option><option>Flat / apart-hotel</option><option>Outro</option></select></label>
+        <label>Responsável<input data-c="responsavel"></label>
+        <label>Telefone / WhatsApp<input data-c="telefone"></label>
+        <label>E-mail<input data-c="email" type="email"></label>
+        <label>CNPJ / CPF<input data-c="documento"></label>
+        <label class="span2">Endereço<input data-c="endereco"></label>
+        <label>Cidade<input data-c="cidade"></label>
+        <label>UF<input data-c="uf" maxlength="2"></label>
+      </div>
+    </article>
+
+    <!-- 2. Local -->
+    <article class="card" id="s-local">
+      <h2><span>2</span> Estrutura do local</h2>
+      <div class="grid3">
+        <label>Número de suítes<input type="number" data-l="suites" min="1" value="30"></label>
+        <label>Número de alas<input type="number" data-l="alas" min="1" value="2"></label>
+        <label>Pontos de rede extras (recepção, administrativo…)<input type="number" data-l="extras" min="0" value="4"></label>
+        <label>Tamanho do tablet nas suítes<select data-l="tablet"><option value="10.1">10,1 polegadas</option><option value="8">8 polegadas</option><option value="8.1">8,1 polegadas</option></select></label>
+        <label>Ramais do PABX (celulares e telefones)<input type="number" data-l="ramais" min="0" value="10"></label>
+        <label>Horas de treinamento<input type="number" data-l="horas" min="0" value="8"></label>
+      </div>
+      <p class="hint">As quantidades abaixo são calculadas a partir destes dados. Se você ajustar um número manualmente, ele fica travado e não muda mais sozinho.</p>
+    </article>
+
+    <!-- 3. Situação atual -->
+    <article class="card" id="s-ambiente">
+      <h2><span>3</span> Situação atual do cliente</h2>
+      <p class="hint">Responda para o sistema sugerir o que o cliente já tem. Você pode mudar qualquer status depois, na lista de itens.</p>
+      <div class="qgrid" id="ambiente"></div>
+    </article>
+
+    <!-- 4. Itens -->
+    <article class="card" id="s-itens">
+      <h2><span>4</span> Equipamentos, sistemas e serviços</h2>
+      <div class="legend">
+        <span><i class="p"></i>Precisa (orçar)</span><span><i class="h"></i>Cliente já possui</span><span><i class="n"></i>Não se aplica</span>
+      </div>
+      <div class="tablewrap">
+        <table class="itens">
+          <thead><tr><th>Item</th><th class="c">Situação</th><th class="c">Qtd</th><th>Un.</th><th class="r">Valor unitário (R$)</th><th class="r">Total (R$)</th><th>Observações</th><th></th></tr></thead>
+          <tbody id="itensBody"></tbody>
+        </table>
+      </div>
+      <div class="addrow">
+        <button class="btn ghost" id="addItem" type="button">+ Adicionar item próprio</button>
+        <button class="btn ghost" id="resetAuto" type="button">Restaurar quantidades automáticas</button>
+      </div>
+    </article>
+
+    <!-- 5. Condições -->
+    <article class="card" id="s-cond">
+      <h2><span>5</span> Descontos, impostos e condições</h2>
+      <div class="grid3">
+        <label>Desconto (%)<input type="number" data-k="descontoPct" min="0" max="100" step="0.5" value="0"></label>
+        <label>Impostos (%)<input type="number" data-k="impostoPct" min="0" max="100" step="0.5" value="0"></label>
+        <label>Status do orçamento<select data-k="status"><option value="rascunho">Rascunho</option><option value="enviado">Enviado ao cliente</option><option value="aprovado">Aprovado</option><option value="recusado">Recusado</option></select></label>
+        <label class="span3">Forma de pagamento<input data-k="pagamento" placeholder="Ex.: 50% na assinatura e 50% na entrega; ou parcelado"></label>
+        <label class="span3">Condições gerais<textarea data-k="condicoes" rows="3" placeholder="Ex.: suporte inicial de 3 meses incluso; visita técnica antes da execução; preços sujeitos a confirmação."></textarea></label>
+        <label class="span3">Observações internas (não aparecem no PDF)<textarea data-k="observacoes" rows="2"></textarea></label>
+      </div>
+    </article>
+
+    <!-- 6. Exportar e salvar -->
+    <article class="card export" id="s-exportar">
+      <h2><span>6</span> Salvar e exportar</h2>
+      <div class="btns">
+        <button class="btn primary" id="btnSalvar" type="button">Salvar na memória</button>
+        <button class="btn" id="btnPdf" type="button">Gerar PDF</button>
+        <button class="btn" id="btnXlsx" type="button">Exportar Excel (.xlsx)</button>
+        <button class="btn" id="btnDocx" type="button">Exportar Word (.docx)</button>
+        <button class="btn ghost" id="btnNovo" type="button">Novo orçamento</button>
+      </div>
+      <div class="savebox" id="saveBox"></div>
+      <p class="hint">O <b>PDF</b> abre a janela de impressão: escolha <b>“Salvar como PDF”</b>. Marque “Gráficos de fundo” para manter as cores.</p>
+    </article>
+  </section>
+
+  <!-- ============ MEMÓRIA ============ -->
+  <section id="memoria" class="view">
+    <div class="intro">
+      <span class="eyebrow">Memória</span>
+      <h1>Orçamentos salvos</h1>
+      <p>Área restrita. Digite a senha de acesso para consultar, abrir, editar e exportar os orçamentos salvos.</p>
+    </div>
+
+    <div id="memLogin" class="card narrow">
+      <h2>Acesso restrito</h2>
+      <form id="formMem" autocomplete="off">
+        <label>Senha de acesso<input type="password" id="memSenha" inputmode="numeric" required autocomplete="current-password"></label>
+        <button class="btn primary" type="submit">Entrar</button>
+        <p class="err" id="memErr"></p>
+      </form>
+    </div>
+
+    <div id="memPainel" class="hidden">
+      <div class="memtop">
+        <input id="memBusca" placeholder="Buscar por cliente, título ou status…">
+        <button class="btn ghost" id="memSair" type="button">Sair da memória</button>
+      </div>
+      <div class="tablewrap">
+        <table class="lista">
+          <thead><tr><th>#</th><th>Título</th><th>Cliente</th><th>Status</th><th class="r">Total</th><th>Atualizado</th><th></th></tr></thead>
+          <tbody id="memBody"></tbody>
+        </table>
+      </div>
+      <div id="memDetalhe" class="card hidden"></div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot wrap">
+  <span>Neon Sistemas · Tecnologia para hotelaria</span>
+  <span>WhatsApp (34) 98430-2083 · contato@neonsistemas.com</span>
+</footer>
+
+<script src="/app.js" defer></script>
+</body>
+</html>
