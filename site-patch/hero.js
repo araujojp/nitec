@@ -38,6 +38,20 @@ const floats = $$('.float, .chip-float');
       f.style.setProperty('--gx', (x * 100) + '%'); f.style.setProperty('--gy', (y * 100) + '%'); f.style.zIndex = 8; });
     f.addEventListener('pointerleave', () => { f._rx = 0; f._ry = 0; f.style.zIndex = ''; });
   });
+  // limites de cada tela: nunca sair da área visível (laterais da tela e altura do topo do site)
+  const heroSec = stage.closest('.hero') || stage;
+  const medir = () => {
+    const vw = document.documentElement.clientWidth, h = heroSec.getBoundingClientRect();
+    floats.forEach((f) => {
+      const old = f.style.transform; f.style.transform = 'none'; const r = f.getBoundingClientRect(); f.style.transform = old;
+      if (!r.width) { f._xmin = f._xmax = f._ymin = f._ymax = 0; return; }
+      const m = 10 + r.width * 0.05, mv = 8 + r.height * 0.05;
+      f._xmin = Math.min(0, m - r.left); f._xmax = Math.max(0, vw - m - r.right);
+      f._ymin = Math.min(0, h.top + mv - r.top); f._ymax = Math.max(0, h.bottom - mv - r.bottom);
+    });
+  };
+  medir(); addEventListener('resize', medir); addEventListener('load', medir); setTimeout(medir, 1200);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(medir);
   let last = performance.now();
   function heroLoop(now) {
     const dt = Math.min(0.05, (now - last) / 1000) || 0.016; last = now; const k = dt * 60;
@@ -54,12 +68,20 @@ const floats = $$('.float, .chip-float');
       const d = Number(f.dataset.depth || 20), chip = !f.classList.contains('float');
       f._tx += (f._rx - f._tx) * 0.12 * k; f._ty += (f._ry - f._ty) * 0.12 * k;
       const bob = Math.sin(t * 0.9 + f._i * 1.7) * (chip ? 7 : 5);
-      const X = P.x * d * 1.9 + f._side * s * d / 260;
-      const Y = P.y * d * 1.5 + bob - s * d / 75;
+      const X = Math.max(f._xmin || 0, Math.min(f._xmax || 0, P.x * d * 1.9 + f._side * s * d / 260)) + (f._cx || 0);
+      const Y = Math.max(f._ymin || 0, Math.min(f._ymax || 0, P.y * d * 1.5 + bob)) - s * d / 75;
       const rx = f._tx - P.y * 13 - P.vy * 40, ry = f._ty + P.x * 17 + P.vx * 50;
       const rz = f._rot + P.x * (chip ? 4 : 2.5) + f._side * s * 0.012;
-      const sc = 1 + Math.min(0.06, sp * 0.5) + Math.abs(P.x) * 0.025;
-      f.style.transform = `translate3d(${X.toFixed(1)}px, ${Y.toFixed(1)}px, ${(d * 1.4).toFixed(0)}px) rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg) rotate(${rz.toFixed(2)}deg) scale(${sc.toFixed(3)})`;
+      const sc = 1 + Math.min(0.02, sp * 0.25);
+      f.style.transform = `translate3d(${X.toFixed(1)}px, ${Y.toFixed(1)}px, 0) rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg) rotate(${rz.toFixed(2)}deg) scale(${sc.toFixed(3)})`;
+    });
+    // correção fina: mede a posição real (já inclinada) e puxa de volta se passar da borda
+    const vwN = document.documentElement.clientWidth;
+    floats.forEach((f) => {
+      const r = f.getBoundingClientRect(); if (!r.width) return;
+      let c = f._cx || 0;
+      if (r.right > vwN - 6) c -= r.right - (vwN - 6); else if (r.left < 6) c += 6 - r.left; else c *= 0.9;
+      f._cx = Math.abs(c) < 0.2 ? 0 : c;
     });
     px = clamp(P.x * 0.5, 0.8); py = clamp(P.y * 0.5, 0.8);
     if (heroCv) heroCv.style.transform = `translate3d(${(-P.x * 26).toFixed(1)}px, ${(-P.y * 16).toFixed(1)}px, 0) scale(1.08)`;
