@@ -68,6 +68,27 @@ async function migrate() {
     INDEX (orcamento_id),
     CONSTRAINT fk_ov FOREIGN KEY (orcamento_id) REFERENCES orcamentos(id) ON DELETE CASCADE
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`);
+  await migratePrecos();
+}
+
+// ---------- tabela de preços (editável no modo admin) ----------
+const { PRECOS, NIVEIS } = require('./precos.cjs');
+async function migratePrecos() {
+  await q(`CREATE TABLE IF NOT EXISTS precos (
+    chave VARCHAR(80) PRIMARY KEY,
+    grupo VARCHAR(80) NOT NULL,
+    rotulo VARCHAR(200) NOT NULL,
+    valor DECIMAL(12,2) NULL,
+    unidade VARCHAR(30) NOT NULL,
+    fonte VARCHAR(30) NOT NULL,
+    nota VARCHAR(400) NULL,
+    atualizado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`);
+  for (const [grupo, chave, rotulo, valor, unidade, fonte, nota] of PRECOS) {
+    // INSERT IGNORE: não sobrescreve valores que o admin já alterou
+    await q('INSERT IGNORE INTO precos (chave, grupo, rotulo, valor, unidade, fonte, nota) VALUES (?,?,?,?,?,?,?)',
+      [chave, grupo, rotulo, valor, unidade, fonte, nota]);
+  }
 }
 
 // ---------- utilidades ----------
@@ -82,7 +103,7 @@ const totalDe = (d) => {
   const itens = Array.isArray(d.itens) ? d.itens : [];
   let sub = 0;
   for (const i of itens) {
-    if (i.status !== 'precisa') continue;
+    if (i.status !== 'precisa' || i.tipo === 'mensal') continue;
     const v = Number(i.valorUnit), n = Number(i.qtd);
     if (Number.isFinite(v) && Number.isFinite(n)) sub += v * n;
   }
@@ -196,6 +217,33 @@ app.delete('/api/memoria/:id', exigeMemoria, async (req, res) => {
   res.json({ ok: true });
 });
 
+// preços (leitura pública, usada pelo gerador) e níveis de escolha
+app.get('/api/precos', async (req, res) => {
+  const rows = await q('SELECT chave, grupo, rotulo, valor, unidade, fonte, nota FROM precos ORDER BY grupo, chave');
+  res.json({ data: rows, niveis: NIVEIS });
+});
+// edição admin (exige a sessão da memória / modo admin)
+app.put('/api/admin/precos', exigeMemoria, async (req, res) => {
+  try {
+    const lista = Array.isArray(req.body.precos) ? req.body.precos : [];
+    if (lista.length > 500) throw new Error('Lista grande demais.');
+    for (const it of lista) {
+      const chave = String(it.chave || '');
+      if (!/^[a-z0-9_]{2,80}$/.test(chave)) continue;
+      const v = (it.valor === null || it.valor === '' || it.valor === undefined) ? null : Number(String(it.valor).replace(',', '.'));
+      if (v !== null && (!Number.isFinite(v) || v < 0 || v > 10000000)) throw new Error('Valor inválido em ' + chave);
+      await q('UPDATE precos SET valor=? WHERE chave=?', [v, chave]);
+    }
+    res.json({ ok: true, atualizados: lista.length });
+  } catch (e) { res.status(400).json({ erro: e.message }); }
+});
+app.post('/api/admin/precos/restaurar', exigeMemoria, async (req, res) => {
+  for (const [grupo, chave, rotulo, valor, unidade, fonte, nota] of PRECOS) {
+    await q('UPDATE precos SET valor=?, rotulo=?, fonte=?, nota=?, unidade=?, grupo=? WHERE chave=?', [valor, rotulo, fonte, nota, unidade, grupo, chave]);
+  }
+  res.json({ ok: true });
+});
+
 // ---------- exportação (Excel e Word) — a partir dos dados do editor ----------
 function linhasItens(d) {
   return (d.itens || []).filter((i) => i.status !== 'nao').map((i) => ({
@@ -205,6 +253,7 @@ function linhasItens(d) {
     valorUnit: (i.status === 'precisa' && i.valorUnit !== '' && i.valorUnit != null) ? Number(i.valorUnit) : null,
     total: (i.status === 'precisa' && i.valorUnit !== '' && i.valorUnit != null) ? Number(i.valorUnit) * (Number(i.qtd) || 0) : null,
     obs: i.obs || '',
+    tipo: i.tipo === 'mensal' ? 'Mensal' : 'Único',
   }));
 }
 app.post('/api/exportar/xlsx', async (req, res) => {

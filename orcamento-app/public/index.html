@@ -36,7 +36,8 @@
       <div><small>Subtotal (itens com valor)</small><b id="tSub">—</b></div>
       <div><small>Desconto</small><b id="tDesc">—</b></div>
       <div><small>Impostos</small><b id="tImp">—</b></div>
-      <div class="big"><small>Total estimado</small><b id="tTot">—</b></div>
+      <div class="big"><small>Total inicial</small><b id="tTot">—</b></div>
+      <div><small>Mensalidade</small><b id="tMens">—</b></div>
       <div><small>Pendentes de valor</small><b id="tPend">0</b></div>
     </div>
 
@@ -80,9 +81,16 @@
       <div class="qgrid" id="ambiente"></div>
     </article>
 
+    <!-- 3b. Modelos -->
+    <article class="card" id="s-modelos">
+      <h2><span>4</span> Escolha dos modelos (do mais barato ao mais caro)</h2>
+      <p class="hint">Cada categoria tem 5 opções. A 1ª é a entrada, suficiente para o uso. A 2ª costuma ser o melhor custo-benefício. Os preços vêm da tabela de preços do sistema, e o modo admin pode alterá-los.</p>
+      <div id="modelos"></div>
+    </article>
+
     <!-- 4. Itens -->
     <article class="card" id="s-itens">
-      <h2><span>4</span> Equipamentos, sistemas e serviços</h2>
+      <h2><span>5</span> Equipamentos, sistemas e serviços</h2>
       <div class="legend">
         <span><i class="p"></i>Precisa (orçar)</span><span><i class="h"></i>Cliente já possui</span><span><i class="n"></i>Não se aplica</span>
       </div>
@@ -100,7 +108,7 @@
 
     <!-- 5. Condições -->
     <article class="card" id="s-cond">
-      <h2><span>5</span> Descontos, impostos e condições</h2>
+      <h2><span>6</span> Descontos, impostos e condições</h2>
       <div class="grid3">
         <label>Desconto (%)<input type="number" data-k="descontoPct" min="0" max="100" step="0.5" value="0"></label>
         <label>Impostos (%)<input type="number" data-k="impostoPct" min="0" max="100" step="0.5" value="0"></label>
@@ -113,7 +121,7 @@
 
     <!-- 6. Exportar e salvar -->
     <article class="card export" id="s-exportar">
-      <h2><span>6</span> Salvar e exportar</h2>
+      <h2><span>7</span> Salvar e exportar</h2>
       <div class="btns">
         <button class="btn primary" id="btnSalvar" type="button">Salvar na memória</button>
         <button class="btn" id="btnPdf" type="button">Gerar PDF</button>
@@ -144,6 +152,21 @@
     </div>
 
     <div id="memPainel" class="hidden">
+      <!-- modo admin: tabela de preços -->
+      <div class="card" id="admin">
+        <h2>Tabela de preços (modo admin)</h2>
+        <p class="hint">Altere os valores que alimentam o gerador. Os valores “estimativa” devem ser confirmados antes de usar. A coluna “fonte” mostra de onde veio cada preço.</p>
+        <div class="tablewrap" style="margin-top:10px">
+          <table class="lista"><thead><tr><th>Item</th><th class="c">Fonte</th><th>Unidade</th><th class="r">Valor (R$)</th><th class="r">Atual</th><th></th></tr></thead>
+          <tbody id="admBody"></tbody></table>
+        </div>
+        <div class="btns" style="margin-top:12px">
+          <button class="btn primary" id="admSalvar" type="button">Salvar alterações de preço</button>
+          <button class="btn ghost" id="admRestaurar" type="button">Restaurar valores padrão</button>
+        </div>
+        <p class="hint" id="admMsg"></p>
+      </div>
+      <div id="memPainel-lista">
       <div class="memtop">
         <input id="memBusca" placeholder="Buscar por cliente, título ou status…">
         <button class="btn ghost" id="memSair" type="button">Sair da memória</button>
@@ -155,6 +178,7 @@
         </table>
       </div>
       <div id="memDetalhe" class="card hidden"></div>
+      </div>
     </div>
   </section>
 </main>
