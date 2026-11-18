@@ -94,6 +94,7 @@ FAQHTML='''
 NEWSEC=open(HERE+'/newsec.html',encoding='utf-8').read()
 EXJS=open(HERE+'/extra.js',encoding='utf-8').read()
 EXCSS=open(HERE+'/extra.css',encoding='utf-8').read()+open(HERE+'/voz.css',encoding='utf-8').read()
+HEROJS=open(HERE+'/hero.js',encoding='utf-8').read()
 VOZJS=open(HERE+'/voz.js',encoding='utf-8').read()
 VOZSEC=open(HERE+'/vozsec.html',encoding='utf-8').read()
 VOZAPI="""
@@ -164,6 +165,9 @@ for p in sys.argv[1:]:
     J=d['j']; a6='var NAMES='; assert J.count(a6)==1
     J=J.replace(a6,'Object.assign(D,'+json.dumps(NEWD,ensure_ascii=False)+');\n'+a6)
     J=J.replace("if(window.NEON_RETR)NEON_RETR();","if(window.NEON_RETR)NEON_RETR();if(window.NEON_CALC)NEON_CALC();")
+    h1="const floats = $$('.float, .chip-float');"; h2='if (!reduce) heroLoop();'
+    ha=J.find(h1); hb=J.find(h2); assert ha>0 and hb>ha and J.count(h1)==1
+    J=J[:ha]+'let px = 0, py = 0;\n  {\n  '+HEROJS+'\n  if (!reduce) requestAnimationFrame(heroLoop);\n  }'+J[hb+len(h2):]
     v3="window.dispatchEvent(new Event('neonsuite'));"; assert J.count(v3)==1; J=J.replace(v3,VOZAPI+'  '+v3)
     J=J.replace("if(window.NEON_CALC)NEON_CALC();","if(window.NEON_CALC)NEON_CALC();if(window.NEON_VOZ)NEON_VOZ();")
     d['j']=J+'\n'+EXJS+'\n'+VOZJS
