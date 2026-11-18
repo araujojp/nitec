@@ -93,7 +93,37 @@ FAQHTML='''
 '''
 NEWSEC=open(HERE+'/newsec.html',encoding='utf-8').read()
 EXJS=open(HERE+'/extra.js',encoding='utf-8').read()
-EXCSS=open(HERE+'/extra.css',encoding='utf-8').read()
+EXCSS=open(HERE+'/extra.css',encoding='utf-8').read()+open(HERE+'/voz.css',encoding='utf-8').read()
+VOZJS=open(HERE+'/voz.js',encoding='utf-8').read()
+VOZSEC=open(HERE+'/vozsec.html',encoding='utf-8').read()
+VOZAPI="""
+  // API de comando de voz (usada pelo módulo de voz)
+  window.NeonSuite.cmd = (c, n) => {
+    try { audio.unlock(); } catch (e) {}
+    mexeu = true;
+    if (c === 'cena') { aplicarCena(n); return; }
+    const on = (k, v) => { S[k] = v; S.cena = null; };
+    switch (c) {
+      case 'luz_off': on('luzOn', false); break;
+      case 'luz_on': on('luzOn', true); if (S.luz < 10) S.luz = 70; break;
+      case 'luz_dim': on('luzOn', true); S.luz = 25; break;
+      case 'hidro_on': on('hidro', true); break;
+      case 'hidro_off': on('hidro', false); break;
+      case 'cort_close': on('cortina', false); break;
+      case 'cort_open': on('cortina', true); break;
+      case 'dnd_on': on('dnd', true); break;
+      case 'dnd_off': on('dnd', false); break;
+      case 'tv_on': on('tvOn', true); break;
+      case 'tv_off': on('tvOn', false); break;
+      case 'som_up': on('somOn', true); S.vol = Math.min(100, S.vol + 20); break;
+      case 'som_down': S.vol = Math.max(0, S.vol - 20); break;
+      case 'temp': on('arOn', true); S.temp = Math.max(16, Math.min(30, n || 22)); break;
+      default: return;
+    }
+    render();
+  };
+"""
+VOZTAB='''<div class="voz-box" id="vozBox"><button type="button" class="voz-mic" id="vozMic" aria-label="Comando de voz"><span class="vr"></span><span class="vr"></span><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#160900" stroke-width="2.4" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button><div class="voz-txt"><small id="vozHint"></small><b id="vozLine"></b></div></div><div class="voz-chips" id="vozChips"></div>'''
 def _faqld(lang):
     ents=[]
     for q,a in FAQ:
@@ -128,11 +158,15 @@ for p in sys.argv[1:]:
     b3='<a href="#contato">Contato</a></div>'; assert B.count(b3)==1
     B=B.replace(b3,'<a href="#contato">Contato</a><a href="#perguntas">Perguntas frequentes</a><a href="#calculadora">Calculadora</a><a href="/privacidade/">Privacidade</a></div><span class="priv">Sem cookies de rastreamento.</span>')
     B='<a class="skip" href="#topo">Pular para o conteúdo</a>'+B
+    v1='<div class="clock" id="clock">--:--</div></div>'; assert B.count(v1)==1; B=B.replace(v1,v1+VOZTAB)
+    v2='<!-- NEON MOTEL -->'; assert B.count(v2)==1; B=B.replace(v2,VOZSEC+'\n  '+v2)
     d['b']=B
     J=d['j']; a6='var NAMES='; assert J.count(a6)==1
     J=J.replace(a6,'Object.assign(D,'+json.dumps(NEWD,ensure_ascii=False)+');\n'+a6)
     J=J.replace("if(window.NEON_RETR)NEON_RETR();","if(window.NEON_RETR)NEON_RETR();if(window.NEON_CALC)NEON_CALC();")
-    d['j']=J+'\n'+EXJS
+    v3="window.dispatchEvent(new Event('neonsuite'));"; assert J.count(v3)==1; J=J.replace(v3,VOZAPI+'  '+v3)
+    J=J.replace("if(window.NEON_CALC)NEON_CALC();","if(window.NEON_CALC)NEON_CALC();if(window.NEON_VOZ)NEON_VOZ();")
+    d['j']=J+'\n'+EXJS+'\n'+VOZJS
     if 'm' in d:
         c1='Ct=mt(1.3,dt+.65,9)'; c2='be.position.x=_e?-.65:.65'
         assert d['m'].count(c1)==1 and d['m'].count(c2)==1

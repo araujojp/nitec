@@ -28,5 +28,5 @@ document.addEventListener('click',function(e){var a=e.target.closest&&e.target.c
  if(/wa\.me|whatsapp/i.test(hr))send('whatsapp',a.id||(a.classList.contains('wa-float')?'flutuante':'link'));else if(hr==='#contato')send('agendar');},true);
 document.addEventListener('submit',function(e){if(e.target&&e.target.id!=='calcForm')send('formulario');},true);
 if('IntersectionObserver' in window){var vistos={};var io=new IntersectionObserver(function(es){es.forEach(function(x){var id=x.target.id;if(x.isIntersecting&&!vistos[id]){vistos[id]=1;send('secao',id);io.unobserve(x.target);}});},{threshold:.35});
- ['painel-neon','neon-motel','pabx-neon','calculadora','comparativo','perguntas','contato'].forEach(function(id){var el=document.getElementById(id);if(el)io.observe(el);});}
+ ['painel-neon','voz','neon-motel','pabx-neon','calculadora','comparativo','perguntas','contato'].forEach(function(id){var el=document.getElementById(id);if(el)io.observe(el);});}
 })();

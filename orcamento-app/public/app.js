@@ -402,7 +402,7 @@ ${d.condicoes ? `<li>${esc(d.condicoes)}</li>` : ''}
   }
   /* ---------- estatísticas do site ---------- */
   const NOME_LINGUA = { pt: 'Português', en: 'Inglês', es: 'Espanhol', fr: 'Francês', de: 'Alemão', zh: 'Chinês' };
-  const NOME_SECAO = { 'painel-neon': 'Simulação Painel Neon', 'neon-motel': 'Simulação Neon Motel', 'pabx-neon': 'Simulação PABX Neon', calculadora: 'Calculadora de ganho', comparativo: 'Comparativo', perguntas: 'Perguntas frequentes', contato: 'Contato' };
+  const NOME_SECAO = { 'painel-neon': 'Simulação Painel Neon', voz: 'Comando de voz', 'neon-motel': 'Simulação Neon Motel', 'pabx-neon': 'Simulação PABX Neon', calculadora: 'Calculadora de ganho', comparativo: 'Comparativo', perguntas: 'Perguntas frequentes', contato: 'Contato' };
   async function statsCarregar() {
     const box = $('#statsBox'); if (!box) return;
     const dias = +($('#statsDias') && $('#statsDias').value) || 30;
