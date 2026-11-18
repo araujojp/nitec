@@ -43,3 +43,23 @@ footer .priv{color:var(--dim);font-size:13px}
 footer .priv a{color:var(--muted);text-decoration:underline;text-underline-offset:3px}
 @media (max-width:900px){.calc{grid-template-columns:1fr;padding:16px}}
 @media (max-width:480px){.calc-out{grid-template-columns:1fr}.co b{font-size:22px}.co.total b{font-size:26px}.cmp{font-size:13.5px}.cmp th,.cmp td{padding:11px 10px}}
+/* ---- suíte: espera o 3D em vez de mostrar a 2D ---- */
+.room.w3d:not(.has3d){background:radial-gradient(60% 60% at 50% 45%,#141a2e,#050508);border-radius:inherit}
+.room.w3d:not(.has3d) svg,.room.w3d:not(.has3d)>.hotspot,.room.w3d:not(.has3d) canvas.tv,.room.w3d:not(.has3d)>*:not(.room3d):not(.sim-badge){visibility:hidden}
+.room.w3d:not(.has3d)::after{content:'';position:absolute;left:50%;top:50%;width:38px;height:38px;margin:-19px 0 0 -19px;border-radius:50%;border:3px solid rgba(255,255,255,.12);border-top-color:var(--o);animation:w3dspin .8s linear infinite}
+@keyframes w3dspin{to{transform:rotate(360deg)}}
+@media (max-width:820px){.room.w3d{aspect-ratio:4/3.4}}
+/* ---- telefone do topo: botões sempre dentro do aparelho ---- */
+.f-phone{display:flex;flex-direction:column}
+.f-phone .acts{margin-top:auto!important;padding-top:6px}
+@media (max-width:820px){
+ .f-phone{height:300px!important;padding:10px!important}
+ .f-phone .notch{height:12px;margin-bottom:8px}
+ .f-phone .ph-lbl{font-size:9px;line-height:1.3}
+ .f-phone .ring{width:46px!important;height:46px!important;font-size:16px!important;margin:8px auto 6px!important}
+ .f-phone .who{font-size:13px}
+ .f-phone .sub{font-size:10.5px;line-height:1.3}
+ .f-phone .h-wave{height:16px;margin-top:4px}
+ .f-phone .acts b{width:36px;height:36px;font-size:14px}
+}
+@media (max-width:820px){.room.has3d .toast-sim{bottom:auto;top:58px}}

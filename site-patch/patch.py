@@ -145,7 +145,10 @@ for p in sys.argv[1:]:
     OLDL="if(d.m){var ms=document.createElement('script');ms.type='module';ms.textContent=d.m;document.body.appendChild(ms);}"
     NEWL=("var rm=document.getElementById('room');function L3(){if(L3.d)return;L3.d=1;fetch('/assets/s3d.bin?v=2').then(function(r){return r.arrayBuffer();}).then(function(a){var b=new Uint8Array(a),k=[];for(var i=0;i<64;i++)k.push((i*73+29)%251);"
           "for(var i=0;i<b.length;i++)b[i]^=k[i%64]^((i*37+11)&255);var ms=document.createElement('script');ms.type='module';ms.textContent=new TextDecoder().decode(b);document.body.appendChild(ms);});}"
-          "if(rm&&'IntersectionObserver' in window){var io=new IntersectionObserver(function(e){if(e[0].isIntersecting){io.disconnect();L3();}},{rootMargin:'1200px 0px'});io.observe(rm);}else L3();")
+          "var gl=false;try{var cv=document.createElement('canvas');gl=!!(cv.getContext('webgl2')||cv.getContext('webgl'));}catch(e){}"
+          "if(rm&&gl){rm.classList.add('w3d');setTimeout(function(){if(!rm.classList.contains('has3d'))rm.classList.remove('w3d');},25000);}"
+          "if(rm&&'IntersectionObserver' in window){var io=new IntersectionObserver(function(e){if(e[0].isIntersecting){io.disconnect();L3();}},{rootMargin:'1200px 0px'});io.observe(rm);}else L3();"
+          "function idle(){(window.requestIdleCallback||function(f){setTimeout(f,1200);})(L3);}if(document.readyState==='complete')idle();else window.addEventListener('load',idle);")
     assert s.count(OLDL)==1
     s=s.replace(OLDL,NEWL)
     raw=json.dumps(d,ensure_ascii=False,separators=(',',':')).encode()
