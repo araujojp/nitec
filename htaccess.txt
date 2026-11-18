@@ -1,0 +1,48 @@
+# Neon Sistemas - segurança e desempenho
+Options -Indexes
+ServerSignature Off
+DirectoryIndex index.html
+
+# Força HTTPS
+RewriteEngine On
+RewriteCond %{HTTP_HOST} ^www\.neonsistemas\.com$ [NC]
+RewriteRule ^ https://neonsistemas.com%{REQUEST_URI} [L,R=301]
+RewriteCond %{HTTPS} !=on
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Bloqueia arquivos ocultos, de configuração e de backup
+RewriteRule (^|/)\. - [F,L]
+<FilesMatch "\.(bak|old|orig|save|swp|zip|tar|gz|map|py|txt|md|log|ini|sh)$">
+  Require all denied
+</FilesMatch>
+<Files "robots.txt">
+  Require all granted
+</Files>
+
+# Impede que as imagens sejam usadas em outros sites (hotlink)
+RewriteCond %{HTTP_REFERER} !^$
+RewriteCond %{HTTP_REFERER} !^https?://(www\.)?neonsistemas\.com [NC]
+RewriteCond %{HTTP_REFERER} !^https?://([a-z0-9-]+\.)*hostingersite\.com [NC]
+RewriteRule \.(png|jpe?g|webp|gif|svg)$ - [F,NC,L]
+
+<IfModule mod_headers.c>
+  Header always set X-Frame-Options "DENY"
+  Header always set Content-Security-Policy "frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'"
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+  Header always set Cross-Origin-Opener-Policy "same-origin"
+  Header always set X-Robots-Tag "noarchive"
+  Header unset X-Powered-By
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+  <FilesMatch "\.(png|svg|webp|jpg)$">
+    Header set Cache-Control "public, max-age=2592000"
+  </FilesMatch>
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript image/svg+xml
+</IfModule>

@@ -1,0 +1,1043 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Neon Sistemas | Sistema para Motel, Automação de Suítes e PABX VoIP</title>
+<meta name="description" content="Sistema de gestão para motéis e hotéis, automação de suítes com painel touch e PABX VoIP com ramais no celular. Conheça o Painel Neon, o Neon Motel e o PABX Neon e agende uma demonstração.">
+<link rel="canonical" href="https://neonsistemas.com/">
+<meta name="theme-color" content="#070b16">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Neon Sistemas">
+<meta property="og:url" content="https://neonsistemas.com/">
+<meta property="og:title" content="Neon Sistemas | Automação, gestão e comunicação para hotelaria">
+<meta property="og:description" content="Painel Neon, Neon Motel e PABX Neon: automação de suítes, gestão e PABX VoIP para motéis e hotéis.">
+<meta property="og:image" content="https://neonsistemas.com/assets/icon-512.png">
+<meta property="og:locale" content="pt_BR">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" sizes="64x64" href="/assets/icon-64.png">
+<link rel="apple-touch-icon" href="/assets/icon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#070b16; --bg2:#0b1122; --card:#0e1529; --card2:#121a33; --line:#1d2742; --line2:#27345a;
+  --text:#eef2fb; --muted:#9aa6c4; --dim:#6b7697;
+  --blue:#3b82f6; --blue2:#60a5fa; --cyan:#22d3ee; --violet:#8b5cf6; --green:#22c55e; --amber:#f59e0b; --red:#ef4444;
+  --r:9px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font:16px/1.6 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+h1,h2,h3,.brand{font-family:"Space Grotesk",Inter,sans-serif;letter-spacing:-.02em;line-height:1.1}
+.wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--blue2)}
+.eyebrow::before{content:"";width:6px;height:6px;border-radius:1px;background:var(--blue)}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:14px 22px;border-radius:6px;font-weight:600;font-size:15px;transition:.2s}
+.btn-primary{background:linear-gradient(135deg,#3b82f6,#2563eb);color:#fff;box-shadow:0 10px 30px -10px rgba(59,130,246,.7)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 36px -10px rgba(59,130,246,.85)}
+.btn-ghost{border:1px solid var(--line2);color:var(--text)}
+.btn-ghost:hover{border-color:var(--blue);background:rgba(59,130,246,.08)}
+.arrow{width:16px;height:16px}
+
+/* NAV */
+header{position:sticky;top:0;z-index:50;background:rgba(7,11,22,.78);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.05)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:72px}
+.logo{height:54px;width:auto;display:block}
+.logo-ft{height:64px}
+@media(max-width:560px){.logo{height:42px}}
+.wordmark{display:inline-flex;align-items:center;gap:10px}
+.mark{width:36px;height:36px;border-radius:5px;display:grid;place-items:center;font:700 20px "Space Grotesk";color:#fff;background:linear-gradient(135deg,#3b82f6,#22d3ee);box-shadow:0 0 24px -4px rgba(59,130,246,.8)}
+.wm{display:flex;flex-direction:column;line-height:1}
+.wm b{font:700 22px "Space Grotesk";letter-spacing:-.02em}
+.wm small{font-size:9px;letter-spacing:.32em;color:var(--muted);margin-top:3px}
+.nav ul{display:flex;gap:30px;list-style:none;font-size:14px;color:var(--muted)}
+.nav ul a:hover{color:var(--text)}
+.nav .btn{padding:10px 18px;font-size:14px}
+@media(max-width:900px){.nav ul{display:none}}
+
+
+.nav-r{display:flex;align-items:center;gap:14px}
+.burger{display:none;width:42px;height:42px;border-radius:6px;border:1px solid var(--line2);background:none;cursor:pointer;flex-direction:column;align-items:center;justify-content:center;gap:5px}
+.burger span{display:block;width:18px;height:2px;border-radius:1px;background:var(--text);transition:.25s}
+header.open .burger span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+header.open .burger span:nth-child(2){opacity:0}
+header.open .burger span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.mnav{display:none;border-top:1px solid var(--line);background:rgba(7,11,22,.97)}
+.mnav .wrap{display:flex;flex-direction:column;padding-top:8px;padding-bottom:22px}
+.mnav a:not(.btn){padding:15px 2px;border-bottom:1px solid var(--line);font-size:17px;color:var(--text)}
+.mnav .btn{margin-top:20px;justify-content:center}
+@media(max-width:900px){.burger{display:flex}header.open .mnav{display:block}}
+@media(max-width:560px){.nav-cta{display:none}.nav-r{gap:8px}.snd{display:none}}
+
+
+/* ===== Idioma (dropdown) ===== */
+.lang{position:relative}
+.lang-trigger{display:flex;align-items:center;gap:7px;height:42px;padding:0 12px;border:1px solid var(--line2);border-radius:6px;background:rgba(255,255,255,.02);color:var(--text);font:600 13px Inter,sans-serif;letter-spacing:.04em;cursor:pointer;transition:border-color .25s,background .25s}
+.lang-trigger:hover,.lang.open .lang-trigger{border-color:var(--blue);background:rgba(59,130,246,.08)}
+.lang-trigger .chev{color:var(--muted);transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+.lang.open .chev{transform:rotate(180deg)}
+.lang-menu{position:absolute;right:0;top:calc(100% + 10px);min-width:190px;padding:6px;border-radius:8px;background:rgba(12,18,36,.96);border:1px solid var(--line2);backdrop-filter:blur(16px);box-shadow:0 24px 60px -18px rgba(0,0,0,.85),0 0 0 1px rgba(59,130,246,.06);opacity:0;visibility:hidden;transform:translateY(-8px) scale(.97);transform-origin:top right;transition:opacity .22s,transform .3s cubic-bezier(.2,.8,.2,1),visibility .3s;z-index:70}
+.lang.open .lang-menu{opacity:1;visibility:visible;transform:none}
+.lang-menu button{width:100%;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 12px;border:0;border-radius:5px;background:none;color:var(--muted);font:500 14px Inter,sans-serif;cursor:pointer;text-align:left;transition:background .2s,color .2s,padding .25s}
+.lang-menu button small{font-size:11px;letter-spacing:.08em;color:var(--dim)}
+.lang-menu button:hover{background:rgba(59,130,246,.12);color:var(--text);padding-left:16px}
+.lang-menu button[aria-checked="true"]{color:#fff}
+.lang-menu button[aria-checked="true"] small{color:var(--blue2)}
+.lang-menu button[aria-checked="true"]::after{content:"";position:absolute;right:auto}
+.lang-menu button[aria-checked="true"] span::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan);margin-right:9px;vertical-align:2px}
+@media(max-width:560px){.lang-trigger{padding:0 10px;gap:6px}}
+.snd{width:42px;height:42px;display:grid;place-items:center;border:1px solid var(--line2);border-radius:6px;background:none;color:var(--muted);cursor:pointer;transition:.25s}
+.snd:hover{color:var(--text);border-color:var(--blue)}
+.snd .off{display:none}.snd[aria-pressed="false"] .on{display:none}.snd[aria-pressed="false"] .off{display:block}
+
+/* ===== Efeitos ===== */
+#progress{position:fixed;left:0;top:0;height:2px;width:100%;transform-origin:0 50%;transform:scaleX(0);background:linear-gradient(90deg,#3b82f6,#22d3ee,#f97316);z-index:80;pointer-events:none}
+header{transition:background .4s,box-shadow .4s}
+header.scrolled{background:rgba(7,11,22,.92);box-shadow:0 10px 40px -20px rgba(0,0,0,.9)}
+.fx [data-rv]{opacity:0;transform:translateY(34px);filter:blur(8px);transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform 1.1s cubic-bezier(.2,.7,.2,1),filter .9s;transition-delay:var(--d,0s)}
+.fx [data-rv].in{opacity:1;transform:none;filter:none}
+.fx [data-rv="l"]{transform:translateX(-40px)}.fx [data-rv="r"]{transform:translateX(40px)}
+.fx [data-rv="zoom"]{transform:scale(.94) translateY(20px)}
+.fx [data-rv].in{transform:none}
+/* entrada do hero */
+.fx .hero .intro{opacity:0;transform:translateY(26px);filter:blur(6px);animation:intro 1.1s cubic-bezier(.2,.7,.2,1) forwards;animation-delay:var(--d,0s)}
+.fx .hero-visual .mk{opacity:0;animation:introv 1.4s cubic-bezier(.2,.7,.2,1) forwards}
+.fx .hv-laptop .mk{animation-delay:.35s}.fx .hv-panel .mk{animation-delay:.6s}.fx .hv-phone .mk{animation-delay:.8s}
+@keyframes intro{to{opacity:1;transform:none;filter:none}}
+@keyframes introv{from{opacity:0;translate:0 50px}to{opacity:1;translate:0 0}}
+.hero-visual .mk{transition:transform .9s cubic-bezier(.2,.7,.2,1)}
+/* brilho que segue o mouse */
+.glow{position:relative;isolation:isolate}
+.glow::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .4s;z-index:2;
+ background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%),rgba(96,165,250,.13),transparent 45%);
+ }
+.glow::before{content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1px;pointer-events:none;opacity:0;transition:opacity .4s;z-index:3;
+ background:radial-gradient(300px circle at var(--mx,50%) var(--my,50%),rgba(96,165,250,.75),rgba(34,211,238,.25) 40%,transparent 70%);
+ -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
+.glow:hover::after,.glow:hover::before{opacity:1}
+.tilt{transition:transform .7s cubic-bezier(.2,.7,.2,1);transform-style:preserve-3d;will-change:transform}
+.btn{will-change:transform}
+.btn-primary{position:relative;overflow:hidden}
+.btn-primary::after{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.35),transparent);transform:skewX(-20deg);transition:left .7s cubic-bezier(.2,.7,.2,1)}
+.btn-primary:hover::after{left:130%}
+.ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,.35);transform:scale(0);animation:rip .7s ease-out forwards;pointer-events:none}
+@keyframes rip{to{transform:scale(4);opacity:0}}
+/* cursor */
+.cur,.cur-dot{position:fixed;left:0;top:0;pointer-events:none;z-index:999;border-radius:50%;opacity:0;transition:opacity .3s}
+.cur{width:38px;height:38px;margin:-19px 0 0 -19px;border:1px solid rgba(147,197,253,.55);transition:width .35s cubic-bezier(.2,.7,.2,1),height .35s cubic-bezier(.2,.7,.2,1),margin .35s cubic-bezier(.2,.7,.2,1),background .35s,border-color .35s,opacity .3s}
+.cur-dot{width:6px;height:6px;margin:-3px 0 0 -3px;background:#93c5fd;box-shadow:0 0 12px #60a5fa}
+.has-cur .cur,.has-cur .cur-dot{opacity:1}
+.cur.hover{width:64px;height:64px;margin:-32px 0 0 -32px;background:rgba(59,130,246,.10);border-color:rgba(34,211,238,.7)}
+.cur.down{width:28px;height:28px;margin:-14px 0 0 -14px}
+@media(pointer:fine){.has-cur,.has-cur a,.has-cur button,.has-cur label{cursor:none}.has-cur input,.has-cur textarea,.has-cur select{cursor:text}.has-cur select{cursor:pointer}}
+.hero-spot{position:absolute;inset:0;pointer-events:none;background:radial-gradient(600px circle at var(--hx,70%) var(--hy,30%),rgba(59,130,246,.10),transparent 60%);transition:opacity .5s}
+main{transition:opacity .28s ease,filter .28s ease;overflow-x:clip}
+footer{overflow-x:clip}
+main.swap{opacity:.15;filter:blur(4px)}
+.chip,.pill{transition:transform .3s cubic-bezier(.2,.7,.2,1),background .3s,border-color .3s}
+.chip:hover{transform:translateY(-2px);background:rgba(59,130,246,.2);border-color:rgba(96,165,250,.5)}
+.fg li{transition:transform .35s cubic-bezier(.2,.7,.2,1)}
+.fg li:hover{transform:translateX(5px)}
+.fg li:hover svg{filter:drop-shadow(0 0 6px var(--cyan))}
+.hl .ic,.pillar .ic{transition:transform .5s cubic-bezier(.2,.7,.2,1),box-shadow .4s}
+.hl>div:hover .ic,.pillar:hover .ic{transform:rotate(-8deg) scale(1.08);box-shadow:0 0 22px -4px rgba(59,130,246,.8)}
+.scene{transition:background .35s}
+@media(prefers-reduced-motion:reduce){.fx [data-rv],.fx .hero .intro,.fx .hero-visual .mk{opacity:1!important;transform:none!important;filter:none!important;animation:none!important}.tilt{transform:none!important}}
+
+
+/* ===== WhatsApp ===== */
+.wa-float{position:fixed;right:max(22px,env(safe-area-inset-right));bottom:max(22px,env(safe-area-inset-bottom));z-index:60;display:flex;align-items:center;gap:12px;opacity:0;transform:scale(.4) translateY(30px);animation:wa-in .8s cubic-bezier(.3,1.6,.5,1) 1.6s forwards}
+.wa-btn{position:relative;width:62px;height:62px;border-radius:50%;display:grid;place-items:center;color:#fff;background:radial-gradient(circle at 30% 25%,#5cf08f,#25d366 45%,#128c4a);box-shadow:0 12px 30px -8px rgba(37,211,102,.7),inset 0 1px 0 rgba(255,255,255,.4),inset 0 -3px 8px rgba(0,0,0,.18);animation:wa-bounce 4s cubic-bezier(.3,.7,.4,1) 2.6s infinite}
+.wa-btn svg{filter:drop-shadow(0 1px 1px rgba(0,0,0,.25));transition:transform .4s cubic-bezier(.3,1.6,.5,1)}
+.wa-btn::before,.wa-btn::after{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid rgba(37,211,102,.7);animation:wa-pulse 2.4s cubic-bezier(.2,.6,.3,1) infinite;pointer-events:none}
+.wa-btn::after{animation-delay:1.2s}
+.wa-float:hover .wa-btn{animation-play-state:paused;box-shadow:0 16px 40px -8px rgba(37,211,102,.95),0 0 0 6px rgba(37,211,102,.15),inset 0 1px 0 rgba(255,255,255,.4)}
+.wa-float:hover .wa-btn svg{transform:rotate(-12deg) scale(1.12)}
+.wa-tip{order:-1;white-space:nowrap;font-size:14px;font-weight:600;color:#fff;padding:10px 14px;border-radius:7px;background:rgba(14,21,41,.95);border:1px solid rgba(37,211,102,.4);box-shadow:0 14px 34px -14px rgba(0,0,0,.8);opacity:0;transform:translateX(10px);transition:.35s cubic-bezier(.2,.7,.2,1);pointer-events:none}
+.wa-float:hover .wa-tip{opacity:1;transform:none}
+@keyframes wa-in{to{opacity:1;transform:none}}
+@keyframes wa-bounce{0%,22%,100%{transform:translateY(0)}6%{transform:translateY(-12px)}11%{transform:translateY(0)}15%{transform:translateY(-5px)}19%{transform:translateY(0)}}
+@keyframes wa-pulse{0%{transform:scale(1);opacity:.8}100%{transform:scale(1.75);opacity:0}}
+@media(max-width:560px){.wa-btn{width:56px;height:56px}.wa-btn svg{width:27px;height:27px}.wa-float{right:16px;bottom:16px}.wa-tip{display:none}}
+@media(prefers-reduced-motion:reduce){.wa-float{animation:none;opacity:1;transform:none}.wa-btn,.wa-btn::before,.wa-btn::after{animation:none}}
+footer{padding-bottom:40px}
+.copy{padding-right:96px}
+.ft ul a{white-space:nowrap}
+@media(max-width:560px){.copy{padding-right:0;padding-bottom:70px}}
+.direct{margin-top:34px;display:flex;flex-direction:column;gap:12px}
+.direct-t{font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+.dc{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:9px;background:var(--card);border:1px solid var(--line);transition:border-color .3s,transform .35s cubic-bezier(.2,.7,.2,1),background .3s}
+.dc:hover{border-color:var(--line2);transform:translateX(4px)}
+.dc-ic{width:42px;height:42px;border-radius:7px;display:grid;place-items:center;background:rgba(59,130,246,.12);color:var(--blue2);flex:none}
+.dc.wa .dc-ic{background:rgba(37,211,102,.14);color:#25d366}
+.dc.wa:hover{border-color:rgba(37,211,102,.5);background:rgba(37,211,102,.05)}
+.dc b{display:block;font-weight:600}.dc small{color:var(--muted);font-size:14px}
+.dc .arrow{margin-left:auto;color:var(--dim)}
+.sendrow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.btn-wa{background:linear-gradient(135deg,#25d366,#128c4a);color:#fff;border:0;justify-content:center;cursor:pointer;box-shadow:0 10px 30px -12px rgba(37,211,102,.7)}
+.btn-wa:hover{box-shadow:0 16px 36px -12px rgba(37,211,102,.9)}
+@media(max-width:560px){.sendrow{grid-template-columns:1fr}}
+/* ===== Proteção de conteúdo ===== */
+body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+input,textarea,select{-webkit-user-select:text;user-select:text}
+img,svg{-webkit-user-drag:none;user-drag:none}
+img{pointer-events:none}
+@media print{html,body{display:none!important}}
+
+/* HERO */
+.hero{position:relative;padding:90px 0 70px;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:-20% -10% auto auto;width:900px;height:900px;background:radial-gradient(circle,rgba(59,130,246,.22),transparent 60%);pointer-events:none}
+.hero::after{content:"";position:absolute;inset:auto auto -30% -10%;width:700px;height:700px;background:radial-gradient(circle,rgba(139,92,246,.13),transparent 60%);pointer-events:none}
+.hero-grid{position:relative;display:grid;grid-template-columns:1.02fr 1fr;gap:56px;align-items:center}
+.hero h1{font-size:clamp(40px,5.6vw,70px);font-weight:700;margin:22px 0 22px}
+.hero h1 span{background:linear-gradient(90deg,#60a5fa,#22d3ee);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p.lead{font-size:18px;color:var(--muted);max-width:520px}
+.hero .ctas{display:flex;gap:14px;flex-wrap:wrap;margin-top:34px}
+.hero-pills{display:flex;gap:10px;flex-wrap:wrap;margin-top:40px}
+.pill{font-size:13px;color:var(--muted);border:1px solid var(--line);padding:7px 13px;border-radius:999px;background:rgba(255,255,255,.02)}
+.pill b{color:var(--text);font-weight:600}
+.hero-visual{position:relative;height:520px}
+@media(max-width:980px){.hero-grid{grid-template-columns:1fr}.hero-visual{height:460px;max-width:560px;width:100%;margin:0 auto}}
+@media(max-width:560px){.hero-visual{height:380px}}
+
+/* ============ MOCKUPS ============ */
+.mk{container-type:inline-size;width:100%}
+/* Touch panel */
+.panel{position:relative;width:100%;aspect-ratio:16/10.5;border-radius:11px;padding:12px;background:linear-gradient(145deg,#2a3150,#0f1424);box-shadow:0 40px 80px -30px rgba(0,0,0,.8),0 0 0 1px rgba(255,255,255,.06),inset 0 1px 0 rgba(255,255,255,.12)}
+.panel .scr{height:100%;border-radius:6px;overflow:hidden;background:radial-gradient(120% 90% at 0% 0%,#1d2a55 0%,#0a1024 55%,#070b18 100%);padding:4.2% 4.6%;display:flex;flex-direction:column;gap:4%;color:#e8edfb;font-size:2.15cqw}
+.scr .top{display:flex;justify-content:space-between;align-items:center;color:#a8b3d6}
+.scr .top b{font:600 1.5em "Space Grotesk";color:#fff}
+.scr .top .st{display:flex;gap:1.2em;align-items:center}
+.scr .grid{flex:1;display:grid;grid-template-columns:1.25fr 1fr 1fr;gap:3%}
+.tile{border-radius:5px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.07);padding:7% 8%;display:flex;flex-direction:column;justify-content:space-between}
+.tile .lbl{color:#9aa6c4;font-size:.85em;letter-spacing:.06em;text-transform:uppercase}
+.tile .big{font:600 2.4em "Space Grotesk";color:#fff;line-height:1}
+.tile.scenes{grid-row:span 2;gap:6%;justify-content:flex-start}
+.scene{display:flex;align-items:center;gap:.8em;padding:.8em .9em;border-radius:4px;background:rgba(255,255,255,.04);font-weight:500}
+.scene i{width:1.7em;height:1.7em;border-radius:3px;flex:none}
+.scene.on{background:linear-gradient(90deg,rgba(236,72,153,.35),rgba(139,92,246,.25));border:1px solid rgba(236,72,153,.45)}
+.slider{height:.55em;border-radius:4.5px;background:rgba(255,255,255,.1);position:relative;margin-top:.6em}
+.slider span{position:absolute;inset:0 auto 0 0;border-radius:4.5px}
+.knob{width:1.3em;height:1.3em;border-radius:50%;background:#fff;position:absolute;top:50%;transform:translate(-50%,-50%);box-shadow:0 0 10px rgba(255,255,255,.6)}
+.dots{display:flex;gap:.5em;margin-top:.6em}
+.dots i{width:1.3em;height:1.3em;border-radius:50%}
+.np{display:flex;gap:.8em;align-items:center}
+.np .art{width:3em;height:3em;border-radius:3.5px;background:linear-gradient(135deg,#f472b6,#8b5cf6 60%,#22d3ee);flex:none}
+.np small{display:block;color:#9aa6c4}
+.ctrls{display:flex;gap:1em;margin-top:.5em;color:#cfd8f3}
+.panel-wall{position:absolute;inset:0;border-radius:14px;background:
+  radial-gradient(60% 50% at 70% 10%,rgba(236,72,153,.28),transparent 70%),
+  radial-gradient(70% 60% at 10% 100%,rgba(59,130,246,.30),transparent 70%),
+  linear-gradient(180deg,#151026,#0b0a18);overflow:hidden}
+.panel-wall::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(255,255,255,.025) 0 2px,transparent 2px 64px)}
+.panel-wall::after{content:"";position:absolute;left:8%;right:8%;top:0;height:3px;background:linear-gradient(90deg,transparent,#ec4899,#8b5cf6,transparent);box-shadow:0 0 30px 6px rgba(236,72,153,.5)}
+
+/* Dashboard (laptop) */
+.laptop{width:100%}
+.laptop .lid{border-radius:8px 8px 0 0;padding:10px 10px 12px;background:linear-gradient(180deg,#2b3352,#161c31);box-shadow:0 0 0 1px rgba(255,255,255,.07)}
+.laptop .base{height:14px;margin:0 -5%;border-radius:0 0 8px 8px;background:linear-gradient(180deg,#3a4366,#1a2038);box-shadow:0 30px 60px -20px rgba(0,0,0,.8)}
+.dash{aspect-ratio:16/10;border-radius:3px;overflow:hidden;background:#0a0f1e;display:grid;grid-template-columns:15% 1fr;font-size:1.42cqw;color:#dbe3f7}
+.dash aside{background:#0d1428;border-right:1px solid #1a2442;padding:10% 9%;display:flex;flex-direction:column;gap:.9em}
+.dash aside .lg{font:700 1.4em "Space Grotesk";color:#fff;margin-bottom:.6em;display:flex;gap:.4em;align-items:center}
+.dash aside .lg i{width:1.2em;height:1.2em;border-radius:2px;background:linear-gradient(135deg,#3b82f6,#22d3ee)}
+.dash aside span{color:#7f8bb0;padding:.45em .6em;border-radius:2.5px}
+.dash aside span.a{background:rgba(59,130,246,.16);color:#bcd3ff}
+.dash main{padding:3% 3.2%;display:flex;flex-direction:column;gap:3%}
+.dash .hd{display:flex;justify-content:space-between;align-items:center}
+.dash .hd b{font:600 1.55em "Space Grotesk";color:#fff}
+.dash .hd small{color:#7f8bb0}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:2.2%}
+.kpi{background:#0f1730;border:1px solid #1a2442;border-radius:3px;padding:6% 8%}
+.kpi small{color:#7f8bb0;display:block}
+.kpi b{font:600 1.65em "Space Grotesk";color:#fff}
+.kpi em{font-style:normal;color:#4ade80;font-size:.9em}
+.dash .body{flex:1;display:grid;grid-template-columns:1.55fr 1fr;gap:2.2%;min-height:0}
+.box{background:#0f1730;border:1px solid #1a2442;border-radius:3px;padding:4% 4.5%;display:flex;flex-direction:column;gap:5%;min-height:0}
+.box .t{display:flex;justify-content:space-between;color:#aeb9d9;font-weight:600}
+.box .t small{font-weight:400;color:#6b7697}
+.suites{flex:1;display:grid;grid-template-columns:repeat(6,1fr);gap:4%}
+.su{border-radius:2px;display:flex;flex-direction:column;justify-content:space-between;padding:8% 10%;font-weight:600;color:#fff}
+.su small{font-weight:400;opacity:.8;font-size:.82em}
+.su.o{background:linear-gradient(160deg,#2563eb,#1e40af)} .su.l{background:#14301f;color:#86efac;border:1px solid #1f5133}
+.su.c{background:#3a2a0b;color:#fcd34d;border:1px solid #5b4310} .su.m{background:#3a1218;color:#fca5a5;border:1px solid #5c1d26}
+.legend{display:flex;gap:1.2em;color:#7f8bb0;font-size:.85em}
+.legend i{display:inline-block;width:.8em;height:.8em;border-radius:1px;margin-right:.35em;vertical-align:-1px}
+.bars{flex:1;display:flex;align-items:flex-end;gap:5%;padding-top:4%}
+.bars span{flex:1;border-radius:1.5px 1.5px 0 0;background:linear-gradient(180deg,#60a5fa,#1d4ed8)}
+.bars span.hl{background:linear-gradient(180deg,#22d3ee,#0e7490)}
+.list{display:flex;flex-direction:column;gap:.55em}
+.list div{display:flex;justify-content:space-between;color:#aeb9d9;border-bottom:1px solid #18213d;padding-bottom:.45em}
+.list b{color:#fff;font-weight:600}
+
+/* Phone */
+.phone{width:100%;aspect-ratio:9/18.6;border-radius:7.5%/3.7%;padding:5%;background:linear-gradient(145deg,#2c3454,#0e1324);box-shadow:0 40px 80px -30px rgba(0,0,0,.85),0 0 0 1px rgba(255,255,255,.08),inset 0 1px 0 rgba(255,255,255,.14)}
+.phone .ps{height:100%;border-radius:6%/3%;overflow:hidden;background:radial-gradient(100% 60% at 50% 0%,#18306a,#0a1024 70%);display:flex;flex-direction:column;align-items:center;padding:14% 9% 10%;font-size:5cqw;position:relative}
+.phone .notch{position:absolute;top:3%;left:50%;transform:translateX(-50%);width:32%;height:3.2%;border-radius:10px;background:#05070f}
+.ps .who{color:#9fb3e6;font-size:.95em;letter-spacing:.08em;text-transform:uppercase}
+.ps .name{font:600 2.2em "Space Grotesk";color:#fff;margin-top:.3em;text-align:center;line-height:1.1}
+.ps .tm{color:#7dd3fc;margin-top:.4em}
+.ps .av{flex:none;width:36cqw;height:36cqw;border-radius:50%;margin:12% 0 10%;background:radial-gradient(circle at 30% 30%,#60a5fa,#1e3a8a);display:grid;place-items:center;box-shadow:0 0 0 10px rgba(96,165,250,.12),0 0 0 22px rgba(96,165,250,.06)}
+.ps .av svg{width:46%;height:46%}
+.ps .keys{display:grid;grid-template-columns:repeat(3,1fr);gap:9% 10%;width:100%;margin-top:auto}
+.ps .k{aspect-ratio:1;border-radius:50%;background:rgba(255,255,255,.08);display:grid;place-items:center}
+.ps .k svg{width:42%;height:42%}
+.ps .k.end{background:#ef4444}
+.ps .lbls{display:grid;grid-template-columns:repeat(3,1fr);gap:10%;width:100%;text-align:center;color:#9aa6c4;font-size:.8em;margin-top:3%}
+
+/* Server card */
+.server{border-radius:7px;padding:14px 16px;background:rgba(14,21,41,.92);border:1px solid var(--line2);box-shadow:0 30px 60px -25px rgba(0,0,0,.8);backdrop-filter:blur(8px);font-size:13px}
+.server .row{display:flex;align-items:center;gap:10px}
+.server .ic{width:34px;height:34px;border-radius:4.5px;background:rgba(34,211,238,.12);display:grid;place-items:center;color:var(--cyan);flex:none}
+.server b{font-weight:600}
+.server small{color:var(--muted);display:block;font-size:12px}
+.led{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green)}
+.ext{display:flex;justify-content:space-between;color:var(--muted);font-size:12px;padding:6px 0;border-top:1px solid var(--line)}
+.ext span:last-child{color:#86efac}
+
+/* Hero composition */
+.hv-laptop{position:absolute;right:0;top:0;width:86%}
+.hv-panel{position:absolute;left:0;bottom:4%;width:52%}
+.hv-phone{position:absolute;right:4%;bottom:0;width:23%}
+.float{animation:float 7s ease-in-out infinite}
+.float.d2{animation-delay:-2.3s}.float.d3{animation-delay:-4.6s}
+@keyframes float{50%{transform:translateY(-10px)}}
+@media(prefers-reduced-motion:reduce){.float{animation:none}}
+
+/* SECTIONS */
+section{padding:110px 0;position:relative}
+.sec-head{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:end;margin-bottom:56px}
+.sec-head h2{font-size:clamp(32px,4vw,50px);font-weight:600;margin-top:16px}
+.sec-head h2 span{color:var(--dim)}
+.sec-head p{color:var(--muted);font-size:17px}
+@media(max-width:860px){.sec-head{grid-template-columns:1fr;gap:16px}}
+
+/* Value strip */
+.strip{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--bg2)}
+.strip .wrap{display:grid;grid-template-columns:repeat(4,1fr)}
+.strip div.it{padding:28px 24px;border-right:1px solid var(--line)}
+.strip div.it:last-child{border-right:0}
+.strip b{display:block;font:600 17px "Space Grotesk";margin-bottom:4px}
+.strip span{color:var(--muted);font-size:14px}
+@media(max-width:860px){.strip .wrap{grid-template-columns:1fr 1fr}.strip div.it:nth-child(2){border-right:0}.strip div.it:nth-child(-n+2){border-bottom:1px solid var(--line)}}
+@media(max-width:480px){.strip .wrap{grid-template-columns:1fr}.strip div.it{border-right:0;border-bottom:1px solid var(--line)}}
+
+/* Product cards */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.pcard{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;transition:.25s}
+.pcard:hover{border-color:var(--line2);transform:translateY(-4px);box-shadow:0 30px 60px -30px rgba(59,130,246,.45)}
+.pcard .vis{height:240px;position:relative;display:grid;place-items:center;overflow:hidden;border-bottom:1px solid var(--line)}
+.pcard .vis.v1{background:radial-gradient(80% 80% at 50% 0%,rgba(236,72,153,.22),transparent 70%),#0b0a18}
+.pcard .vis.v2{background:radial-gradient(80% 80% at 50% 0%,rgba(59,130,246,.25),transparent 70%),#0a1022}
+.pcard .vis.v3{background:radial-gradient(80% 80% at 50% 0%,rgba(34,211,238,.2),transparent 70%),#08121c}
+.pcard .vis>.mk{width:84%}
+.pcard .vis.v2>.mk{width:90%}
+.pcard .vis.v3>.mk{width:30%;margin-top:6%}
+.pcard .bd{padding:26px 26px 28px;display:flex;flex-direction:column;flex:1}
+.pcard .tag{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--blue2);font-weight:600}
+.pcard h3{font-size:26px;margin:10px 0 10px}
+.pcard p{color:var(--muted);font-size:15px;flex:1}
+.pcard .more{margin-top:22px;display:flex;justify-content:space-between;align-items:center;font-weight:600;font-size:14px;padding-top:18px;border-top:1px solid var(--line)}
+.pcard .more svg{transition:.2s}.pcard:hover .more svg{transform:translateX(4px)}
+@media(max-width:980px){.cards{grid-template-columns:1fr;max-width:560px;margin:0 auto}}
+
+/* Product detail */
+.product{border-top:1px solid var(--line)}
+.product.alt{background:linear-gradient(180deg,var(--bg2),var(--bg))}
+.pd-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:64px;align-items:center}
+.pd-grid.rev .pd-vis{order:2}
+.pd-vis{position:relative;border-radius:12px;padding:48px 40px;border:1px solid var(--line);overflow:hidden;min-height:440px;display:grid;place-items:center}
+.pd-vis.v1{background:radial-gradient(70% 60% at 30% 0%,rgba(236,72,153,.28),transparent 70%),radial-gradient(60% 60% at 100% 100%,rgba(59,130,246,.3),transparent 70%),#0b0a18}
+.pd-vis.v2{background:radial-gradient(70% 60% at 70% 0%,rgba(59,130,246,.3),transparent 70%),#0a1022}
+.pd-vis.v3{background:radial-gradient(70% 60% at 30% 0%,rgba(34,211,238,.22),transparent 70%),radial-gradient(60% 60% at 100% 100%,rgba(59,130,246,.25),transparent 70%),#08121c}
+.pd-vis>.mk{width:100%}
+.pd-vis .server{position:absolute;right:6%;bottom:14%;width:44%;max-width:300px}
+@media(max-width:560px){.pd-vis .server{position:static;width:100%;max-width:none;margin-top:20px}.pd-vis.v3>div[data-tpl]{width:60%!important;margin:0 auto!important}}
+.pd-vis .server.left{right:auto;left:7%;top:12%;bottom:auto}
+.pd-txt h2{font-size:clamp(32px,3.8vw,46px);font-weight:600;margin:16px 0 18px}
+.pd-txt h2 span{color:var(--dim)}
+.pd-txt>p{color:var(--muted);font-size:17px;margin-bottom:28px}
+.hl{display:flex;flex-direction:column;gap:18px;margin-bottom:32px}
+.hl>div{display:flex;gap:14px}
+.hl .ic{width:40px;height:40px;border-radius:5.5px;background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.25);display:grid;place-items:center;color:var(--blue2);flex:none}
+.hl b{display:block;font-weight:600;margin-bottom:2px}
+.hl span{color:var(--muted);font-size:15px}
+@media(max-width:980px){.pd-grid{grid-template-columns:1fr;gap:40px}.pd-grid.rev .pd-vis{order:0}.pd-vis{min-height:0;padding:36px 24px}}
+
+/* Feature groups */
+.features{margin-top:80px;display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.features.four{grid-template-columns:repeat(3,1fr)}
+.fg{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:28px}
+.fg h4{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--blue2);margin-bottom:18px;font-weight:600}
+.fg ul{list-style:none;display:flex;flex-direction:column;gap:14px}
+.fg li{display:flex;gap:12px;font-size:15px}
+.fg li svg{flex:none;margin-top:4px;color:var(--cyan)}
+.fg li b{font-weight:600;display:block}
+.fg li span{color:var(--muted);font-size:14px}
+@media(max-width:980px){.features,.features.four{grid-template-columns:1fr}}
+.for{margin-top:22px;display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:22px 28px;border-radius:var(--r);border:1px dashed var(--line2)}
+.for strong{font-weight:600;margin-right:8px;font-size:15px}
+.chip{font-size:13px;padding:6px 13px;border-radius:999px;background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.22);color:#c7d7fb}
+
+/* Ecosystem */
+.eco{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;position:relative}
+.eco .st{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:30px;position:relative}
+.eco .n{font:600 13px "Space Grotesk";color:var(--blue2);letter-spacing:.1em}
+.eco h3{font-size:22px;margin:12px 0 10px}
+.eco p{color:var(--muted);font-size:15px}
+.eco .who{display:flex;gap:8px;margin-top:18px;flex-wrap:wrap}
+.eco .who span{font-size:12px;padding:5px 10px;border-radius:3.5px;background:var(--card2);color:var(--muted)}
+@media(max-width:980px){.eco{grid-template-columns:1fr}}
+
+/* About */
+.about{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+.about h2{font-size:clamp(32px,4vw,50px);font-weight:600;margin-top:16px}
+.about h2 span{color:var(--dim)}
+.about p{color:var(--muted);font-size:17px;margin-bottom:16px}
+.pillars{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.pillar{padding:24px;border-radius:var(--r);background:var(--card);border:1px solid var(--line)}
+.pillar b{font:600 18px "Space Grotesk";display:block;margin:12px 0 6px}
+.pillar span{color:var(--muted);font-size:14px}
+.pillar .ic{width:40px;height:40px;border-radius:5.5px;display:grid;place-items:center;background:rgba(59,130,246,.12);color:var(--blue2)}
+@media(max-width:900px){.about{grid-template-columns:1fr;gap:40px}}
+
+/* Contact */
+.contact{background:linear-gradient(180deg,var(--bg),#0a1330)}
+.ct{display:grid;grid-template-columns:1fr 1.1fr;gap:64px;align-items:start}
+.ct h2{font-size:clamp(32px,4vw,50px);font-weight:600;margin:16px 0 18px}
+.ct p{color:var(--muted);font-size:17px}
+.steps{margin-top:32px;display:flex;flex-direction:column;gap:16px}
+.steps div{display:flex;gap:14px;align-items:flex-start}
+.steps i{font-style:normal;font:600 13px "Space Grotesk";width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:rgba(59,130,246,.15);color:var(--blue2);flex:none}
+.steps span{color:var(--muted);font-size:15px;padding-top:4px}
+.steps b{color:var(--text);font-weight:600}
+form{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:32px;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+form .full{grid-column:1/-1}
+label{display:flex;flex-direction:column;gap:7px;font-size:13px;color:var(--muted);font-weight:500}
+input,select,textarea{font:inherit;color:var(--text);background:var(--bg2);border:1px solid var(--line2);border-radius:5.5px;padding:13px 14px;outline:none;transition:.2s;width:100%}
+input:focus,select:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(59,130,246,.2)}
+textarea{min-height:110px;resize:vertical}
+.chk{flex-direction:row;align-items:flex-start;gap:10px;font-weight:400}
+.chk input{width:auto;margin-top:3px;accent-color:var(--blue)}
+form .btn{justify-content:center;border:0;cursor:pointer;width:100%}
+form small{color:var(--dim);font-size:12px;text-align:center}
+@media(max-width:900px){.ct{grid-template-columns:1fr;gap:40px}}
+@media(max-width:560px){form{grid-template-columns:1fr;padding:22px}}
+
+footer{border-top:1px solid var(--line);padding:56px 0 36px}
+.ft{display:grid;grid-template-columns:1.3fr 1.1fr .8fr .8fr;gap:40px}
+@media(max-width:1000px){.ft{grid-template-columns:1fr 1fr}}
+.ft p{color:var(--muted);font-size:15px;margin-top:14px;max-width:340px}
+.ft h5{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:14px}
+.ft ul{list-style:none;display:flex;flex-direction:column;gap:9px;color:var(--muted);font-size:15px}
+.ft a:hover{color:var(--text)}
+.copy{margin-top:44px;padding-top:24px;border-top:1px solid var(--line);display:flex;justify-content:space-between;color:var(--dim);font-size:13px;flex-wrap:wrap;gap:10px}
+@media(max-width:760px){.ft{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<a class="wa-float" href="https://wa.me/5534984302083?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20gostaria%20de%20conhecer%20as%20solu%C3%A7%C3%B5es%20da%20Neon%20Sistemas." target="_blank" rel="noopener" aria-label="Fale com a gente no WhatsApp" data-i18n-aria><span class="wa-tip">Fale com a gente no WhatsApp</span><span class="wa-btn"><svg width="30" height="30"><use href="#i-wa"/></svg></span></a><div class="cur"></div><div class="cur-dot"></div>
+
+<!-- Ícones reutilizáveis -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-wa" viewBox="0 0 24 24" fill="currentColor"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.64.07-.3-.15-1.26-.46-2.39-1.47-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.07c.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.7.63.71.22 1.36.19 1.87.12.57-.09 1.76-.72 2-1.41.25-.7.25-1.29.18-1.41-.08-.13-.28-.2-.57-.35zM12.05 21.79h-.01a9.87 9.87 0 01-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 01-1.51-5.26c0-5.45 4.44-9.88 9.89-9.88a9.83 9.83 0 019.88 9.89c0 5.45-4.44 9.88-9.88 9.88zm8.41-18.3A11.81 11.81 0 0012.05 0C5.5 0 .16 5.34.16 11.89c0 2.1.55 4.14 1.59 5.95L.06 24l6.3-1.65a11.88 11.88 0 005.68 1.45h.01c6.55 0 11.89-5.34 11.89-11.89 0-3.18-1.24-6.17-3.48-8.42z"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 6.5l8.5 6.5 8.5-6.5"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-touch" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/><circle cx="12" cy="10.5" r="2.5"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5L18 18M6 18l2.5-2.5M15.5 8.5L18 6"/></symbol>
+  <symbol id="i-leaf" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><path d="M16 4.5a3.5 3.5 0 010 7M18 14.8c2 .7 3.2 2.4 3.6 5.2"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M11 18.5h2"/></symbol>
+  <symbol id="i-server" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="7" rx="1.5"/><rect x="3" y="13" width="18" height="7" rx="1.5"/><path d="M7 7.5h.01M7 16.5h.01"/></symbol>
+  <symbol id="i-link" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14a4.5 4.5 0 006.4 0l3-3a4.5 4.5 0 00-6.4-6.4l-1 1"/><path d="M14 10a4.5 4.5 0 00-6.4 0l-3 3a4.5 4.5 0 006.4 6.4l1-1"/></symbol>
+  <symbol id="i-call" viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8a15.2 15.2 0 006.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 013 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1z"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24" fill="#fff"><circle cx="12" cy="8" r="4.2"/><path d="M3.5 21c.9-4.4 4.2-6.6 8.5-6.6s7.6 2.2 8.5 6.6z"/></symbol>
+</svg>
+
+<!-- Mockup: Painel Neon (tela touch da suíte) -->
+<template id="tpl-panel">
+  <div class="panel"><div class="scr">
+    <div class="top"><b>Suíte 07</b><div class="st"><span>23:41</span><span>24°C</span><span>●&nbsp;Wi‑Fi</span></div></div>
+    <div class="grid">
+      <div class="tile scenes">
+        <div class="lbl">Cenas</div>
+        <div class="scene on"><i style="background:linear-gradient(135deg,#ec4899,#8b5cf6)"></i>Romântico</div>
+        <div class="scene"><i style="background:linear-gradient(135deg,#22d3ee,#3b82f6)"></i>Relax</div>
+        <div class="scene"><i style="background:linear-gradient(135deg,#f59e0b,#ef4444)"></i>Festa</div>
+        <div class="scene"><i style="background:linear-gradient(135deg,#334155,#0f172a)"></i>Dormir</div>
+      </div>
+      <div class="tile">
+        <div class="lbl">Iluminação</div><div class="big">65%</div>
+        <div><div class="slider"><span style="width:65%;background:linear-gradient(90deg,#8b5cf6,#ec4899)"></span><i class="knob" style="left:65%"></i></div>
+        <div class="dots"><i style="background:#ec4899"></i><i style="background:#8b5cf6"></i><i style="background:#3b82f6"></i><i style="background:#f59e0b"></i></div></div>
+      </div>
+      <div class="tile">
+        <div class="lbl">Clima</div><div class="big">22°</div>
+        <div style="color:#9aa6c4">Frio · Ventilação 2</div>
+      </div>
+      <div class="tile" style="grid-column:span 2">
+        <div class="lbl">Música</div>
+        <div class="np"><div class="art"></div><div><b>Late Night Lounge</b><small>Playlist da suíte</small></div></div>
+        <div class="slider"><span style="width:42%;background:#e8edfb"></span></div>
+      </div>
+    </div>
+  </div></div>
+</template>
+
+<!-- Mockup: Neon Motel (painel de gestão) -->
+<template id="tpl-dash">
+  <div class="laptop"><div class="lid"><div class="dash">
+    <aside><div class="lg"><i></i>Neon</div><span class="a">Mapa de suítes</span><span>Recepção</span><span>Reservas</span><span>Caixa</span><span>Estoque</span><span>Governança</span><span>Relatórios</span></aside>
+    <main>
+      <div class="hd"><b>Mapa de suítes</b><small>Turno noite · Caixa aberto</small></div>
+      <div class="kpis">
+        <div class="kpi"><small>Ocupação</small><b>78%</b> <em>▲ 6%</em></div>
+        <div class="kpi"><small>Receita do dia</small><b>R$ 12,4 mil</b></div>
+        <div class="kpi"><small>Permanência média</small><b>3h12</b></div>
+        <div class="kpi"><small>Em limpeza</small><b>3</b></div>
+      </div>
+      <div class="body">
+        <div class="box">
+          <div class="t">Suítes <span class="legend"><span><i style="background:#2563eb"></i>Ocupada</span><span><i style="background:#22c55e"></i>Livre</span><span><i style="background:#f59e0b"></i>Limpeza</span><span><i style="background:#ef4444"></i>Manut.</span></span></div>
+          <div class="suites">
+            <div class="su o">01<small>2h10</small></div><div class="su o">02<small>0h45</small></div><div class="su l">03<small>Livre</small></div><div class="su o">04<small>3h02</small></div><div class="su c">05<small>Limpeza</small></div><div class="su o">06<small>1h20</small></div>
+            <div class="su o">07<small>0h18</small></div><div class="su l">08<small>Livre</small></div><div class="su o">09<small>4h40</small></div><div class="su o">10<small>2h55</small></div><div class="su m">11<small>Manut.</small></div><div class="su o">12<small>1h05</small></div>
+            <div class="su c">13<small>Limpeza</small></div><div class="su o">14<small>0h32</small></div><div class="su o">15<small>2h21</small></div><div class="su l">16<small>Livre</small></div><div class="su o">17<small>3h47</small></div><div class="su c">18<small>Limpeza</small></div>
+          </div>
+        </div>
+        <div class="box">
+          <div class="t">Receita <small>últimos 7 dias</small></div>
+          <div class="bars"><span style="height:48%"></span><span style="height:62%"></span><span style="height:55%"></span><span style="height:70%"></span><span style="height:88%"></span><span style="height:96%"></span><span class="hl" style="height:74%"></span></div>
+          <div class="list"><div><span>Permanências</span><b>R$ 9.860</b></div><div><span>Consumo / frigobar</span><b>R$ 2.540</b></div></div>
+        </div>
+      </div>
+    </main>
+  </div></div><div class="base"></div></div>
+</template>
+
+<!-- Mockup: PABX Neon (chamada pelo celular) -->
+<template id="tpl-phone">
+  <div class="phone"><div class="ps"><div class="notch"></div>
+    <div class="who">Ramal 207 · PABX Neon</div>
+    <div class="name">Recepção</div>
+    <div class="tm">Em chamada · 00:42</div>
+    <div class="av"><svg><use href="#i-user"/></svg></div>
+    <div class="keys">
+      <div class="k"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 3a3 3 0 00-3 3v6a3 3 0 006 0V6a3 3 0 00-3-3zM5 11a7 7 0 0014 0M12 18v3"/></svg></div>
+      <div class="k"><svg viewBox="0 0 24 24" fill="#fff"><circle cx="6" cy="6" r="1.6"/><circle cx="12" cy="6" r="1.6"/><circle cx="18" cy="6" r="1.6"/><circle cx="6" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="18" cy="12" r="1.6"/><circle cx="6" cy="18" r="1.6"/><circle cx="12" cy="18" r="1.6"/><circle cx="18" cy="18" r="1.6"/></svg></div>
+      <div class="k"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M4 9v6h4l5 4V5L8 9zM16 9a4 4 0 010 6"/></svg></div>
+      <div class="k"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M7 7h11l-3-3M17 17H6l3 3"/></svg></div>
+      <div class="k end"><svg viewBox="0 0 24 24" fill="#fff" style="transform:rotate(135deg)"><use href="#i-call"/></svg></div>
+      <div class="k"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></div>
+    </div>
+    <div class="lbls"><span>Transferir</span><span>Encerrar</span><span>Espera</span></div>
+  </div></div>
+</template>
+
+<template id="tpl-server">
+  <div class="server">
+    <div class="row"><div class="ic"><svg width="18" height="18"><use href="#i-server"/></svg></div><div><b>Servidor Neon · Recepção</b><small>Processamento local</small></div><span class="led" style="margin-left:auto"></span></div>
+    <div style="margin-top:10px">
+      <div class="ext"><span>Ramais conectados</span><span>48 online</span></div>
+      <div class="ext"><span>Chamadas agora</span><span>3 ativas</span></div>
+      <div class="ext"><span>Custo das ligações internas</span><span>R$ 0,00</span></div>
+    </div>
+  </div>
+</template>
+
+<header>
+  <div class="wrap nav">
+    <a href="#inicio" aria-label="Neon Sistemas – início"><img class="logo" src="/assets/logo-neon.png" alt="Neon Sistemas" width="320" height="120"></a>
+    <ul>
+      <li><a href="#solucoes">Soluções</a></li>
+      <li><a href="#painel-neon">Painel Neon</a></li>
+      <li><a href="#neon-motel">Neon Motel</a></li>
+      <li><a href="#pabx-neon">PABX Neon</a></li>
+      <li><a href="#sobre">Sobre</a></li>
+    </ul>
+    <div class="nav-r">
+      <button type="button" class="snd" aria-label="Som" aria-pressed="true" title="Som"><svg class="on" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.5 8.5a5 5 0 010 7M19 6a8.5 8.5 0 010 12"/></svg><svg class="off" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M17 9.5l5 5M22 9.5l-5 5"/></svg></button>
+      <div class="lang">
+        <button type="button" class="lang-trigger" aria-haspopup="menu" aria-expanded="false" aria-label="Idioma"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 000 20 14.5 14.5 0 000-20M2 12h20"/></svg><span class="lang-code">PT</span><svg class="chev" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+        <div class="lang-menu" role="menu">
+          <button type="button" role="menuitemradio" data-lang="pt"><span>Português</span><small>PT</small></button>
+          <button type="button" role="menuitemradio" data-lang="en"><span>English</span><small>EN</small></button>
+          <button type="button" role="menuitemradio" data-lang="es"><span>Español</span><small>ES</small></button>
+          <button type="button" role="menuitemradio" data-lang="fr"><span>Français</span><small>FR</small></button>
+          <button type="button" role="menuitemradio" data-lang="de"><span>Deutsch</span><small>DE</small></button>
+          <button type="button" role="menuitemradio" data-lang="zh"><span>中文</span><small>ZH</small></button>
+        </div>
+      </div>
+      <a class="btn btn-primary nav-cta" href="#contato">Solicitar demonstração</a>
+      <button type="button" class="burger" aria-label="Menu" aria-expanded="false" aria-controls="mnav"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+  <nav class="mnav" id="mnav">
+    <div class="wrap">
+      <a href="#solucoes">Soluções</a>
+      <a href="#painel-neon">Painel Neon</a>
+      <a href="#neon-motel">Neon Motel</a>
+      <a href="#pabx-neon">PABX Neon</a>
+      <a href="#sobre">Sobre</a>
+      <a class="btn btn-primary" href="#contato">Solicitar demonstração</a>
+    </div>
+  </nav>
+</header>
+
+<main id="inicio">
+<!-- HERO -->
+<section class="hero"><div class="hero-spot"></div>
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow intro" style="--d:.05s">Tecnologia para motéis e hotéis</span>
+      <h1 class="intro" style="--d:.15s">Sua suíte, sua gestão e sua comunicação. <span>Em um só ecossistema.</span></h1>
+      <p class="lead intro" style="--d:.3s">A Neon Sistemas integra automação de suítes, sistema de gestão e PABX VoIP para que o seu estabelecimento opere com mais controle, mais eficiência e uma experiência que o hóspede percebe.</p>
+      <div class="ctas intro" style="--d:.45s">
+        <a class="btn btn-primary" href="#contato">Agendar demonstração <svg class="arrow"><use href="#i-arrow"/></svg></a>
+        <a class="btn btn-ghost" href="#solucoes">Conhecer as soluções</a>
+      </div>
+      <div class="hero-pills intro" style="--d:.6s">
+        <span class="pill"><b>Painel Neon</b> · automação</span>
+        <span class="pill"><b>Neon Motel</b> · gestão</span>
+        <span class="pill"><b>PABX Neon</b> · comunicação</span>
+      </div>
+    </div>
+    <div class="hero-visual" aria-hidden="true">
+      <div class="hv-laptop float" data-tpl="tpl-dash"></div>
+      <div class="hv-panel float d2" data-tpl="tpl-panel"></div>
+      <div class="hv-phone float d3" data-tpl="tpl-phone"></div>
+    </div>
+  </div>
+</section>
+
+<div class="strip">
+  <div class="wrap">
+    <div class="it"><b>Tudo integrado</b><span>Suíte, recepção e caixa falando a mesma língua.</span></div>
+    <div class="it"><b>Operação local</b><span>Servidor no estabelecimento, sem depender da internet.</span></div>
+    <div class="it"><b>Sem custo de ligação</b><span>Ramais no celular para equipe e hóspedes.</span></div>
+    <div class="it"><b>Feito para hotelaria</b><span>Pensado para motéis, hotéis e pousadas.</span></div>
+  </div>
+</div>
+
+<!-- SOLUÇÕES -->
+<section id="solucoes">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><span class="eyebrow">Nossas soluções</span><h2>Três produtos. <span>Uma operação conectada.</span></h2></div>
+      <p>Use cada solução de forma independente ou combine as três: a automação da suíte, a gestão do negócio e a comunicação interna trabalhando juntas.</p>
+    </div>
+    <div class="cards">
+      <a class="pcard" href="#painel-neon">
+        <div class="vis v1" data-tpl="tpl-panel"></div>
+        <div class="bd"><span class="tag">Automação de suítes</span><h3>Painel Neon</h3><p>Painel touch que comanda iluminação, TV, música e ar-condicionado da suíte, com cenas prontas para cada momento.</p><span class="more">Ver detalhes <svg class="arrow"><use href="#i-arrow"/></svg></span></div>
+      </a>
+      <a class="pcard" href="#neon-motel">
+        <div class="vis v2" data-tpl="tpl-dash"></div>
+        <div class="bd"><span class="tag">Gestão de motéis e hotéis</span><h3>Neon Motel</h3><p>Sistema de gestão com mapa de suítes em tempo real, recepção, caixa, estoque, governança e relatórios.</p><span class="more">Ver detalhes <svg class="arrow"><use href="#i-arrow"/></svg></span></div>
+      </a>
+      <a class="pcard" href="#pabx-neon">
+        <div class="vis v3" data-tpl="tpl-phone"></div>
+        <div class="bd"><span class="tag">Intercomunicação VoIP</span><h3>PABX Neon</h3><p>Suítes, recepção e setores conectados pelo celular, como ramais, sem custo de ligação e com servidor local.</p><span class="more">Ver detalhes <svg class="arrow"><use href="#i-arrow"/></svg></span></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- PAINEL NEON -->
+<section class="product" id="painel-neon">
+  <div class="wrap">
+    <div class="pd-grid">
+      <div class="pd-vis v1" data-tpl="tpl-panel"></div>
+      <div class="pd-txt">
+        <span class="eyebrow">01 · Painel Neon</span>
+        <h2>A suíte inteira <span>no toque da tela.</span></h2>
+        <p>Um painel touch elegante reúne iluminação, multimídia, som e clima em uma interface simples. O hóspede cria o ambiente ideal em segundos e o estabelecimento ganha em conforto e economia de energia.</p>
+        <div class="hl">
+          <div><span class="ic"><svg width="20" height="20"><use href="#i-touch"/></svg></span><div><b>Controle por toque</b><span>Luz, TV, som e ar-condicionado em uma única tela.</span></div></div>
+          <div><span class="ic"><svg width="20" height="20"><use href="#i-spark"/></svg></span><div><b>Cenas de ambiente</b><span>Romântico, relax, festa ou dormir: tudo ajustado em um toque.</span></div></div>
+          <div><span class="ic"><svg width="20" height="20"><use href="#i-leaf"/></svg></span><div><b>Eficiência energética</b><span>Automação por ocupação desliga o que não está sendo usado.</span></div></div>
+        </div>
+        <a class="btn btn-primary" href="#contato" data-prod="Painel Neon">Ver o Painel Neon funcionando <svg class="arrow"><use href="#i-arrow"/></svg></a>
+      </div>
+    </div>
+    <div class="features">
+      <div class="fg"><h4>Iluminação e ambiente</h4><ul>
+        <li><svg width="16" height="16"><use href="#i-check"/></svg><div><b>Cenas e dimerização</b><span>Intensidade e cenas para cada momento.</span></div></li>
+        <li><svg width="16" height="16"><use href="#i-check"/></svg><div><b>Iluminação RGB</b><span>Cores e tons para criar atmosferas únicas.</span></div></li>
+        <li><svg width="16" height="16"><use href="#i-check"/></svg><div><b>Zonas e circuitos</b><span>Comando independente de cada área.</span></div></li>
+        <li><svg width="16" height="16"><use href="#i-check"/></svg><div><b>Cortinas e persianas</b><span>Acionamento integrado ao painel.</span></div></li>
+      </ul></div>
+      <div class="fg"><h4>Multimídia e clima</h4><ul>
+        <li><svg width="16" height="16"><use href="#i-check"/></svg><div><b>Controle da TV</b><span>Liga/desliga, canais, volume e fonte.</span></div></li>
+        <li><svg width="16" height="16"><use href="#i-check"/></svg><div><b>Música e streaming</b><span>Playlists e fontes de áudio pelo painel.</span></div></li>
+        <li><svg width="16" height="16"><use href="#i-check"/></svg><div><b>Áudio multizona</b><span>Som ambiente com controle por zona.</span></div></li>
+        <li><svg width="16" height="16"><use href="#i-check"/></svg><div><b>Climatização</b><span>Temperatura, ventilação e modos do ar.</span></div></li>
+      </ul></div>
+      <div class="fg"><h4>Experiência e operação</h4><ul>
+        <li><svg width="16" height="16"><use href="#i-check"/></svg><div><b>Não perturbe / arrumar</b><span>Status da suíte enviado à recepção.</span></div></li>
+        <li><svg width="16" height="16"><use href="#i-check"/></svg><div><b>Automação por ocupação</b><span>Conforto na chegada, economia na saída.</span></div></li>
+        <li><svg width="16" height="16"><use href="#i-check"/></svg><div><b>Despertador inteligente</b><span>Acordar com luz, música e cortinas.</span></div></li>
+        <li><svg width="16" height="16"><use href="#i-check"/></svg><div><b>Integração com o Neon Motel</b><span>Suíte e recepção sempre sincronizadas.</span></div></li>
+      </ul></div>
+    </div>
+    <div class="for"><strong>Ideal para</strong><span class="chip">Motéis</span><span class="chip">Hotéis</span><span class="chip">Pousadas</span><span class="chip">Flats</span><span class="chip">Resorts</span><span class="chip">Suítes premium</span></div>
+  </div>
+</section>
+
+<!-- NEON MOTEL -->
+<section class="product alt" id="neon-motel">
+  <div class="wrap">
+    <div class="pd-grid rev">
+      <div class="pd-vis v2" data-tpl="tpl-dash"></div>
+      <div class="pd-txt">
+        <span class="eyebrow">02 · Neon Motel</span>
+        <h2>Gestão completa <span>do check-in ao caixa.</span></h2>
+        <p>Um sistema de gestão feito para a rotina de motéis, hotéis e pousadas: mapa de suítes em tempo real, recepção, equipe, estoque e financeiro em uma única plataforma.</p>
+        <div class="hl">
+          <div><span class="ic"><svg width="20" height="20"><use href="#i-grid"/></svg></span><div><b>Mapa de suítes ao vivo</b><span>Ocupação, limpeza e manutenção de cada suíte em uma só tela.</span></div></div>
+          <div><span class="ic"><svg width="20" height="20"><use href="#i-users"/></svg></span><div><b>Equipe sob controle</b><span>Permissões por colaborador, turnos e fechamento de caixa.</span></div></div>
+          <div><span class="ic"><svg width="20" height="20"><use href="#i-chart"/></svg></span><div><b>Números do negócio</b><span>Ocupação, receita e desempenho para decidir melhor.</span></div></div>
+        </div>
+        <a class="btn btn-primary" href="#contato" data-prod="Neon Motel">Ver o Neon Motel funcionando <svg class="arrow"><use href="#i-arrow"/></svg></a>
+      </div>
+    </div>
+    <div class="features">
+      <div class="fg"><h4>Reservas e recepção</h4><ul>
+        <li><svg width="16" height="16"><use href="#i-check"/></svg><div><b>Reservas e agenda</b><span>Disponibilidade e agenda de ocupação.</span></div></li>
+        <li><svg width="16" height="16"><use href="#i-check"/></svg><div><b>Check-in e check-out</b><span>Entrada e saída com status em tempo real.</span></div></li>
+        <li><svg width="16" height="16"><use href="#i-check"/></svg><div><b>Status das suítes</b><span>Ocupação, limpeza e manutenção.</span></div></li>
+        <li><svg width="16" height="16"><use href="#i-check"/></svg><div><b>Histórico de hóspedes</b><span>Cadastro e estadias anteriores.</span></div></li>
+      </ul></div>
+      <div class="fg"><h4>Operação e equipe</h4><ul>
+        <li><svg width="16" height="16"><use href="#i-check"/></svg><div><b>Funções e permissões</b><span>Cada colaborador acessa só o que precisa.</span></div></li>
+        <li><svg width="16" height="16"><use href="#i-check"/></svg><div><b>Turnos e caixa</b><span>Abertura, conferência e fechamento por turno.</span></div></li>
+        <li><svg width="16" height="16"><use href="#i-check"/></svg><div><b>Governança</b><span>Acompanhamento de limpeza e camareiras.</span></div></li>
+        <li><svg width="16" height="16"><use href="#i-check"/></svg><div><b>Estoque e frigobar</b><span>Entradas, saídas e consumo por suíte.</span></div></li>
+      </ul></div>
+      <div class="fg"><h4>Financeiro e gestão</h4><ul>
+        <li><svg width="16" height="16"><use href="#i-check"/></svg><div><b>Tarifação por período</b><span>Hora, pernoite ou diária, com promoções.</span></div></li>
+        <li><svg width="16" height="16"><use href="#i-check"/></svg><div><b>Faturamento e fiscal</b><span>Emissão de notas integrada à operação.</span></div></li>
+        <li><svg width="16" height="16"><use href="#i-check"/></svg><div><b>Pagamentos</b><span>Registro e conferência de recebimentos.</span></div></li>
+        <li><svg width="16" height="16"><use href="#i-check"/></svg><div><b>Relatórios e indicadores</b><span>Ocupação, receita e desempenho.</span></div></li>
+      </ul></div>
+    </div>
+    <div class="for"><strong>Ideal para</strong><span class="chip">Motéis</span><span class="chip">Hotéis</span><span class="chip">Pousadas</span><span class="chip">Flats</span><span class="chip">Apart-hotéis</span><span class="chip">Pequenas e médias redes</span></div>
+  </div>
+</section>
+
+<!-- PABX NEON -->
+<section class="product" id="pabx-neon">
+  <div class="wrap">
+    <div class="pd-grid">
+      <div class="pd-vis v3"><div data-tpl="tpl-phone" style="width:38%;margin-right:34%"></div><div class="server" data-tpl-inline="tpl-server"></div></div>
+      <div class="pd-txt">
+        <span class="eyebrow">03 · PABX Neon</span>
+        <h2>Comunicação interna <span>sem custo de ligação.</span></h2>
+        <p>Suítes, recepção e setores conversam pelo celular, como ramais do sistema. Um servidor instalado na recepção reúne as tecnologias mais modernas de PABX VoIP com processamento local e controle total.</p>
+        <div class="hl">
+          <div><span class="ic"><svg width="20" height="20"><use href="#i-phone"/></svg></span><div><b>Ramais no celular</b><span>Equipe e hóspedes conectados sem custo de ligação.</span></div></div>
+          <div><span class="ic"><svg width="20" height="20"><use href="#i-server"/></svg></span><div><b>Servidor na recepção</b><span>Funciona localmente, sem depender de nuvem externa.</span></div></div>
+          <div><span class="ic"><svg width="20" height="20"><use href="#i-link"/></svg></span><div><b>Integrado à gestão</b><span>Ramal ativado no check-in e liberado no check-out.</span></div></div>
+        </div>
+        <a class="btn btn-primary" href="#contato" data-prod="PABX Neon">Ver o PABX Neon funcionando <svg class="arrow"><use href="#i-arrow"/></svg></a>
+      </div>
+    </div>
+    <div class="features">
+      <div class="fg"><h4>Comunicação unificada</h4><ul>
+        <li><svg width="16" height="16"><use href="#i-check"/></svg><div><b>PABX VoIP / IP PBX</b><span>Voz digital pela rede do estabelecimento.</span></div></li>
+        <li><svg width="16" height="16"><use href="#i-check"/></svg><div><b>Ramais móveis</b><span>Celulares funcionando como ramais.</span></div></li>
+        <li><svg width="16" height="16"><use href="#i-check"/></svg><div><b>SIP trunk</b><span>Conexão com operadoras externas.</span></div></li>
+        <li><svg width="16" height="16"><use href="#i-check"/></svg><div><b>Arquitetura híbrida</b><span>Aproveita telefones analógicos existentes.</span></div></li>
+      </ul></div>
+      <div class="fg"><h4>Recursos de telefonia</h4><ul>
+        <li><svg width="16" height="16"><use href="#i-check"/></svg><div><b>URA / atendimento automático</b><span>Chamadas direcionadas ao setor certo.</span></div></li>
+        <li><svg width="16" height="16"><use href="#i-check"/></svg><div><b>Transferência e espera</b><span>Entre setores, com facilidade.</span></div></li>
+        <li><svg width="16" height="16"><use href="#i-check"/></svg><div><b>Caixa postal</b><span>Recados e avisos de chamadas perdidas.</span></div></li>
+        <li><svg width="16" height="16"><use href="#i-check"/></svg><div><b>Despertador e emergência</b><span>Chamadas programadas e rota prioritária.</span></div></li>
+      </ul></div>
+      <div class="fg"><h4>Gestão e escala</h4><ul>
+        <li><svg width="16" height="16"><use href="#i-check"/></svg><div><b>Integração com PMS</b><span>Ramal automático no check-in e check-out.</span></div></li>
+        <li><svg width="16" height="16"><use href="#i-check"/></svg><div><b>Relatórios de chamadas</b><span>Registros detalhados de uso (CDR).</span></div></li>
+        <li><svg width="16" height="16"><use href="#i-check"/></svg><div><b>Administração remota</b><span>Ramais, rotas e permissões pelo painel.</span></div></li>
+        <li><svg width="16" height="16"><use href="#i-check"/></svg><div><b>Cresce por software</b><span>Novos ramais e unidades sem trocar hardware.</span></div></li>
+      </ul></div>
+    </div>
+    <div class="for"><strong>Ideal para</strong><span class="chip">Hotéis</span><span class="chip">Motéis</span><span class="chip">Pousadas</span><span class="chip">Hospitais</span><span class="chip">Prefeituras</span><span class="chip">Empresas de todos os portes</span></div>
+  </div>
+</section>
+
+<!-- ECOSSISTEMA -->
+<section class="product alt">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><span class="eyebrow">Como funciona junto</span><h2>Uma estadia, <span>três soluções em sintonia.</span></h2></div>
+      <p>Quando os produtos Neon trabalham integrados, cada etapa da estadia acontece sem retrabalho para a equipe.</p>
+    </div>
+    <div class="eco">
+      <div class="st"><span class="n">CHECK-IN</span><h3>A suíte se prepara sozinha</h3><p>A recepção libera a suíte no Neon Motel. O ramal é ativado no PABX Neon e o Painel Neon recebe o hóspede com a cena de boas-vindas.</p><div class="who"><span>Neon Motel</span><span>PABX Neon</span><span>Painel Neon</span></div></div>
+      <div class="st"><span class="n">ESTADIA</span><h3>Conforto e atendimento</h3><p>O hóspede controla luz, som e clima pelo painel e fala com a recepção pelo ramal. Pedidos e consumo entram direto na conta da suíte.</p><div class="who"><span>Painel Neon</span><span>PABX Neon</span><span>Neon Motel</span></div></div>
+      <div class="st"><span class="n">CHECK-OUT</span><h3>Fechamento sem atrito</h3><p>Conta fechada no caixa, ramal liberado, suíte em modo economia e governança avisada para a limpeza.</p><div class="who"><span>Neon Motel</span><span>PABX Neon</span><span>Painel Neon</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SOBRE -->
+<section id="sobre">
+  <div class="wrap about">
+    <div>
+      <span class="eyebrow">Sobre a Neon</span>
+      <h2>Tecnologia com um propósito: <span>o seu negócio.</span></h2>
+      <p style="margin-top:22px">A Neon Sistemas desenvolve soluções de automação, gestão e comunicação para motéis, hotéis e empresas. Nosso foco é ajudar gestores e proprietários a operar com mais eficiência e a oferecer experiências que fazem o cliente voltar.</p>
+      <p>Painel Neon, Neon Motel e PABX Neon nasceram da rotina da hotelaria e foram pensados para funcionar juntos, com implantação acompanhada e suporte próximo.</p>
+      <a class="btn btn-ghost" href="#contato" style="margin-top:12px">Converse com a Neon <svg class="arrow"><use href="#i-arrow"/></svg></a>
+    </div>
+    <div class="pillars">
+      <div class="pillar"><span class="ic"><svg width="20" height="20"><use href="#i-spark"/></svg></span><b>Inovação</b><span>Tecnologia atual aplicada à operação real.</span></div>
+      <div class="pillar"><span class="ic"><svg width="20" height="20"><use href="#i-touch"/></svg></span><b>Automação</b><span>Suítes mais confortáveis e eficientes.</span></div>
+      <div class="pillar"><span class="ic"><svg width="20" height="20"><use href="#i-grid"/></svg></span><b>Gestão</b><span>Controle do negócio em um só sistema.</span></div>
+      <div class="pillar"><span class="ic"><svg width="20" height="20"><use href="#i-phone"/></svg></span><b>Comunicação</b><span>Equipe e hóspedes sempre conectados.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTATO -->
+<section class="contact" id="contato">
+  <div class="wrap ct">
+    <div>
+      <span class="eyebrow">Vamos conversar</span>
+      <h2>Veja a Neon funcionando no seu cenário.</h2>
+      <p>Conte um pouco sobre o seu estabelecimento e agende uma demonstração das soluções que fazem sentido para a sua operação.</p>
+      <div class="steps">
+        <div><i>1</i><span><b>Você envia seus dados.</b> Leva menos de um minuto.</span></div>
+        <div><i>2</i><span><b>Entendemos sua operação.</b> Número de suítes, rotina e objetivos.</span></div>
+        <div><i>3</i><span><b>Demonstração personalizada.</b> As telas e os recursos na prática.</span></div>
+      </div>
+      <div class="direct">
+        <span class="direct-t">Prefere falar direto?</span>
+        <a class="dc wa" href="https://wa.me/5534984302083" target="_blank" rel="noopener"><span class="dc-ic"><svg width="22" height="22"><use href="#i-wa"/></svg></span><span><b>WhatsApp</b><small>+55 (34) 98430-2083</small></span><svg class="arrow"><use href="#i-arrow"/></svg></a>
+        <a class="dc" href="mailto:contato@neonsistemas.com"><span class="dc-ic"><svg width="22" height="22"><use href="#i-mail"/></svg></span><span><b>E-mail</b><small>contato@neonsistemas.com</small></span><svg class="arrow"><use href="#i-arrow"/></svg></a>
+      </div>
+    </div>
+    <form id="form">
+      <label>Seu nome<input name="nome" required autocomplete="name"></label>
+      <label>Estabelecimento<input name="estabelecimento" required></label>
+      <label>E-mail<input type="email" name="email" required autocomplete="email"></label>
+      <label>Telefone / WhatsApp<input type="tel" name="telefone" autocomplete="tel"></label>
+      <label class="full">Qual solução você quer conhecer?
+        <select name="solucao" id="solucao">
+          <option>Todas as soluções</option><option>Painel Neon</option><option>Neon Motel</option><option>PABX Neon</option><option>Ainda não sei, quero conversar</option>
+        </select></label>
+      <label class="full">Mensagem (opcional)<textarea name="mensagem" placeholder="Ex.: motel com 20 suítes, queremos automatizar e trocar o sistema de gestão."></textarea></label>
+      <label class="chk full"><input type="checkbox" required> Autorizo a Neon Sistemas a usar estes dados para entrar em contato sobre esta solicitação.</label>
+      <div class="full sendrow"><button class="btn btn-primary" type="submit">Solicitar demonstração <svg class="arrow"><use href="#i-arrow"/></svg></button><button class="btn btn-wa" type="button" id="sendwa"><svg width="18" height="18"><use href="#i-wa"/></svg> Enviar pelo WhatsApp</button></div>
+      <small class="full">Seus dados são privados e usados apenas para atender à sua solicitação.</small>
+    </form>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="ft">
+      <div><img class="logo logo-ft" src="/assets/logo-neon.png" alt="Neon Sistemas" width="320" height="120"><p>Automação, gestão e comunicação para conectar a sua operação ao futuro.</p></div>
+      <div><h5>Soluções</h5><ul><li><a href="#painel-neon">Painel Neon</a></li><li><a href="#neon-motel">Neon Motel</a></li><li><a href="#pabx-neon">PABX Neon</a></li></ul></div>
+      <div><h5>Contato</h5><ul><li><a href="https://wa.me/5534984302083" target="_blank" rel="noopener">WhatsApp · (34) 98430-2083</a></li><li><a href="mailto:contato@neonsistemas.com">contato@neonsistemas.com</a></li></ul></div>
+      <div><h5>Empresa</h5><ul><li><a href="#sobre">Sobre a Neon</a></li><li><a href="#contato">Solicitar demonstração</a></li></ul></div>
+    </div>
+    <div class="copy"><span>© 2026 Neon Sistemas. Todos os direitos reservados.</span><span>Automação · Gestão · Comunicação</span></div>
+  </div>
+</footer>
+
+<script>
+// Renderiza os mockups dos produtos a partir dos templates
+document.querySelectorAll('[data-tpl]').forEach(el=>{
+  const mk=document.createElement('div');mk.className='mk';mk.appendChild(document.getElementById(el.dataset.tpl).content.cloneNode(true));el.appendChild(mk);
+});
+document.querySelectorAll('[data-tpl-inline]').forEach(el=>{
+  const t=document.getElementById(el.dataset.tplInline).content.firstElementChild.cloneNode(true);
+  el.replaceWith(t);
+});
+
+const REDUCED=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+
+// ================= SONS (sintetizados, discretos) =================
+const SND={ctx:null,out:null,on:store.get('neon-sound')!=='off',ready:false,last:0};
+function audio(){
+  if(!SND.ready)return null;
+  if(!SND.ctx){const C=window.AudioContext||window.webkitAudioContext;if(!C)return null;
+    SND.ctx=new C();const comp=SND.ctx.createDynamicsCompressor();SND.out=SND.ctx.createGain();SND.out.gain.value=.7;SND.out.connect(comp);comp.connect(SND.ctx.destination);}
+  if(SND.ctx.state==='suspended')SND.ctx.resume();
+  return SND.ctx;
+}
+function tone(f,dur,o={}){const c=audio();if(!c||!SND.on)return;const t=c.currentTime+(o.delay||0);
+  const osc=c.createOscillator(),g=c.createGain();osc.type=o.type||'sine';osc.frequency.setValueAtTime(f,t);
+  if(o.to)osc.frequency.exponentialRampToValueAtTime(o.to,t+dur);
+  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(o.vol||.04,t+(o.attack||.005));g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+  osc.connect(g);g.connect(SND.out);osc.start(t);osc.stop(t+dur+.05);}
+function air(dur,o={}){const c=audio();if(!c||!SND.on)return;const t=c.currentTime;
+  const buf=c.createBuffer(1,Math.ceil(c.sampleRate*dur),c.sampleRate),d=buf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;
+  const src=c.createBufferSource();src.buffer=buf;const bp=c.createBiquadFilter();bp.type='bandpass';bp.Q.value=1.4;
+  bp.frequency.setValueAtTime(o.from||400,t);bp.frequency.exponentialRampToValueAtTime(o.to||2400,t+dur);
+  const g=c.createGain();g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(o.vol||.03,t+dur*.35);g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+  src.connect(bp);bp.connect(g);g.connect(SND.out);src.start(t);src.stop(t+dur);}
+const sfx={
+  hover(){const n=performance.now();if(n-SND.last<70)return;SND.last=n;tone(2100,.05,{vol:.012});},
+  click(){tone(620,.14,{type:'triangle',vol:.045});tone(930,.22,{vol:.03,delay:.04});},
+  open(){air(.24,{from:300,to:2800,vol:.035});tone(880,.18,{vol:.015,delay:.06});},
+  close(){air(.2,{from:2400,to:280,vol:.03});},
+  lang(){[523.25,659.25,783.99,1046.5].forEach((f,i)=>tone(f,.6,{vol:.022,delay:i*.06}));},
+  on(){tone(520,.12,{vol:.045});tone(780,.2,{vol:.035,delay:.08});},
+};
+function unlock(){if(SND.ready)return;SND.ready=true;audio();}
+['pointerdown','keydown','touchstart'].forEach(e=>addEventListener(e,unlock,{once:true,passive:true}));
+const sndBtn=document.querySelector('.snd');
+function paintSnd(){sndBtn.setAttribute('aria-pressed',SND.on);}
+paintSnd();
+sndBtn.addEventListener('click',()=>{SND.on=!SND.on;store.set('neon-sound',SND.on?'on':'off');paintSnd();if(SND.on){unlock();sfx.on();}});
+const HOVER_SEL='a,button,.pcard,label.chk,select';
+let lastHover=null;
+document.addEventListener('pointerover',e=>{if(e.pointerType!=='mouse')return;const el=e.target.closest(HOVER_SEL);if(el&&el!==lastHover){lastHover=el;sfx.hover();}if(!el)lastHover=null;});
+document.addEventListener('click',e=>{const el=e.target.closest('a,button,select,input[type=checkbox]');if(!el||el.closest('.lang')||el.classList.contains('burger')||el.classList.contains('snd'))return;sfx.click();});
+
+// ================= MENU DO CELULAR =================
+const hdr=document.querySelector('header'), burger=document.querySelector('.burger');
+function menu(open){hdr.classList.toggle('open',open);burger.setAttribute('aria-expanded',open);}
+burger.addEventListener('click',()=>{const o=!hdr.classList.contains('open');menu(o);o?sfx.open():sfx.close();});
+document.querySelectorAll('.mnav a').forEach(a=>a.addEventListener('click',()=>menu(false)));
+
+// ================= IDIOMAS =================
+const I18N={"Soluções": {"en": "Solutions", "es": "Soluciones", "fr": "Solutions", "de": "Lösungen", "zh": "解决方案"}, "Sobre": {"en": "About", "es": "Nosotros", "fr": "À propos", "de": "Über uns", "zh": "关于我们"}, "Solicitar demonstração": {"en": "Request a demo", "es": "Solicitar demostración", "fr": "Demander une démo", "de": "Demo anfragen", "zh": "预约演示"}, "Tecnologia para motéis e hotéis": {"en": "Technology for motels and hotels", "es": "Tecnología para moteles y hoteles", "fr": "Technologie pour motels et hôtels", "de": "Technologie für Motels und Hotels", "zh": "汽车旅馆与酒店科技"}, "Sua suíte, sua gestão e sua comunicação.": {"en": "Your suites, your management and your communication.", "es": "Su suite, su gestión y su comunicación.", "fr": "Vos suites, votre gestion et votre communication.", "de": "Ihre Suiten, Ihr Management und Ihre Kommunikation.", "zh": "客房、管理与通信，"}, "Em um só ecossistema.": {"en": "In one ecosystem.", "es": "En un solo ecosistema.", "fr": "Dans un seul écosystème.", "de": "In einem Ökosystem.", "zh": "尽在一个生态系统。"}, "A Neon Sistemas integra automação de suítes, sistema de gestão e PABX VoIP para que o seu estabelecimento opere com mais controle, mais eficiência e uma experiência que o hóspede percebe.": {"en": "Neon Sistemas brings together suite automation, a management system and VoIP PBX so your property runs with more control, more efficiency and an experience your guests notice.", "es": "Neon Sistemas integra automatización de suites, sistema de gestión y centralita VoIP para que su establecimiento opere con más control, más eficiencia y una experiencia que el huésped percibe.", "fr": "Neon Sistemas réunit la domotique des suites, un logiciel de gestion et un standard VoIP pour que votre établissement fonctionne avec plus de contrôle, plus d'efficacité et une expérience que vos clients remarquent.", "de": "Neon Sistemas vereint Suitenautomation, Managementsystem und VoIP-Telefonanlage, damit Ihr Haus mit mehr Kontrolle, mehr Effizienz und einem spürbar besseren Gästeerlebnis arbeitet.", "zh": "Neon Sistemas 将客房自动化、管理系统和 VoIP 电话交换机整合在一起，让您的门店运营更可控、更高效，并带来客人真切感受到的入住体验。"}, "Agendar demonstração": {"en": "Book a demo", "es": "Agendar demostración", "fr": "Réserver une démo", "de": "Demo vereinbaren", "zh": "预约演示"}, "Conhecer as soluções": {"en": "Explore the solutions", "es": "Conocer las soluciones", "fr": "Découvrir les solutions", "de": "Lösungen entdecken", "zh": "了解解决方案"}, "· automação": {"en": "· automation", "es": "· automatización", "fr": "· domotique", "de": "· Automation", "zh": "· 自动化"}, "· gestão": {"en": "· management", "es": "· gestión", "fr": "· gestion", "de": "· Management", "zh": "· 管理"}, "· comunicação": {"en": "· communication", "es": "· comunicación", "fr": "· communication", "de": "· Kommunikation", "zh": "· 通信"}, "Mapa de suítes": {"en": "Suite map", "es": "Mapa de suites", "fr": "Plan des suites", "de": "Suitenübersicht", "zh": "客房总览"}, "Recepção": {"en": "Front desk", "es": "Recepción", "fr": "Réception", "de": "Rezeption", "zh": "前台"}, "Reservas": {"en": "Bookings", "es": "Reservas", "fr": "Réservations", "de": "Reservierungen", "zh": "预订"}, "Caixa": {"en": "Cashier", "es": "Caja", "fr": "Caisse", "de": "Kasse", "zh": "收银"}, "Estoque": {"en": "Inventory", "es": "Inventario", "fr": "Stock", "de": "Lager", "zh": "库存"}, "Governança": {"en": "Housekeeping", "es": "Ama de llaves", "fr": "Gouvernance", "de": "Housekeeping", "zh": "客房服务"}, "Relatórios": {"en": "Reports", "es": "Informes", "fr": "Rapports", "de": "Berichte", "zh": "报表"}, "Turno noite · Caixa aberto": {"en": "Night shift · Register open", "es": "Turno noche · Caja abierta", "fr": "Équipe de nuit · Caisse ouverte", "de": "Nachtschicht · Kasse geöffnet", "zh": "夜班 · 收银中"}, "Ocupação": {"en": "Occupancy", "es": "Ocupación", "fr": "Occupation", "de": "Auslastung", "zh": "入住率"}, "Receita do dia": {"en": "Today's revenue", "es": "Ingresos del día", "fr": "Chiffre du jour", "de": "Tagesumsatz", "zh": "今日营收"}, "R$ 12,4 mil": {"en": "R$ 12.4k", "es": "R$ 12,4 mil", "fr": "12,4 k R$", "de": "12,4 Tsd. R$", "zh": "R$ 1.24 万"}, "Permanência média": {"en": "Average stay", "es": "Estancia media", "fr": "Séjour moyen", "de": "Ø Aufenthalt", "zh": "平均停留"}, "Em limpeza": {"en": "Being cleaned", "es": "En limpieza", "fr": "En nettoyage", "de": "In Reinigung", "zh": "清洁中"}, "Suítes": {"en": "Suites", "es": "Suites", "fr": "Suites", "de": "Suiten", "zh": "客房"}, "Ocupada": {"en": "Occupied", "es": "Ocupada", "fr": "Occupée", "de": "Belegt", "zh": "已入住"}, "Livre": {"en": "Free", "es": "Libre", "fr": "Libre", "de": "Frei", "zh": "空闲"}, "Limpeza": {"en": "Cleaning", "es": "Limpieza", "fr": "Nettoyage", "de": "Reinigung", "zh": "清洁"}, "Manut.": {"en": "Maint.", "es": "Mant.", "fr": "Maint.", "de": "Wartung", "zh": "维修"}, "Receita": {"en": "Revenue", "es": "Ingresos", "fr": "Chiffre d'affaires", "de": "Umsatz", "zh": "营收"}, "últimos 7 dias": {"en": "last 7 days", "es": "últimos 7 días", "fr": "7 derniers jours", "de": "letzte 7 Tage", "zh": "近 7 天"}, "Permanências": {"en": "Stays", "es": "Estancias", "fr": "Séjours", "de": "Aufenthalte", "zh": "住宿"}, "Consumo / frigobar": {"en": "Minibar / extras", "es": "Consumo / minibar", "fr": "Consommations / minibar", "de": "Verzehr / Minibar", "zh": "消费 / 迷你吧"}, "Suíte 07": {"en": "Suite 07", "es": "Suite 07", "fr": "Suite 07", "de": "Suite 07", "zh": "客房 07"}, "Cenas": {"en": "Scenes", "es": "Escenas", "fr": "Scènes", "de": "Szenen", "zh": "场景"}, "Romântico": {"en": "Romantic", "es": "Romántico", "fr": "Romantique", "de": "Romantisch", "zh": "浪漫"}, "Festa": {"en": "Party", "es": "Fiesta", "fr": "Fête", "de": "Party", "zh": "派对"}, "Dormir": {"en": "Sleep", "es": "Dormir", "fr": "Dormir", "de": "Schlafen", "zh": "睡眠"}, "Iluminação": {"en": "Lighting", "es": "Iluminación", "fr": "Éclairage", "de": "Beleuchtung", "zh": "灯光"}, "Clima": {"en": "Climate", "es": "Clima", "fr": "Climat", "de": "Klima", "zh": "空调"}, "Frio · Ventilação 2": {"en": "Cool · Fan 2", "es": "Frío · Ventilación 2", "fr": "Froid · Ventilation 2", "de": "Kühl · Lüftung 2", "zh": "制冷 · 风速 2"}, "Música": {"en": "Music", "es": "Música", "fr": "Musique", "de": "Musik", "zh": "音乐"}, "Playlist da suíte": {"en": "Suite playlist", "es": "Playlist de la suite", "fr": "Playlist de la suite", "de": "Suite-Playlist", "zh": "客房歌单"}, "Ramal 207 · PABX Neon": {"en": "Ext. 207 · PABX Neon", "es": "Extensión 207 · PABX Neon", "fr": "Poste 207 · PABX Neon", "de": "Nebenstelle 207 · PABX Neon", "zh": "分机 207 · PABX Neon"}, "Em chamada · 00:42": {"en": "On call · 00:42", "es": "En llamada · 00:42", "fr": "En appel · 00:42", "de": "Im Gespräch · 00:42", "zh": "通话中 · 00:42"}, "Transferir": {"en": "Transfer", "es": "Transferir", "fr": "Transférer", "de": "Weiterleiten", "zh": "转接"}, "Encerrar": {"en": "End", "es": "Colgar", "fr": "Raccrocher", "de": "Beenden", "zh": "挂断"}, "Espera": {"en": "Hold", "es": "Espera", "fr": "Attente", "de": "Halten", "zh": "保持"}, "Tudo integrado": {"en": "Fully integrated", "es": "Todo integrado", "fr": "Tout intégré", "de": "Alles integriert", "zh": "全面集成"}, "Suíte, recepção e caixa falando a mesma língua.": {"en": "Suites, front desk and cashier speaking the same language.", "es": "Suite, recepción y caja hablando el mismo idioma.", "fr": "Suites, réception et caisse parlent le même langage.", "de": "Suiten, Rezeption und Kasse sprechen dieselbe Sprache.", "zh": "客房、前台与收银协同一致。"}, "Operação local": {"en": "On-site operation", "es": "Operación local", "fr": "Fonctionnement local", "de": "Lokaler Betrieb", "zh": "本地运行"}, "Servidor no estabelecimento, sem depender da internet.": {"en": "Server on your premises, no internet dependency.", "es": "Servidor en el establecimiento, sin depender de internet.", "fr": "Serveur sur place, sans dépendre d'internet.", "de": "Server vor Ort, unabhängig vom Internet.", "zh": "服务器部署在门店，不依赖互联网。"}, "Sem custo de ligação": {"en": "No call costs", "es": "Sin costo de llamadas", "fr": "Aucun coût d'appel", "de": "Keine Gesprächskosten", "zh": "零通话费用"}, "Ramais no celular para equipe e hóspedes.": {"en": "Mobile extensions for staff and guests.", "es": "Extensiones en el celular para el equipo y los huéspedes.", "fr": "Postes sur mobile pour l'équipe et les clients.", "de": "Nebenstellen auf dem Handy für Team und Gäste.", "zh": "员工和客人都能用手机当分机。"}, "Feito para hotelaria": {"en": "Built for hospitality", "es": "Hecho para hotelería", "fr": "Conçu pour l'hôtellerie", "de": "Für die Hotellerie gemacht", "zh": "专为酒店业打造"}, "Pensado para motéis, hotéis e pousadas.": {"en": "Designed for motels, hotels and inns.", "es": "Pensado para moteles, hoteles y posadas.", "fr": "Pensé pour les motels, hôtels et maisons d'hôtes.", "de": "Entwickelt für Motels, Hotels und Pensionen.", "zh": "为汽车旅馆、酒店和民宿而设计。"}, "Nossas soluções": {"en": "Our solutions", "es": "Nuestras soluciones", "fr": "Nos solutions", "de": "Unsere Lösungen", "zh": "我们的解决方案"}, "Três produtos.": {"en": "Three products.", "es": "Tres productos.", "fr": "Trois produits.", "de": "Drei Produkte.", "zh": "三款产品，"}, "Uma operação conectada.": {"en": "One connected operation.", "es": "Una operación conectada.", "fr": "Une exploitation connectée.", "de": "Ein vernetzter Betrieb.", "zh": "一体化运营。"}, "Use cada solução de forma independente ou combine as três: a automação da suíte, a gestão do negócio e a comunicação interna trabalhando juntas.": {"en": "Use each solution on its own or combine all three: suite automation, business management and internal communication working together.", "es": "Use cada solución de forma independiente o combine las tres: la automatización de la suite, la gestión del negocio y la comunicación interna trabajando juntas.", "fr": "Utilisez chaque solution seule ou combinez les trois : la domotique des suites, la gestion de l'établissement et la communication interne travaillent ensemble.", "de": "Nutzen Sie jede Lösung einzeln oder kombinieren Sie alle drei: Suitenautomation, Betriebsmanagement und interne Kommunikation arbeiten Hand in Hand.", "zh": "每个方案都可单独使用，也可三者组合：客房自动化、门店管理与内部通信协同运作。"}, "Automação de suítes": {"en": "Suite automation", "es": "Automatización de suites", "fr": "Domotique des suites", "de": "Suitenautomation", "zh": "客房自动化"}, "Painel touch que comanda iluminação, TV, música e ar-condicionado da suíte, com cenas prontas para cada momento.": {"en": "Touch panel that controls the suite's lighting, TV, music and air conditioning, with ready-made scenes for every moment.", "es": "Panel táctil que controla la iluminación, TV, música y aire acondicionado de la suite, con escenas listas para cada momento.", "fr": "Écran tactile qui pilote l'éclairage, la TV, la musique et la climatisation de la suite, avec des scènes prêtes pour chaque moment.", "de": "Touchpanel, das Licht, TV, Musik und Klimaanlage der Suite steuert, mit fertigen Szenen für jeden Moment.", "zh": "触控面板统一控制客房的灯光、电视、音乐和空调，为每个时刻预设场景。"}, "Ver detalhes": {"en": "See details", "es": "Ver detalles", "fr": "Voir les détails", "de": "Details ansehen", "zh": "查看详情"}, "Gestão de motéis e hotéis": {"en": "Motel and hotel management", "es": "Gestión de moteles y hoteles", "fr": "Gestion de motels et d'hôtels", "de": "Management für Motels und Hotels", "zh": "汽车旅馆与酒店管理"}, "Sistema de gestão com mapa de suítes em tempo real, recepção, caixa, estoque, governança e relatórios.": {"en": "Management system with a real-time suite map, front desk, cashier, inventory, housekeeping and reports.", "es": "Sistema de gestión con mapa de suites en tiempo real, recepción, caja, inventario, ama de llaves e informes.", "fr": "Logiciel de gestion avec plan des suites en temps réel, réception, caisse, stock, gouvernance et rapports.", "de": "Managementsystem mit Suitenübersicht in Echtzeit, Rezeption, Kasse, Lager, Housekeeping und Berichten.", "zh": "管理系统提供实时客房总览、前台、收银、库存、客房服务和报表。"}, "Intercomunicação VoIP": {"en": "VoIP intercom", "es": "Intercomunicación VoIP", "fr": "Interphonie VoIP", "de": "VoIP-Gegensprechanlage", "zh": "VoIP 对讲"}, "Suítes, recepção e setores conectados pelo celular, como ramais, sem custo de ligação e com servidor local.": {"en": "Suites, front desk and departments connected by mobile phone as extensions, with no call costs and a local server.", "es": "Suites, recepción y sectores conectados por el celular, como extensiones, sin costo de llamadas y con servidor local.", "fr": "Suites, réception et services reliés par mobile, comme des postes, sans coût d'appel et avec un serveur local.", "de": "Suiten, Rezeption und Abteilungen per Handy verbunden, als Nebenstellen, ohne Gesprächskosten und mit lokalem Server.", "zh": "客房、前台和各部门通过手机作为分机互联，零通话费用，配备本地服务器。"}, "01 · Painel Neon": {"en": "01 · Painel Neon", "es": "01 · Painel Neon", "fr": "01 · Painel Neon", "de": "01 · Painel Neon", "zh": "01 · Painel Neon"}, "A suíte inteira": {"en": "The whole suite", "es": "Toda la suite", "fr": "Toute la suite", "de": "Die ganze Suite", "zh": "整间客房，"}, "no toque da tela.": {"en": "at the touch of a screen.", "es": "al toque de la pantalla.", "fr": "du bout des doigts.", "de": "mit einer Berührung.", "zh": "一触即控。"}, "Um painel touch elegante reúne iluminação, multimídia, som e clima em uma interface simples. O hóspede cria o ambiente ideal em segundos e o estabelecimento ganha em conforto e economia de energia.": {"en": "An elegant touch panel brings lighting, media, sound and climate together in one simple interface. Guests set the perfect mood in seconds, and your property gains in comfort and energy savings.", "es": "Un elegante panel táctil reúne iluminación, multimedia, sonido y clima en una interfaz sencilla. El huésped crea el ambiente ideal en segundos y el establecimiento gana en confort y ahorro de energía.", "fr": "Un élégant écran tactile réunit éclairage, multimédia, son et climat dans une interface simple. Le client crée l'ambiance idéale en quelques secondes et l'établissement gagne en confort et en économies d'énergie.", "de": "Ein elegantes Touchpanel vereint Licht, Multimedia, Sound und Klima in einer einfachen Oberfläche. Gäste schaffen in Sekunden die perfekte Atmosphäre, Ihr Haus gewinnt an Komfort und spart Energie.", "zh": "优雅的触控面板将灯光、多媒体、音响和空调集成在简洁的界面中。客人几秒钟即可营造理想氛围，门店则更舒适、更节能。"}, "Controle por toque": {"en": "Touch control", "es": "Control táctil", "fr": "Commande tactile", "de": "Touch-Steuerung", "zh": "触控操作"}, "Luz, TV, som e ar-condicionado em uma única tela.": {"en": "Lights, TV, sound and air conditioning on a single screen.", "es": "Luz, TV, sonido y aire acondicionado en una sola pantalla.", "fr": "Lumière, TV, son et climatisation sur un seul écran.", "de": "Licht, TV, Sound und Klimaanlage auf einem Bildschirm.", "zh": "灯光、电视、音响和空调，一屏掌控。"}, "Cenas de ambiente": {"en": "Mood scenes", "es": "Escenas de ambiente", "fr": "Scènes d'ambiance", "de": "Stimmungsszenen", "zh": "氛围场景"}, "Romântico, relax, festa ou dormir: tudo ajustado em um toque.": {"en": "Romantic, relax, party or sleep: everything set with one touch.", "es": "Romántico, relax, fiesta o dormir: todo ajustado con un toque.", "fr": "Romantique, détente, fête ou sommeil : tout se règle d'une touche.", "de": "Romantisch, Entspannung, Party oder Schlafen: alles mit einer Berührung.", "zh": "浪漫、放松、派对或睡眠：一键切换。"}, "Eficiência energética": {"en": "Energy efficiency", "es": "Eficiencia energética", "fr": "Efficacité énergétique", "de": "Energieeffizienz", "zh": "节能高效"}, "Automação por ocupação desliga o que não está sendo usado.": {"en": "Occupancy-based automation turns off whatever isn't in use.", "es": "La automatización por ocupación apaga lo que no se está usando.", "fr": "L'automatisation selon l'occupation éteint ce qui ne sert pas.", "de": "Belegungsabhängige Automation schaltet ab, was nicht genutzt wird.", "zh": "按入住状态自动关闭闲置设备。"}, "Ver o Painel Neon funcionando": {"en": "See Painel Neon in action", "es": "Ver el Painel Neon en acción", "fr": "Voir le Painel Neon en action", "de": "Painel Neon in Aktion sehen", "zh": "观看 Painel Neon 演示"}, "Iluminação e ambiente": {"en": "Lighting and ambience", "es": "Iluminación y ambiente", "fr": "Éclairage et ambiance", "de": "Licht und Atmosphäre", "zh": "灯光与氛围"}, "Cenas e dimerização": {"en": "Scenes and dimming", "es": "Escenas y atenuación", "fr": "Scènes et variation", "de": "Szenen und Dimmen", "zh": "场景与调光"}, "Intensidade e cenas para cada momento.": {"en": "Brightness and scenes for every moment.", "es": "Intensidad y escenas para cada momento.", "fr": "Intensité et scènes pour chaque moment.", "de": "Helligkeit und Szenen für jeden Moment.", "zh": "为每个时刻调节亮度与场景。"}, "Iluminação RGB": {"en": "RGB lighting", "es": "Iluminación RGB", "fr": "Éclairage RVB", "de": "RGB-Beleuchtung", "zh": "RGB 灯光"}, "Cores e tons para criar atmosferas únicas.": {"en": "Colours and tones to create unique atmospheres.", "es": "Colores y tonos para crear atmósferas únicas.", "fr": "Couleurs et teintes pour des ambiances uniques.", "de": "Farben und Töne für einzigartige Stimmungen.", "zh": "丰富色彩，营造独特氛围。"}, "Zonas e circuitos": {"en": "Zones and circuits", "es": "Zonas y circuitos", "fr": "Zones et circuits", "de": "Zonen und Kreise", "zh": "区域与回路"}, "Comando independente de cada área.": {"en": "Independent control of each area.", "es": "Control independiente de cada área.", "fr": "Commande indépendante de chaque espace.", "de": "Unabhängige Steuerung jedes Bereichs.", "zh": "各区域独立控制。"}, "Cortinas e persianas": {"en": "Curtains and blinds", "es": "Cortinas y persianas", "fr": "Rideaux et stores", "de": "Vorhänge und Jalousien", "zh": "窗帘与百叶"}, "Acionamento integrado ao painel.": {"en": "Operated straight from the panel.", "es": "Accionamiento integrado al panel.", "fr": "Pilotage intégré à l'écran.", "de": "Direkt über das Panel gesteuert.", "zh": "直接通过面板控制。"}, "Multimídia e clima": {"en": "Media and climate", "es": "Multimedia y clima", "fr": "Multimédia et climat", "de": "Multimedia und Klima", "zh": "多媒体与空调"}, "Controle da TV": {"en": "TV control", "es": "Control de TV", "fr": "Commande de la TV", "de": "TV-Steuerung", "zh": "电视控制"}, "Liga/desliga, canais, volume e fonte.": {"en": "Power, channels, volume and input.", "es": "Encendido, canales, volumen y fuente.", "fr": "Marche/arrêt, chaînes, volume et source.", "de": "Ein/Aus, Sender, Lautstärke und Quelle.", "zh": "开关、频道、音量和信号源。"}, "Música e streaming": {"en": "Music and streaming", "es": "Música y streaming", "fr": "Musique et streaming", "de": "Musik und Streaming", "zh": "音乐与流媒体"}, "Playlists e fontes de áudio pelo painel.": {"en": "Playlists and audio sources from the panel.", "es": "Playlists y fuentes de audio desde el panel.", "fr": "Playlists et sources audio depuis l'écran.", "de": "Playlists und Audioquellen über das Panel.", "zh": "通过面板播放歌单和音源。"}, "Áudio multizona": {"en": "Multi-zone audio", "es": "Audio multizona", "fr": "Audio multizone", "de": "Multiroom-Audio", "zh": "多区域音频"}, "Som ambiente com controle por zona.": {"en": "Ambient sound with per-zone control.", "es": "Sonido ambiental con control por zona.", "fr": "Son d'ambiance avec réglage par zone.", "de": "Raumklang mit Steuerung pro Zone.", "zh": "背景音乐分区控制。"}, "Climatização": {"en": "Climate control", "es": "Climatización", "fr": "Climatisation", "de": "Klimatisierung", "zh": "空调控制"}, "Temperatura, ventilação e modos do ar.": {"en": "Temperature, fan speed and AC modes.", "es": "Temperatura, ventilación y modos del aire.", "fr": "Température, ventilation et modes.", "de": "Temperatur, Lüftung und Betriebsmodi.", "zh": "温度、风速和运行模式。"}, "Experiência e operação": {"en": "Experience and operations", "es": "Experiencia y operación", "fr": "Expérience et exploitation", "de": "Erlebnis und Betrieb", "zh": "体验与运营"}, "Não perturbe / arrumar": {"en": "Do not disturb / make up room", "es": "No molestar / arreglar", "fr": "Ne pas déranger / faire la chambre", "de": "Bitte nicht stören / Zimmer aufräumen", "zh": "请勿打扰 / 请即打扫"}, "Status da suíte enviado à recepção.": {"en": "Suite status sent to the front desk.", "es": "Estado de la suite enviado a recepción.", "fr": "Statut de la suite envoyé à la réception.", "de": "Suitenstatus geht direkt an die Rezeption.", "zh": "客房状态同步至前台。"}, "Automação por ocupação": {"en": "Occupancy automation", "es": "Automatización por ocupación", "fr": "Automatisation selon l'occupation", "de": "Belegungsautomation", "zh": "入住自动化"}, "Conforto na chegada, economia na saída.": {"en": "Comfort on arrival, savings on departure.", "es": "Confort a la llegada, ahorro a la salida.", "fr": "Confort à l'arrivée, économies au départ.", "de": "Komfort bei Ankunft, Ersparnis bei Abreise.", "zh": "入住即舒适，离店即节能。"}, "Despertador inteligente": {"en": "Smart wake-up", "es": "Despertador inteligente", "fr": "Réveil intelligent", "de": "Intelligenter Wecker", "zh": "智能唤醒"}, "Acordar com luz, música e cortinas.": {"en": "Wake up with light, music and curtains.", "es": "Despertar con luz, música y cortinas.", "fr": "Se réveiller avec la lumière, la musique et les rideaux.", "de": "Aufwachen mit Licht, Musik und Vorhängen.", "zh": "用灯光、音乐和窗帘唤醒客人。"}, "Integração com o Neon Motel": {"en": "Neon Motel integration", "es": "Integración con Neon Motel", "fr": "Intégration avec Neon Motel", "de": "Integration mit Neon Motel", "zh": "与 Neon Motel 集成"}, "Suíte e recepção sempre sincronizadas.": {"en": "Suite and front desk always in sync.", "es": "Suite y recepción siempre sincronizadas.", "fr": "Suite et réception toujours synchronisées.", "de": "Suite und Rezeption immer synchron.", "zh": "客房与前台始终同步。"}, "Ideal para": {"en": "Ideal for", "es": "Ideal para", "fr": "Idéal pour", "de": "Ideal für", "zh": "适用于"}, "Motéis": {"en": "Motels", "es": "Moteles", "fr": "Motels", "de": "Motels", "zh": "汽车旅馆"}, "Hotéis": {"en": "Hotels", "es": "Hoteles", "fr": "Hôtels", "de": "Hotels", "zh": "酒店"}, "Pousadas": {"en": "Inns", "es": "Posadas", "fr": "Maisons d'hôtes", "de": "Pensionen", "zh": "民宿"}, "Suítes premium": {"en": "Premium suites", "es": "Suites premium", "fr": "Suites premium", "de": "Premium-Suiten", "zh": "高端套房"}, "02 · Neon Motel": {"en": "02 · Neon Motel", "es": "02 · Neon Motel", "fr": "02 · Neon Motel", "de": "02 · Neon Motel", "zh": "02 · Neon Motel"}, "Gestão completa": {"en": "Complete management", "es": "Gestión completa", "fr": "Une gestion complète", "de": "Komplettes Management", "zh": "全面管理，"}, "do check-in ao caixa.": {"en": "from check-in to checkout.", "es": "del check-in a la caja.", "fr": "de l'arrivée à la caisse.", "de": "vom Check-in bis zur Kasse.", "zh": "从入住到结账。"}, "Um sistema de gestão feito para a rotina de motéis, hotéis e pousadas: mapa de suítes em tempo real, recepção, equipe, estoque e financeiro em uma única plataforma.": {"en": "A management system built for the daily routine of motels, hotels and inns: real-time suite map, front desk, staff, inventory and finance on a single platform.", "es": "Un sistema de gestión hecho para la rutina de moteles, hoteles y posadas: mapa de suites en tiempo real, recepción, equipo, inventario y finanzas en una única plataforma.", "fr": "Un logiciel de gestion conçu pour le quotidien des motels, hôtels et maisons d'hôtes : plan des suites en temps réel, réception, équipe, stock et finances sur une seule plateforme.", "de": "Ein Managementsystem für den Alltag von Motels, Hotels und Pensionen: Suitenübersicht in Echtzeit, Rezeption, Team, Lager und Finanzen auf einer Plattform.", "zh": "专为汽车旅馆、酒店和民宿日常运营打造的管理系统：实时客房总览、前台、员工、库存和财务集于一个平台。"}, "Mapa de suítes ao vivo": {"en": "Live suite map", "es": "Mapa de suites en vivo", "fr": "Plan des suites en direct", "de": "Live-Suitenübersicht", "zh": "实时客房总览"}, "Ocupação, limpeza e manutenção de cada suíte em uma só tela.": {"en": "Occupancy, cleaning and maintenance of every suite on one screen.", "es": "Ocupación, limpieza y mantenimiento de cada suite en una sola pantalla.", "fr": "Occupation, nettoyage et maintenance de chaque suite sur un seul écran.", "de": "Belegung, Reinigung und Wartung jeder Suite auf einem Bildschirm.", "zh": "每间客房的入住、清洁与维修状态，一屏尽览。"}, "Equipe sob controle": {"en": "Staff under control", "es": "Equipo bajo control", "fr": "Une équipe maîtrisée", "de": "Team im Griff", "zh": "员工尽在掌握"}, "Permissões por colaborador, turnos e fechamento de caixa.": {"en": "Per-employee permissions, shifts and register closing.", "es": "Permisos por colaborador, turnos y cierre de caja.", "fr": "Droits par collaborateur, équipes et clôture de caisse.", "de": "Rechte pro Mitarbeiter, Schichten und Kassenabschluss.", "zh": "按员工分配权限、排班与交班结账。"}, "Números do negócio": {"en": "Business numbers", "es": "Números del negocio", "fr": "Les chiffres clés", "de": "Kennzahlen des Betriebs", "zh": "经营数据"}, "Ocupação, receita e desempenho para decidir melhor.": {"en": "Occupancy, revenue and performance for better decisions.", "es": "Ocupación, ingresos y desempeño para decidir mejor.", "fr": "Occupation, chiffre d'affaires et performance pour mieux décider.", "de": "Auslastung, Umsatz und Leistung für bessere Entscheidungen.", "zh": "入住率、营收和业绩，助您科学决策。"}, "Ver o Neon Motel funcionando": {"en": "See Neon Motel in action", "es": "Ver Neon Motel en acción", "fr": "Voir Neon Motel en action", "de": "Neon Motel in Aktion sehen", "zh": "观看 Neon Motel 演示"}, "Reservas e recepção": {"en": "Bookings and front desk", "es": "Reservas y recepción", "fr": "Réservations et réception", "de": "Reservierungen und Rezeption", "zh": "预订与前台"}, "Reservas e agenda": {"en": "Bookings and calendar", "es": "Reservas y agenda", "fr": "Réservations et planning", "de": "Reservierungen und Kalender", "zh": "预订与日程"}, "Disponibilidade e agenda de ocupação.": {"en": "Availability and occupancy calendar.", "es": "Disponibilidad y agenda de ocupación.", "fr": "Disponibilités et planning d'occupation.", "de": "Verfügbarkeit und Belegungskalender.", "zh": "房态与入住日程。"}, "Check-in e check-out": {"en": "Check-in and check-out", "es": "Check-in y check-out", "fr": "Arrivée et départ", "de": "Check-in und Check-out", "zh": "入住与退房"}, "Entrada e saída com status em tempo real.": {"en": "Arrivals and departures with real-time status.", "es": "Entradas y salidas con estado en tiempo real.", "fr": "Arrivées et départs avec statut en temps réel.", "de": "An- und Abreise mit Status in Echtzeit.", "zh": "实时显示到店与离店状态。"}, "Status das suítes": {"en": "Suite status", "es": "Estado de las suites", "fr": "Statut des suites", "de": "Suitenstatus", "zh": "客房状态"}, "Ocupação, limpeza e manutenção.": {"en": "Occupancy, cleaning and maintenance.", "es": "Ocupación, limpieza y mantenimiento.", "fr": "Occupation, nettoyage et maintenance.", "de": "Belegung, Reinigung und Wartung.", "zh": "入住、清洁与维修。"}, "Histórico de hóspedes": {"en": "Guest history", "es": "Historial de huéspedes", "fr": "Historique des clients", "de": "Gästehistorie", "zh": "客人档案"}, "Cadastro e estadias anteriores.": {"en": "Profiles and previous stays.", "es": "Registro y estancias anteriores.", "fr": "Fiches et séjours précédents.", "de": "Profile und frühere Aufenthalte.", "zh": "客人资料与历史入住。"}, "Operação e equipe": {"en": "Operations and staff", "es": "Operación y equipo", "fr": "Exploitation et équipe", "de": "Betrieb und Team", "zh": "运营与员工"}, "Funções e permissões": {"en": "Roles and permissions", "es": "Funciones y permisos", "fr": "Rôles et droits d'accès", "de": "Rollen und Berechtigungen", "zh": "角色与权限"}, "Cada colaborador acessa só o que precisa.": {"en": "Each employee sees only what they need.", "es": "Cada colaborador accede solo a lo que necesita.", "fr": "Chaque collaborateur n'accède qu'à ce dont il a besoin.", "de": "Jeder Mitarbeiter sieht nur, was er braucht.", "zh": "每位员工只访问所需内容。"}, "Turnos e caixa": {"en": "Shifts and cashier", "es": "Turnos y caja", "fr": "Équipes et caisse", "de": "Schichten und Kasse", "zh": "班次与收银"}, "Abertura, conferência e fechamento por turno.": {"en": "Opening, reconciliation and closing per shift.", "es": "Apertura, conciliación y cierre por turno.", "fr": "Ouverture, contrôle et clôture par équipe.", "de": "Öffnung, Abgleich und Abschluss pro Schicht.", "zh": "按班次开班、对账和结账。"}, "Acompanhamento de limpeza e camareiras.": {"en": "Tracking of cleaning and housekeepers.", "es": "Seguimiento de limpieza y camareras.", "fr": "Suivi du nettoyage et des femmes de chambre.", "de": "Überblick über Reinigung und Zimmermädchen.", "zh": "跟踪清洁和客房服务员工作。"}, "Estoque e frigobar": {"en": "Inventory and minibar", "es": "Inventario y minibar", "fr": "Stock et minibar", "de": "Lager und Minibar", "zh": "库存与迷你吧"}, "Entradas, saídas e consumo por suíte.": {"en": "Stock in, stock out and consumption per suite.", "es": "Entradas, salidas y consumo por suite.", "fr": "Entrées, sorties et consommation par suite.", "de": "Zu- und Abgänge sowie Verbrauch pro Suite.", "zh": "按客房记录出入库与消费。"}, "Financeiro e gestão": {"en": "Finance and management", "es": "Finanzas y gestión", "fr": "Finances et gestion", "de": "Finanzen und Management", "zh": "财务与管理"}, "Tarifação por período": {"en": "Time-based pricing", "es": "Tarifas por período", "fr": "Tarification par période", "de": "Zeitbasierte Tarife", "zh": "分时计价"}, "Hora, pernoite ou diária, com promoções.": {"en": "Hourly, overnight or daily rates, with promotions.", "es": "Por hora, por noche o por día, con promociones.", "fr": "À l'heure, à la nuit ou à la journée, avec promotions.", "de": "Stündlich, über Nacht oder pro Tag, mit Aktionen.", "zh": "按小时、过夜或按天计价，支持促销。"}, "Faturamento e fiscal": {"en": "Billing and tax", "es": "Facturación y fiscal", "fr": "Facturation et fiscalité", "de": "Abrechnung und Steuern", "zh": "开票与税务"}, "Emissão de notas integrada à operação.": {"en": "Invoicing built into daily operations.", "es": "Emisión de facturas integrada a la operación.", "fr": "Émission de factures intégrée à l'exploitation.", "de": "Rechnungsstellung direkt im Betrieb integriert.", "zh": "发票开具与运营无缝集成。"}, "Pagamentos": {"en": "Payments", "es": "Pagos", "fr": "Paiements", "de": "Zahlungen", "zh": "收款"}, "Registro e conferência de recebimentos.": {"en": "Recording and reconciling payments.", "es": "Registro y conciliación de cobros.", "fr": "Enregistrement et contrôle des encaissements.", "de": "Erfassung und Abgleich von Zahlungseingängen.", "zh": "记录并核对各类收款。"}, "Relatórios e indicadores": {"en": "Reports and KPIs", "es": "Informes e indicadores", "fr": "Rapports et indicateurs", "de": "Berichte und Kennzahlen", "zh": "报表与指标"}, "Ocupação, receita e desempenho.": {"en": "Occupancy, revenue and performance.", "es": "Ocupación, ingresos y desempeño.", "fr": "Occupation, chiffre d'affaires et performance.", "de": "Auslastung, Umsatz und Leistung.", "zh": "入住率、营收和业绩。"}, "Apart-hotéis": {"en": "Aparthotels", "es": "Apartahoteles", "fr": "Appart-hôtels", "de": "Aparthotels", "zh": "公寓式酒店"}, "Pequenas e médias redes": {"en": "Small and mid-sized chains", "es": "Pequeñas y medianas cadenas", "fr": "Petites et moyennes chaînes", "de": "Kleine und mittlere Ketten", "zh": "中小型连锁"}, "Servidor Neon · Recepção": {"en": "Neon Server · Front desk", "es": "Servidor Neon · Recepción", "fr": "Serveur Neon · Réception", "de": "Neon-Server · Rezeption", "zh": "Neon 服务器 · 前台"}, "Processamento local": {"en": "Local processing", "es": "Procesamiento local", "fr": "Traitement local", "de": "Lokale Verarbeitung", "zh": "本地处理"}, "Ramais conectados": {"en": "Connected extensions", "es": "Extensiones conectadas", "fr": "Postes connectés", "de": "Verbundene Nebenstellen", "zh": "已连接分机"}, "Chamadas agora": {"en": "Active calls", "es": "Llamadas ahora", "fr": "Appels en cours", "de": "Aktive Gespräche", "zh": "当前通话"}, "3 ativas": {"en": "3 active", "es": "3 activas", "fr": "3 actifs", "de": "3 aktiv", "zh": "3 路进行中"}, "Custo das ligações internas": {"en": "Internal call cost", "es": "Costo de llamadas internas", "fr": "Coût des appels internes", "de": "Kosten interner Gespräche", "zh": "内部通话费用"}, "03 · PABX Neon": {"en": "03 · PABX Neon", "es": "03 · PABX Neon", "fr": "03 · PABX Neon", "de": "03 · PABX Neon", "zh": "03 · PABX Neon"}, "Comunicação interna": {"en": "Internal communication", "es": "Comunicación interna", "fr": "Communication interne", "de": "Interne Kommunikation", "zh": "内部通信，"}, "sem custo de ligação.": {"en": "with no call costs.", "es": "sin costo de llamadas.", "fr": "sans coût d'appel.", "de": "ohne Gesprächskosten.", "zh": "零通话费用。"}, "Suítes, recepção e setores conversam pelo celular, como ramais do sistema. Um servidor instalado na recepção reúne as tecnologias mais modernas de PABX VoIP com processamento local e controle total.": {"en": "Suites, front desk and departments talk by mobile phone as system extensions. A server installed at the front desk brings together the latest VoIP PBX technology with local processing and full control.", "es": "Suites, recepción y sectores se comunican por el celular, como extensiones del sistema. Un servidor instalado en recepción reúne las tecnologías más modernas de centralita VoIP con procesamiento local y control total.", "fr": "Suites, réception et services communiquent par mobile, comme des postes du système. Un serveur installé à la réception réunit les technologies VoIP les plus modernes, avec traitement local et contrôle total.", "de": "Suiten, Rezeption und Abteilungen telefonieren per Handy als Nebenstellen des Systems. Ein Server an der Rezeption vereint modernste VoIP-Technologie mit lokaler Verarbeitung und voller Kontrolle.", "zh": "客房、前台和各部门通过手机作为系统分机互相通话。安装在前台的服务器集成了最先进的 VoIP 电话交换技术，本地处理，完全可控。"}, "Ramais no celular": {"en": "Extensions on your phone", "es": "Extensiones en el celular", "fr": "Postes sur mobile", "de": "Nebenstellen auf dem Handy", "zh": "手机即分机"}, "Equipe e hóspedes conectados sem custo de ligação.": {"en": "Staff and guests connected with no call costs.", "es": "Equipo y huéspedes conectados sin costo de llamadas.", "fr": "Équipe et clients connectés sans coût d'appel.", "de": "Team und Gäste verbunden, ohne Gesprächskosten.", "zh": "员工与客人互联，零通话费用。"}, "Servidor na recepção": {"en": "Server at the front desk", "es": "Servidor en recepción", "fr": "Serveur à la réception", "de": "Server an der Rezeption", "zh": "前台服务器"}, "Funciona localmente, sem depender de nuvem externa.": {"en": "Runs locally, with no reliance on an external cloud.", "es": "Funciona localmente, sin depender de la nube externa.", "fr": "Fonctionne en local, sans dépendre d'un cloud externe.", "de": "Läuft lokal, ohne Abhängigkeit von externer Cloud.", "zh": "本地运行，不依赖外部云。"}, "Integrado à gestão": {"en": "Integrated with management", "es": "Integrado a la gestión", "fr": "Intégré à la gestion", "de": "In das Management integriert", "zh": "与管理系统集成"}, "Ramal ativado no check-in e liberado no check-out.": {"en": "Extension activated at check-in and released at check-out.", "es": "Extensión activada en el check-in y liberada en el check-out.", "fr": "Poste activé à l'arrivée et libéré au départ.", "de": "Nebenstelle beim Check-in aktiviert und beim Check-out freigegeben.", "zh": "入住时开通分机，退房时自动释放。"}, "Ver o PABX Neon funcionando": {"en": "See PABX Neon in action", "es": "Ver PABX Neon en acción", "fr": "Voir PABX Neon en action", "de": "PABX Neon in Aktion sehen", "zh": "观看 PABX Neon 演示"}, "Comunicação unificada": {"en": "Unified communication", "es": "Comunicación unificada", "fr": "Communication unifiée", "de": "Unified Communication", "zh": "统一通信"}, "Voz digital pela rede do estabelecimento.": {"en": "Digital voice over your property's network.", "es": "Voz digital por la red del establecimiento.", "fr": "Voix numérique sur le réseau de l'établissement.", "de": "Digitale Sprache über das Netzwerk Ihres Hauses.", "zh": "通过门店网络传输数字语音。"}, "Ramais móveis": {"en": "Mobile extensions", "es": "Extensiones móviles", "fr": "Postes mobiles", "de": "Mobile Nebenstellen", "zh": "移动分机"}, "Celulares funcionando como ramais.": {"en": "Mobile phones working as extensions.", "es": "Celulares funcionando como extensiones.", "fr": "Les mobiles deviennent des postes.", "de": "Handys werden zu Nebenstellen.", "zh": "手机即可作为分机使用。"}, "Conexão com operadoras externas.": {"en": "Connection to external carriers.", "es": "Conexión con operadores externos.", "fr": "Connexion aux opérateurs externes.", "de": "Anbindung an externe Netzbetreiber.", "zh": "连接外部运营商。"}, "Arquitetura híbrida": {"en": "Hybrid architecture", "es": "Arquitectura híbrida", "fr": "Architecture hybride", "de": "Hybride Architektur", "zh": "混合架构"}, "Aproveita telefones analógicos existentes.": {"en": "Reuses your existing analogue phones.", "es": "Aprovecha los teléfonos analógicos existentes.", "fr": "Réutilise les téléphones analogiques existants.", "de": "Nutzt vorhandene analoge Telefone weiter.", "zh": "继续使用现有模拟电话。"}, "Recursos de telefonia": {"en": "Telephony features", "es": "Funciones de telefonía", "fr": "Fonctions de téléphonie", "de": "Telefoniefunktionen", "zh": "电话功能"}, "URA / atendimento automático": {"en": "IVR / auto attendant", "es": "IVR / atención automática", "fr": "SVI / accueil automatique", "de": "IVR / automatische Vermittlung", "zh": "IVR / 自动应答"}, "Chamadas direcionadas ao setor certo.": {"en": "Calls routed to the right department.", "es": "Llamadas dirigidas al sector correcto.", "fr": "Appels dirigés vers le bon service.", "de": "Anrufe landen in der richtigen Abteilung.", "zh": "来电自动转至对应部门。"}, "Transferência e espera": {"en": "Transfer and hold", "es": "Transferencia y espera", "fr": "Transfert et mise en attente", "de": "Weiterleiten und Halten", "zh": "转接与保持"}, "Entre setores, com facilidade.": {"en": "Between departments, with ease.", "es": "Entre sectores, con facilidad.", "fr": "Entre services, en toute simplicité.", "de": "Zwischen Abteilungen, ganz einfach.", "zh": "部门之间轻松转接。"}, "Caixa postal": {"en": "Voicemail", "es": "Buzón de voz", "fr": "Messagerie vocale", "de": "Voicemail", "zh": "语音信箱"}, "Recados e avisos de chamadas perdidas.": {"en": "Messages and missed-call alerts.", "es": "Mensajes y avisos de llamadas perdidas.", "fr": "Messages et alertes d'appels manqués.", "de": "Nachrichten und Hinweise auf verpasste Anrufe.", "zh": "留言及未接来电提醒。"}, "Despertador e emergência": {"en": "Wake-up and emergency", "es": "Despertador y emergencia", "fr": "Réveil et urgence", "de": "Weckruf und Notfall", "zh": "叫醒与紧急呼叫"}, "Chamadas programadas e rota prioritária.": {"en": "Scheduled calls and priority routing.", "es": "Llamadas programadas y ruta prioritaria.", "fr": "Appels programmés et routage prioritaire.", "de": "Geplante Anrufe und priorisiertes Routing.", "zh": "定时呼叫与优先路由。"}, "Gestão e escala": {"en": "Management and scale", "es": "Gestión y escala", "fr": "Gestion et évolutivité", "de": "Management und Skalierung", "zh": "管理与扩展"}, "Integração com PMS": {"en": "PMS integration", "es": "Integración con PMS", "fr": "Intégration PMS", "de": "PMS-Integration", "zh": "PMS 集成"}, "Ramal automático no check-in e check-out.": {"en": "Automatic extension at check-in and check-out.", "es": "Extensión automática en el check-in y check-out.", "fr": "Poste automatique à l'arrivée et au départ.", "de": "Automatische Nebenstelle bei Check-in und Check-out.", "zh": "入住和退房时自动开通或释放分机。"}, "Relatórios de chamadas": {"en": "Call reports", "es": "Informes de llamadas", "fr": "Rapports d'appels", "de": "Anrufberichte", "zh": "通话报表"}, "Registros detalhados de uso (CDR).": {"en": "Detailed usage records (CDR).", "es": "Registros detallados de uso (CDR).", "fr": "Journaux d'utilisation détaillés (CDR).", "de": "Detaillierte Nutzungsdaten (CDR).", "zh": "详细的通话记录（CDR）。"}, "Administração remota": {"en": "Remote administration", "es": "Administración remota", "fr": "Administration à distance", "de": "Fernverwaltung", "zh": "远程管理"}, "Ramais, rotas e permissões pelo painel.": {"en": "Extensions, routes and permissions from the dashboard.", "es": "Extensiones, rutas y permisos desde el panel.", "fr": "Postes, routes et droits depuis le tableau de bord.", "de": "Nebenstellen, Routen und Rechte über das Dashboard.", "zh": "通过后台管理分机、路由和权限。"}, "Cresce por software": {"en": "Scales through software", "es": "Crece por software", "fr": "Évolue par logiciel", "de": "Skaliert per Software", "zh": "软件扩容"}, "Novos ramais e unidades sem trocar hardware.": {"en": "New extensions and sites without changing hardware.", "es": "Nuevas extensiones y unidades sin cambiar hardware.", "fr": "Nouveaux postes et sites sans changer de matériel.", "de": "Neue Nebenstellen und Standorte ohne neue Hardware.", "zh": "新增分机和门店无需更换硬件。"}, "Hospitais": {"en": "Hospitals", "es": "Hospitales", "fr": "Hôpitaux", "de": "Krankenhäuser", "zh": "医院"}, "Prefeituras": {"en": "City halls", "es": "Municipios", "fr": "Mairies", "de": "Stadtverwaltungen", "zh": "市政机构"}, "Empresas de todos os portes": {"en": "Businesses of all sizes", "es": "Empresas de todos los tamaños", "fr": "Entreprises de toutes tailles", "de": "Unternehmen jeder Größe", "zh": "各种规模的企业"}, "Como funciona junto": {"en": "How it works together", "es": "Cómo funciona en conjunto", "fr": "Comment tout fonctionne ensemble", "de": "So arbeitet alles zusammen", "zh": "协同运作"}, "Uma estadia,": {"en": "One stay,", "es": "Una estancia,", "fr": "Un séjour,", "de": "Ein Aufenthalt,", "zh": "一次入住，"}, "três soluções em sintonia.": {"en": "three solutions in harmony.", "es": "tres soluciones en sintonía.", "fr": "trois solutions en harmonie.", "de": "drei Lösungen im Einklang.", "zh": "三个方案默契配合。"}, "Quando os produtos Neon trabalham integrados, cada etapa da estadia acontece sem retrabalho para a equipe.": {"en": "When Neon products work together, every step of the stay happens without extra work for your staff.", "es": "Cuando los productos Neon trabajan integrados, cada etapa de la estancia ocurre sin retrabajo para el equipo.", "fr": "Quand les produits Neon sont intégrés, chaque étape du séjour se déroule sans travail en double pour l'équipe.", "de": "Wenn die Neon-Produkte integriert arbeiten, läuft jeder Schritt des Aufenthalts ohne Doppelarbeit für Ihr Team.", "zh": "当 Neon 产品协同运行时，入住的每一步都无需员工重复操作。"}, "ESTADIA": {"en": "STAY", "es": "ESTANCIA", "fr": "SÉJOUR", "de": "AUFENTHALT", "zh": "入住期间"}, "A suíte se prepara sozinha": {"en": "The suite gets itself ready", "es": "La suite se prepara sola", "fr": "La suite se prépare toute seule", "de": "Die Suite bereitet sich selbst vor", "zh": "客房自动就绪"}, "A recepção libera a suíte no Neon Motel. O ramal é ativado no PABX Neon e o Painel Neon recebe o hóspede com a cena de boas-vindas.": {"en": "The front desk releases the suite in Neon Motel. The extension is activated in PABX Neon and Painel Neon greets the guest with the welcome scene.", "es": "La recepción libera la suite en Neon Motel. La extensión se activa en PABX Neon y el Painel Neon recibe al huésped con la escena de bienvenida.", "fr": "La réception attribue la suite dans Neon Motel. Le poste est activé dans PABX Neon et le Painel Neon accueille le client avec la scène de bienvenue.", "de": "Die Rezeption gibt die Suite in Neon Motel frei. Die Nebenstelle wird in PABX Neon aktiviert und Painel Neon empfängt den Gast mit der Willkommensszene.", "zh": "前台在 Neon Motel 中开放客房，PABX Neon 开通分机，Painel Neon 以欢迎场景迎接客人。"}, "Conforto e atendimento": {"en": "Comfort and service", "es": "Confort y atención", "fr": "Confort et service", "de": "Komfort und Service", "zh": "舒适与服务"}, "O hóspede controla luz, som e clima pelo painel e fala com a recepção pelo ramal. Pedidos e consumo entram direto na conta da suíte.": {"en": "Guests control light, sound and climate from the panel and call the front desk on their extension. Orders and consumption go straight to the suite's bill.", "es": "El huésped controla luz, sonido y clima desde el panel y habla con recepción por la extensión. Pedidos y consumo entran directo a la cuenta de la suite.", "fr": "Le client règle lumière, son et climat depuis l'écran et appelle la réception depuis son poste. Commandes et consommations s'ajoutent directement à la note de la suite.", "de": "Der Gast steuert Licht, Sound und Klima über das Panel und ruft die Rezeption über seine Nebenstelle an. Bestellungen und Verzehr landen direkt auf der Rechnung der Suite.", "zh": "客人通过面板控制灯光、音响和空调，并通过分机联系前台。点单和消费直接计入客房账单。"}, "Fechamento sem atrito": {"en": "Frictionless checkout", "es": "Cierre sin fricción", "fr": "Un départ sans friction", "de": "Reibungsloser Check-out", "zh": "轻松退房"}, "Conta fechada no caixa, ramal liberado, suíte em modo economia e governança avisada para a limpeza.": {"en": "Bill closed at the cashier, extension released, suite in energy-saving mode and housekeeping notified to clean.", "es": "Cuenta cerrada en caja, extensión liberada, suite en modo ahorro y ama de llaves avisada para la limpieza.", "fr": "Note réglée en caisse, poste libéré, suite en mode économie et gouvernance prévenue pour le nettoyage.", "de": "Rechnung an der Kasse abgeschlossen, Nebenstelle freigegeben, Suite im Sparmodus und Housekeeping zur Reinigung benachrichtigt.", "zh": "收银结账、分机释放、客房进入节能模式，并通知客房服务进行清洁。"}, "Sobre a Neon": {"en": "About Neon", "es": "Sobre Neon", "fr": "À propos de Neon", "de": "Über Neon", "zh": "关于 Neon"}, "Tecnologia com um propósito:": {"en": "Technology with a purpose:", "es": "Tecnología con un propósito:", "fr": "Une technologie avec un objectif :", "de": "Technologie mit einem Ziel:", "zh": "科技只为一个目标："}, "o seu negócio.": {"en": "your business.", "es": "su negocio.", "fr": "votre établissement.", "de": "Ihr Betrieb.", "zh": "您的生意。"}, "A Neon Sistemas desenvolve soluções de automação, gestão e comunicação para motéis, hotéis e empresas. Nosso foco é ajudar gestores e proprietários a operar com mais eficiência e a oferecer experiências que fazem o cliente voltar.": {"en": "Neon Sistemas develops automation, management and communication solutions for motels, hotels and businesses. Our focus is helping managers and owners run more efficiently and deliver experiences that bring guests back.", "es": "Neon Sistemas desarrolla soluciones de automatización, gestión y comunicación para moteles, hoteles y empresas. Nuestro enfoque es ayudar a gerentes y propietarios a operar con más eficiencia y a ofrecer experiencias que hacen volver al cliente.", "fr": "Neon Sistemas développe des solutions de domotique, de gestion et de communication pour motels, hôtels et entreprises. Notre objectif : aider gérants et propriétaires à gagner en efficacité et à offrir des expériences qui donnent envie de revenir.", "de": "Neon Sistemas entwickelt Lösungen für Automation, Management und Kommunikation für Motels, Hotels und Unternehmen. Unser Ziel ist es, Betreibern und Eigentümern zu mehr Effizienz zu verhelfen und Erlebnisse zu schaffen, die Gäste wiederkommen lassen.", "zh": "Neon Sistemas 为汽车旅馆、酒店和企业开发自动化、管理和通信解决方案。我们致力于帮助经营者和业主提升效率，打造让客人愿意再次光临的体验。"}, "Painel Neon, Neon Motel e PABX Neon nasceram da rotina da hotelaria e foram pensados para funcionar juntos, com implantação acompanhada e suporte próximo.": {"en": "Painel Neon, Neon Motel and PABX Neon were born from day-to-day hospitality and designed to work together, with guided rollout and close support.", "es": "Painel Neon, Neon Motel y PABX Neon nacieron de la rutina hotelera y fueron pensados para funcionar juntos, con implementación acompañada y soporte cercano.", "fr": "Painel Neon, Neon Motel et PABX Neon sont nés du quotidien de l'hôtellerie et ont été conçus pour fonctionner ensemble, avec un déploiement accompagné et un support de proximité.", "de": "Painel Neon, Neon Motel und PABX Neon sind aus dem Alltag der Hotellerie entstanden und wurden für das Zusammenspiel entwickelt, mit begleiteter Einführung und persönlichem Support.", "zh": "Painel Neon、Neon Motel 和 PABX Neon 源自酒店业的日常运营，专为协同工作而设计，并提供全程实施陪伴与贴心支持。"}, "Converse com a Neon": {"en": "Talk to Neon", "es": "Hable con Neon", "fr": "Parler avec Neon", "de": "Mit Neon sprechen", "zh": "联系 Neon"}, "Inovação": {"en": "Innovation", "es": "Innovación", "fr": "Innovation", "de": "Innovation", "zh": "创新"}, "Tecnologia atual aplicada à operação real.": {"en": "Modern technology applied to real operations.", "es": "Tecnología actual aplicada a la operación real.", "fr": "Une technologie actuelle au service de l'exploitation réelle.", "de": "Moderne Technologie für den echten Betrieb.", "zh": "将前沿科技应用于真实运营。"}, "Automação": {"en": "Automation", "es": "Automatización", "fr": "Domotique", "de": "Automation", "zh": "自动化"}, "Suítes mais confortáveis e eficientes.": {"en": "More comfortable, efficient suites.", "es": "Suites más cómodas y eficientes.", "fr": "Des suites plus confortables et plus efficaces.", "de": "Komfortablere und effizientere Suiten.", "zh": "更舒适、更高效的客房。"}, "Gestão": {"en": "Management", "es": "Gestión", "fr": "Gestion", "de": "Management", "zh": "管理"}, "Controle do negócio em um só sistema.": {"en": "Your whole business in one system.", "es": "Control del negocio en un solo sistema.", "fr": "Tout l'établissement dans un seul système.", "de": "Der ganze Betrieb in einem System.", "zh": "一个系统掌控全部业务。"}, "Comunicação": {"en": "Communication", "es": "Comunicación", "fr": "Communication", "de": "Kommunikation", "zh": "通信"}, "Equipe e hóspedes sempre conectados.": {"en": "Staff and guests always connected.", "es": "Equipo y huéspedes siempre conectados.", "fr": "Équipe et clients toujours connectés.", "de": "Team und Gäste immer verbunden.", "zh": "员工与客人时刻互联。"}, "Vamos conversar": {"en": "Let's talk", "es": "Conversemos", "fr": "Parlons-en", "de": "Lassen Sie uns sprechen", "zh": "联系我们"}, "Veja a Neon funcionando no seu cenário.": {"en": "See Neon working in your setting.", "es": "Vea Neon funcionando en su escenario.", "fr": "Découvrez Neon dans votre contexte.", "de": "Erleben Sie Neon in Ihrem Szenario.", "zh": "看看 Neon 在您门店的实际效果。"}, "Conte um pouco sobre o seu estabelecimento e agende uma demonstração das soluções que fazem sentido para a sua operação.": {"en": "Tell us a little about your property and book a demo of the solutions that fit your operation.", "es": "Cuéntenos un poco sobre su establecimiento y agende una demostración de las soluciones que tienen sentido para su operación.", "fr": "Parlez-nous de votre établissement et réservez une démonstration des solutions adaptées à votre exploitation.", "de": "Erzählen Sie uns etwas über Ihr Haus und vereinbaren Sie eine Demo der Lösungen, die zu Ihrem Betrieb passen.", "zh": "简单介绍一下您的门店，预约适合您运营需求的方案演示。"}, "Você envia seus dados.": {"en": "You send your details.", "es": "Usted envía sus datos.", "fr": "Vous envoyez vos coordonnées.", "de": "Sie senden Ihre Daten.", "zh": "提交您的信息。"}, "Leva menos de um minuto.": {"en": "It takes less than a minute.", "es": "Toma menos de un minuto.", "fr": "Cela prend moins d'une minute.", "de": "Dauert weniger als eine Minute.", "zh": "不到一分钟即可完成。"}, "Entendemos sua operação.": {"en": "We learn about your operation.", "es": "Entendemos su operación.", "fr": "Nous étudions votre exploitation.", "de": "Wir verstehen Ihren Betrieb.", "zh": "了解您的运营情况。"}, "Número de suítes, rotina e objetivos.": {"en": "Number of suites, routine and goals.", "es": "Número de suites, rutina y objetivos.", "fr": "Nombre de suites, routine et objectifs.", "de": "Anzahl der Suiten, Abläufe und Ziele.", "zh": "客房数量、日常流程和目标。"}, "Demonstração personalizada.": {"en": "Tailored demo.", "es": "Demostración personalizada.", "fr": "Démonstration personnalisée.", "de": "Persönliche Demo.", "zh": "个性化演示。"}, "As telas e os recursos na prática.": {"en": "The screens and features in practice.", "es": "Las pantallas y funciones en la práctica.", "fr": "Les écrans et les fonctions en pratique.", "de": "Bildschirme und Funktionen in der Praxis.", "zh": "实际展示界面与功能。"}, "Seu nome": {"en": "Your name", "es": "Su nombre", "fr": "Votre nom", "de": "Ihr Name", "zh": "您的姓名"}, "Estabelecimento": {"en": "Property", "es": "Establecimiento", "fr": "Établissement", "de": "Betrieb", "zh": "门店名称"}, "E-mail": {"en": "Email", "es": "Correo electrónico", "fr": "E-mail", "de": "E-Mail", "zh": "电子邮箱"}, "Telefone / WhatsApp": {"en": "Phone / WhatsApp", "es": "Teléfono / WhatsApp", "fr": "Téléphone / WhatsApp", "de": "Telefon / WhatsApp", "zh": "电话 / WhatsApp"}, "Qual solução você quer conhecer?": {"en": "Which solution are you interested in?", "es": "¿Qué solución quiere conocer?", "fr": "Quelle solution vous intéresse ?", "de": "Welche Lösung interessiert Sie?", "zh": "您想了解哪个方案？"}, "Todas as soluções": {"en": "All solutions", "es": "Todas las soluciones", "fr": "Toutes les solutions", "de": "Alle Lösungen", "zh": "全部方案"}, "Ainda não sei, quero conversar": {"en": "Not sure yet, let's talk", "es": "Aún no sé, quiero conversar", "fr": "Je ne sais pas encore, parlons-en", "de": "Noch unsicher, lassen Sie uns sprechen", "zh": "还不确定，想先聊聊"}, "Mensagem (opcional)": {"en": "Message (optional)", "es": "Mensaje (opcional)", "fr": "Message (facultatif)", "de": "Nachricht (optional)", "zh": "留言（选填）"}, "Autorizo a Neon Sistemas a usar estes dados para entrar em contato sobre esta solicitação.": {"en": "I authorise Neon Sistemas to use this information to contact me about this request.", "es": "Autorizo a Neon Sistemas a usar estos datos para contactarme sobre esta solicitud.", "fr": "J'autorise Neon Sistemas à utiliser ces données pour me contacter au sujet de cette demande.", "de": "Ich erlaube Neon Sistemas, diese Daten zu nutzen, um mich zu dieser Anfrage zu kontaktieren.", "zh": "我同意 Neon Sistemas 使用以上信息就本次咨询与我联系。"}, "Seus dados são privados e usados apenas para atender à sua solicitação.": {"en": "Your information is private and used only to handle your request.", "es": "Sus datos son privados y se usan solo para atender su solicitud.", "fr": "Vos données sont privées et utilisées uniquement pour traiter votre demande.", "de": "Ihre Daten sind privat und werden nur zur Bearbeitung Ihrer Anfrage verwendet.", "zh": "您的信息将被保密，仅用于处理本次咨询。"}, "Automação, gestão e comunicação para conectar a sua operação ao futuro.": {"en": "Automation, management and communication to connect your operation to the future.", "es": "Automatización, gestión y comunicación para conectar su operación al futuro.", "fr": "Domotique, gestion et communication pour connecter votre exploitation à l'avenir.", "de": "Automation, Management und Kommunikation, die Ihren Betrieb mit der Zukunft verbinden.", "zh": "以自动化、管理与通信，将您的运营连接未来。"}, "Empresa": {"en": "Company", "es": "Empresa", "fr": "Entreprise", "de": "Unternehmen", "zh": "公司"}, "© 2026 Neon Sistemas. Todos os direitos reservados.": {"en": "© 2026 Neon Sistemas. All rights reserved.", "es": "© 2026 Neon Sistemas. Todos los derechos reservados.", "fr": "© 2026 Neon Sistemas. Tous droits réservés.", "de": "© 2026 Neon Sistemas. Alle Rechte vorbehalten.", "zh": "© 2026 Neon Sistemas. 保留所有权利。"}, "Automação · Gestão · Comunicação": {"en": "Automation · Management · Communication", "es": "Automatización · Gestión · Comunicación", "fr": "Domotique · Gestion · Communication", "de": "Automation · Management · Kommunikation", "zh": "自动化 · 管理 · 通信"}, "Ex.: motel com 20 suítes, queremos automatizar e trocar o sistema de gestão.": {"en": "E.g. motel with 20 suites, we want to automate and replace our management system.", "es": "Ej.: motel con 20 suites, queremos automatizar y cambiar el sistema de gestión.", "fr": "Ex. : motel de 20 suites, nous voulons automatiser et changer de logiciel de gestion.", "de": "z. B. Motel mit 20 Suiten, wir möchten automatisieren und das Managementsystem wechseln.", "zh": "例如：拥有 20 间客房的汽车旅馆，希望实现自动化并更换管理系统。"}, "Menu": {"en": "Menu", "es": "Menú", "fr": "Menu", "de": "Menü", "zh": "菜单"}, "Prefere falar direto?": {"en": "Prefer to talk directly?", "es": "¿Prefiere hablar directo?", "fr": "Vous préférez nous parler directement ?", "de": "Lieber direkt sprechen?", "zh": "想直接沟通？"}, "Enviar pelo WhatsApp": {"en": "Send via WhatsApp", "es": "Enviar por WhatsApp", "fr": "Envoyer via WhatsApp", "de": "Per WhatsApp senden", "zh": "通过 WhatsApp 发送"}, "Contato": {"en": "Contact", "es": "Contacto", "fr": "Contact", "de": "Kontakt", "zh": "联系方式"}, "Fale com a gente no WhatsApp": {"en": "Chat with us on WhatsApp", "es": "Hable con nosotros por WhatsApp", "fr": "Écrivez-nous sur WhatsApp", "de": "Schreiben Sie uns auf WhatsApp", "zh": "通过 WhatsApp 联系我们"}};
+const LANGS={pt:'pt-BR',en:'en',es:'es',fr:'fr',de:'de',zh:'zh-Hans'};
+const META={"pt": ["Neon Sistemas | Sistema para Motel, Automação de Suítes e PABX VoIP", "Sistema de gestão para motéis e hotéis, automação de suítes com painel touch e PABX VoIP com ramais no celular. Conheça o Painel Neon, o Neon Motel e o PABX Neon e agende uma demonstração."], "en": ["Neon Sistemas | Motel & Hotel Management Software, Suite Automation and VoIP PBX", "Management software for motels and hotels, touch-panel suite automation and a VoIP PBX with mobile extensions. Discover Painel Neon, Neon Motel and PABX Neon and book a demo."], "es": ["Neon Sistemas | Software para Moteles y Hoteles, Automatización de Suites y Centralita VoIP", "Sistema de gestión para moteles y hoteles, automatización de suites con panel táctil y centralita VoIP con extensiones en el celular. Conozca Painel Neon, Neon Motel y PABX Neon y agende una demostración."], "fr": ["Neon Sistemas | Logiciel de gestion pour motels et hôtels, domotique et standard VoIP", "Logiciel de gestion pour motels et hôtels, domotique des suites avec écran tactile et standard VoIP avec postes sur mobile. Découvrez Painel Neon, Neon Motel et PABX Neon et réservez une démo."], "de": ["Neon Sistemas | Software für Motels und Hotels, Suitenautomation und VoIP-Telefonanlage", "Managementsoftware für Motels und Hotels, Suitenautomation per Touchpanel und VoIP-Telefonanlage mit Handy-Nebenstellen. Entdecken Sie Painel Neon, Neon Motel und PABX Neon und vereinbaren Sie eine Demo."], "zh": ["Neon Sistemas | 汽车旅馆与酒店管理系统、客房自动化与 VoIP 电话交换机", "面向汽车旅馆和酒店的管理系统、触控面板客房自动化，以及支持手机分机的 VoIP 电话交换机。了解 Painel Neon、Neon Motel 和 PABX Neon，立即预约演示。"]};
+const PATHS={"pt": "/", "en": "/en/", "es": "/es/", "fr": "/fr/", "de": "/de/", "zh": "/zh/"};
+const LBL={snd:{pt:'Som',en:'Sound',es:'Sonido',fr:'Son',de:'Ton',zh:'声音'},lang:{pt:'Idioma',en:'Language',es:'Idioma',fr:'Langue',de:'Sprache',zh:'语言'}};
+const textNodes=[];
+(function(){const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);let n;
+ while(n=w.nextNode()){if(n.parentNode.closest('.lang-menu'))continue;const v=n.nodeValue.trim();if(v&&I18N[v])textNodes.push([n,n.nodeValue,v]);}})();
+const attrEls=[...document.querySelectorAll('[placeholder],.burger,[data-i18n-aria]')].map(e=>[e,e.getAttribute('placeholder'),e.getAttribute('aria-label')]);
+let cur='pt';
+function applyLang(lang){
+  cur=lang;const tr=v=>lang==='pt'||!I18N[v]?v:(I18N[v][lang]||v);
+  textNodes.forEach(([n,raw,v])=>{n.nodeValue=raw.replace(v,tr(v));});
+  attrEls.forEach(([e,ph,al])=>{if(ph)e.setAttribute('placeholder',tr(ph));if(al)e.setAttribute('aria-label',tr(al));});
+  document.documentElement.lang=LANGS[lang];
+  document.title=META[lang][0];document.querySelector('meta[name=description]').content=META[lang][1];
+  document.querySelector('.lang-code').textContent=lang.toUpperCase();
+  document.querySelectorAll('.lang-menu button').forEach(b=>b.setAttribute('aria-checked',b.dataset.lang===lang));
+  sndBtn.setAttribute('aria-label',LBL.snd[lang]);sndBtn.title=LBL.snd[lang];
+  document.querySelector('.lang-trigger').setAttribute('aria-label',LBL.lang[lang]);
+  store.set('neon-lang',lang);
+  if(/^https?:$/.test(location.protocol)&&location.pathname!==PATHS[lang]){try{history.replaceState(null,'',PATHS[lang]+location.hash);}catch(e){}}
+  const cn=document.querySelector('link[rel=canonical]');if(cn)cn.href='https://neonsistemas.com'+PATHS[lang];
+}
+const langBox=document.querySelector('.lang'),langBtn=langBox.querySelector('.lang-trigger');
+function langMenu(open){langBox.classList.toggle('open',open);langBtn.setAttribute('aria-expanded',open);}
+langBtn.addEventListener('click',e=>{e.stopPropagation();const o=!langBox.classList.contains('open');langMenu(o);o?sfx.open():sfx.close();
+  if(o)(langBox.querySelector('[aria-checked=true]')||langBox.querySelector('.lang-menu button')).focus({preventScroll:true});});
+document.addEventListener('click',e=>{if(!langBox.contains(e.target)&&langBox.classList.contains('open'))langMenu(false);});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(langBox.classList.contains('open')){langMenu(false);langBtn.focus();}if(hdr.classList.contains('open'))menu(false);}});
+langBox.querySelectorAll('.lang-menu button').forEach(b=>b.addEventListener('click',()=>{
+  langMenu(false);const l=b.dataset.lang;if(l===cur)return;sfx.lang();
+  const m=document.querySelector('main');
+  if(REDUCED){applyLang(l);return;}
+  m.classList.add('swap');setTimeout(()=>{applyLang(l);requestAnimationFrame(()=>m.classList.remove('swap'));},260);
+}));
+(function(){const pre=document.documentElement.dataset.page;const saved=store.get('neon-lang');
+  applyLang(pre&&pre!=='pt'?pre:(LANGS[saved]?saved:'pt'));})();
+
+// ================= EFEITOS VISUAIS =================
+if(!REDUCED){
+  document.documentElement.classList.add('fx');
+  // revelação ao rolar
+  const rv=(sel,mode,step)=>document.querySelectorAll(sel).forEach((el,i)=>{el.dataset.rv=mode||'';if(step)el.style.setProperty('--d',(i%4*step)+'s');});
+  rv('.sec-head>div');rv('.sec-head>p','',0);
+  document.querySelectorAll('.sec-head>p').forEach(p=>p.style.setProperty('--d','.15s'));
+  rv('.strip .it','',.08);rv('.pcard','',.12);
+  document.querySelectorAll('.pd-grid').forEach(g=>{const v=g.querySelector('.pd-vis'),t=g.querySelector('.pd-txt');const rev=g.classList.contains('rev');
+    v.dataset.rv=rev?'r':'l';t.dataset.rv=rev?'l':'r';t.style.setProperty('--d','.12s');});
+  document.querySelectorAll('.features').forEach(f=>f.querySelectorAll('.fg').forEach((el,i)=>{el.dataset.rv='';el.style.setProperty('--d',i*.1+'s');}));
+  rv('.for','zoom');rv('.eco .st','',.12);rv('.about>div:first-child','l');rv('.pillar','',.08);rv('.ct>div','l');rv('.ct form','r');rv('.ft>div','',.08);
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{rootMargin:'0px 0px -8% 0px',threshold:.12});
+  document.querySelectorAll('[data-rv]').forEach(el=>io.observe(el));
+
+  // barra de progresso + header
+  const prog=document.getElementById('progress');let ticking=false;
+  function onScroll(){const h=document.documentElement;prog.style.transform='scaleX('+(h.scrollTop/(h.scrollHeight-h.clientHeight)||0)+')';hdr.classList.toggle('scrolled',h.scrollTop>30);ticking=false;}
+  addEventListener('scroll',()=>{if(!ticking){ticking=true;requestAnimationFrame(onScroll);}},{passive:true});onScroll();
+
+  if(matchMedia('(pointer:fine)').matches){
+    // brilho que segue o mouse
+    document.querySelectorAll('.pcard,.fg,.eco .st,.pillar,.pd-vis,.ct form,.strip .it').forEach(el=>el.classList.add('glow'));
+    document.addEventListener('pointermove',e=>{const g=e.target.closest('.glow');if(!g)return;const r=g.getBoundingClientRect();
+      g.style.setProperty('--mx',(e.clientX-r.left)+'px');g.style.setProperty('--my',(e.clientY-r.top)+'px');});
+    // inclinação 3D das telas
+    document.querySelectorAll('.pd-vis,.pcard .vis').forEach(box=>{box.style.perspective='1100px';
+      const kids=[...box.children];kids.forEach(k=>k.classList.add('tilt'));
+      box.addEventListener('pointermove',e=>{const r=box.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
+        kids.forEach((k,i)=>{const z=i?40:0;k.style.transform=`rotateY(${x*9}deg) rotateX(${-y*7}deg) translateZ(${z}px)`;});});
+      box.addEventListener('pointerleave',()=>kids.forEach(k=>k.style.transform=''));});
+    // paralaxe do hero
+    const hero=document.querySelector('.hero'),spot=hero.querySelector('.hero-spot');
+    const layers=[['.hv-laptop .mk',10],['.hv-panel .mk',22],['.hv-phone .mk',30]].map(([s,d])=>[hero.querySelector(s),d]);
+    hero.addEventListener('pointermove',e=>{const r=hero.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
+      spot.style.setProperty('--hx',(e.clientX-r.left)+'px');spot.style.setProperty('--hy',(e.clientY-r.top)+'px');
+      layers.forEach(([el,d])=>{if(el)el.style.transform=`translate(${-x*d}px,${-y*d}px) rotateY(${x*4}deg) rotateX(${-y*4}deg)`;});});
+    hero.addEventListener('pointerleave',()=>layers.forEach(([el])=>el&&(el.style.transform='')));
+    // botões magnéticos
+    document.querySelectorAll('.btn').forEach(b=>{
+      b.addEventListener('pointermove',e=>{const r=b.getBoundingClientRect();b.style.transform=`translate(${(e.clientX-r.left-r.width/2)*.18}px,${(e.clientY-r.top-r.height/2)*.3}px)`;});
+      b.addEventListener('pointerleave',()=>{b.style.transform='';});});
+    // cursor personalizado
+    const ring=document.querySelector('.cur'),dot=document.querySelector('.cur-dot');let mx=-100,my=-100,rx=-100,ry=-100;
+    document.documentElement.classList.add('has-cur');
+    addEventListener('pointermove',e=>{if(e.pointerType!=='mouse')return;mx=e.clientX;my=e.clientY;dot.style.transform=`translate(${mx}px,${my}px)`;
+      ring.classList.toggle('hover',!!e.target.closest('a,button,.pcard,select,label.chk'));},{passive:true});
+    addEventListener('pointerdown',()=>ring.classList.add('down'));addEventListener('pointerup',()=>ring.classList.remove('down'));
+    document.addEventListener('mouseleave',()=>document.documentElement.classList.remove('has-cur'));
+    document.addEventListener('mouseenter',()=>document.documentElement.classList.add('has-cur'));
+    (function loop(){rx+=(mx-rx)*.18;ry+=(my-ry)*.18;ring.style.transform=`translate(${rx}px,${ry}px)`;requestAnimationFrame(loop);})();
+  }
+  // ondulação ao clicar nos botões
+  document.querySelectorAll('.btn').forEach(b=>b.addEventListener('pointerdown',e=>{const r=b.getBoundingClientRect(),s=Math.max(r.width,r.height);
+    const sp=document.createElement('span');sp.className='ripple';sp.style.cssText=`width:${s}px;height:${s}px;left:${e.clientX-r.left-s/2}px;top:${e.clientY-r.top-s/2}px`;
+    b.appendChild(sp);setTimeout(()=>sp.remove(),700);}));
+}
+// Pré-seleciona o produto no formulário a partir dos botões de cada seção
+document.querySelectorAll('[data-prod]').forEach(a=>a.addEventListener('click',()=>{document.getElementById('solucao').value=a.dataset.prod;}));
+// ===== Envio do formulário: e-mail ou WhatsApp =====
+const DESTINO='contato@neonsistemas.com', WHATS='5534984302083';
+const formEl=document.getElementById('form');
+function dados(){const f=new FormData(formEl);const m={nome:'Nome',estabelecimento:'Estabelecimento',email:'E-mail',telefone:'Telefone',solucao:'Solução',mensagem:'Mensagem'};
+  return {sol:f.get('solucao'),txt:[...f.entries()].filter(([k,v])=>m[k]&&v).map(([k,v])=>m[k]+': '+v).join('\n')};}
+function enviar(e){e.preventDefault();const d=dados();
+  location.href='mailto:'+DESTINO+'?subject='+encodeURIComponent('Demonstração - '+d.sol)+'&body='+encodeURIComponent(d.txt);return false;}
+formEl.addEventListener('submit',enviar);
+document.getElementById('sendwa').addEventListener('click',()=>{if(!formEl.reportValidity())return;const d=dados();
+  window.open('https://wa.me/'+WHATS+'?text='+encodeURIComponent('Olá! Gostaria de uma demonstração da Neon Sistemas.\n\n'+d.txt),'_blank','noopener');});
+
+// ===== Proteção de conteúdo =====
+(function(){
+  const inField=t=>{const el=t&&t.nodeType===3?t.parentElement:t;return !!(el&&el.closest&&el.closest('input,textarea,select'));};
+  document.addEventListener('contextmenu',e=>e.preventDefault());
+  ['copy','cut','dragstart','selectstart'].forEach(ev=>document.addEventListener(ev,e=>{if(!inField(e.target))e.preventDefault();}));
+  document.addEventListener('keydown',e=>{
+    const k=(e.key||'').toLowerCase(),mod=e.ctrlKey||e.metaKey;
+    const block=e.key==='F12'||
+      (mod&&e.shiftKey&&['i','j','c','k','e','m'].includes(k))||
+      (e.metaKey&&e.altKey&&['i','j','c','u'].includes(k))||
+      (mod&&['u','s','p'].includes(k))||
+      (mod&&['a','c','x'].includes(k)&&!inField(e.target));
+    if(block){e.preventDefault();e.stopImmediatePropagation();}
+  },true);
+})();
+</script>
+</body>
+</html>
