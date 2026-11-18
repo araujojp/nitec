@@ -1,0 +1,75 @@
+services:
+  db:
+    image: postgres:16.16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: neon
+      POSTGRES_USER: neon
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U neon -d neon"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  directus:
+    image: directus/directus:11.17.4
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      KEY: ${KEY}
+      SECRET: ${SECRET}
+      PUBLIC_URL: https://${GESTAO_HOST}
+      DB_CLIENT: pg
+      DB_HOST: db
+      DB_PORT: "5432"
+      DB_DATABASE: neon
+      DB_USER: neon
+      DB_PASSWORD: ${DB_PASSWORD}
+      ADMIN_EMAIL: ${ADMIN_EMAIL}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      FILES_MAX_UPLOAD_SIZE: 2gb
+      MAX_PAYLOAD_SIZE: 50mb
+      RATE_LIMITER_ENABLED: "true"
+      RATE_LIMITER_POINTS: "100"
+      RATE_LIMITER_DURATION: "1"
+      TELEMETRY: "false"
+      WEBSOCKETS_ENABLED: "true"
+    volumes:
+      - arquivos:/directus/uploads
+      - extensoes:/directus/extensions
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.neon-gestao.rule=Host(`${GESTAO_HOST}`)
+      - traefik.http.routers.neon-gestao.entrypoints=websecure
+      - traefik.http.routers.neon-gestao.tls.certresolver=letsencrypt
+      - traefik.http.services.neon-gestao.loadbalancer.server.port=8055
+
+  backup:
+    image: prodrigestivill/postgres-backup-local:16-alpine
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      POSTGRES_HOST: db
+      POSTGRES_DB: neon
+      POSTGRES_USER: neon
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      SCHEDULE: "@daily"
+      BACKUP_KEEP_DAYS: "7"
+      BACKUP_KEEP_WEEKS: "4"
+      BACKUP_KEEP_MONTHS: "6"
+      HEALTHCHECK_PORT: "8080"
+    volumes:
+      - backups:/backups
+
+volumes:
+  db:
+  arquivos:
+  extensoes:
+  backups:

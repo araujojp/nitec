@@ -3,3 +3,7 @@ neon-sistemas-preview.html
 __pycache__/
 *.zip
 .DS_Store
+cred.json
+out.json
+env.txt
+req.json
