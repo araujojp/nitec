@@ -134,13 +134,16 @@ for p in sys.argv[1:]:
     J=J.replace("if(window.NEON_RETR)NEON_RETR();","if(window.NEON_RETR)NEON_RETR();if(window.NEON_CALC)NEON_CALC();")
     d['j']=J+'\n'+EXJS
     if 'm' in d:
+        c1='Ct=mt(1.3,dt+.65,9)'; c2='be.position.x=_e?-.65:.65'
+        assert d['m'].count(c1)==1 and d['m'].count(c2)==1
+        d['m']=d['m'].replace(c1,'Ct=mt(1.6,dt+.65,9)').replace(c2,'be.position.x=_e?.8:-.8').replace('let tt=re(1,.28,D.cort)','let tt=re(1,.2,D.cort)').replace('Math.min(.05,(B-ot)/1e3)','Math.min(.1,(B-ot)/1e3)').replace('D.cort=re(D.cort,C.cortina?1:0,Math.min(1,B*1.2))','D.cort=re(D.cort,C.cortina?1:0,Math.min(1,B*2.2))')
         mod=d.pop('m').encode()
         K3=[(i*73+29)%251 for i in range(64)]
         enc3=bytes(x^K3[i%64]^((i*37+11)&255) for i,x in enumerate(mod))
         root=p.split('/')[0]; os.makedirs(root+'/assets',exist_ok=True)
         open(root+'/assets/s3d.bin','wb').write(enc3)
     OLDL="if(d.m){var ms=document.createElement('script');ms.type='module';ms.textContent=d.m;document.body.appendChild(ms);}"
-    NEWL=("var rm=document.getElementById('room');function L3(){if(L3.d)return;L3.d=1;fetch('/assets/s3d.bin?v=1').then(function(r){return r.arrayBuffer();}).then(function(a){var b=new Uint8Array(a),k=[];for(var i=0;i<64;i++)k.push((i*73+29)%251);"
+    NEWL=("var rm=document.getElementById('room');function L3(){if(L3.d)return;L3.d=1;fetch('/assets/s3d.bin?v=2').then(function(r){return r.arrayBuffer();}).then(function(a){var b=new Uint8Array(a),k=[];for(var i=0;i<64;i++)k.push((i*73+29)%251);"
           "for(var i=0;i<b.length;i++)b[i]^=k[i%64]^((i*37+11)&255);var ms=document.createElement('script');ms.type='module';ms.textContent=new TextDecoder().decode(b);document.body.appendChild(ms);});}"
           "if(rm&&'IntersectionObserver' in window){var io=new IntersectionObserver(function(e){if(e[0].isIntersecting){io.disconnect();L3();}},{rootMargin:'1200px 0px'});io.observe(rm);}else L3();")
     assert s.count(OLDL)==1
