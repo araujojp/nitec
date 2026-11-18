@@ -10,3 +10,8 @@ req.json
 out_hosp.json
 cred_hosp.json
 env_hosp.json
+
+# Neon Gestão (app)
+painel-app/node_modules/
+painel-app/.env
+painel-app/storage/
