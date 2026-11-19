@@ -16,6 +16,7 @@ const EVENTOS = {
   chamado_novo: { nome: 'Chamado novo', desc: 'Qualquer chamado aberto no painel.', padrao: ['push'] },
   chamado_urgente: { nome: 'Chamado de prioridade alta ou urgente', desc: 'Na abertura ou quando a prioridade sobe.', padrao: ['telegram', 'push', 'email'] },
   chamado_atribuido: { nome: 'Chamado passado para mim', desc: 'Quando você vira o responsável por um chamado.', padrao: ['push', 'telegram'], pessoal: true },
+  chamado_sla: { nome: 'Chamado fora do prazo (SLA)', desc: 'Quando o prazo de atendimento estoura.', padrao: ['telegram', 'push'] },
   equipamento_offline: { nome: 'Equipamento sem sinal', desc: 'Instalação ativa que parou de dar sinal.', padrao: ['telegram', 'push'] },
   equipamento_voltou: { nome: 'Equipamento voltou', desc: 'O equipamento que estava sem sinal voltou.', padrao: ['push'] },
   licenca_vencendo: { nome: 'Licença vencendo', desc: 'Faltando 7, 3 e 0 dias (ajustável).', padrao: ['telegram', 'email'] },
@@ -125,8 +126,11 @@ async function emailCfg() {
   return { host: c.host || 'smtp.hostinger.com', porta: Number(c.porta) || 465, usuario: c.usuario || '', senha: c.senha || '', nome: c.nome || 'Neon Gestão', pronto: !!(c.usuario && c.senha) };
 }
 async function enviarEmail(para, m) {
-  const html = emailHtml(m);
-  if (TESTE) { saidaTeste.push({ canal: 'email', para, assunto: m.titulo, html }); return; }
+  return enviarEmailCru({ para, assunto: (m.urgente ? '🚨 ' : '') + m.titulo, html: emailHtml(m), texto: `${m.titulo}\n\n${m.texto}${m.link && baseUrl() ? `\n\n${baseUrl()}${m.link}` : ''}` });
+}
+// Envio genérico (usado também nos e-mails para clientes)
+async function enviarEmailCru({ para, assunto, html, texto, responderPara }) {
+  if (TESTE) { saidaTeste.push({ canal: 'email', para, assunto, html, responderPara }); return; }
   const c = await emailCfg();
   if (!c.pronto) throw new Error('E-mail de avisos não configurado.');
   const key = [c.host, c.porta, c.usuario, crypto.createHash('sha256').update(c.senha).digest('hex')].join('|');
@@ -134,7 +138,7 @@ async function enviarEmail(para, m) {
     transporter = require('nodemailer').createTransport({ host: c.host, port: c.porta, secure: c.porta === 465, auth: { user: c.usuario, pass: c.senha }, connectionTimeout: 15000, greetingTimeout: 15000 });
     transporterKey = key;
   }
-  await transporter.sendMail({ from: { name: c.nome, address: c.usuario }, to: para, subject: (m.urgente ? '🚨 ' : '') + m.titulo, html, text: `${m.titulo}\n\n${m.texto}${m.link && baseUrl() ? `\n\n${baseUrl()}${m.link}` : ''}` });
+  await transporter.sendMail({ from: { name: c.nome, address: c.usuario }, to: para, subject: assunto, html, text: texto, replyTo: responderPara || undefined });
 }
 function emailHtml(m) {
   const linhas = esc(m.texto).replace(/\n/g, '<br>');
@@ -261,6 +265,15 @@ async function verificar(agora = new Date()) {
     if (u.affectedRows !== 1) continue;
     await disparar({ evento: 'equipamento_voltou', link: `/instalacoes/${i.id}`, tag: `inst-${i.id}`, titulo: `Voltou: ${i.codigo}`, texto: `${i.cliente}\nO equipamento voltou a dar sinal.` });
     r.voltou++;
+  }
+
+  // Chamados que estouraram o prazo de atendimento (SLA)
+  const sla = await q(`SELECT ch.id, ch.titulo, ch.prioridade, ch.sla_limite, ch.responsavel_id, c.nome_fantasia cliente FROM chamados ch JOIN clientes c ON c.id=ch.cliente_id
+    WHERE ch.status IN ('aberto','andamento') AND ch.sla_limite IS NOT NULL AND ch.sla_limite < UTC_TIMESTAMP() AND ch.sla_limite > UTC_TIMESTAMP() - INTERVAL 30 DAY`);
+  for (const ch of sla) {
+    if (!(await primeiraVez(`sla:${ch.id}:${ch.sla_limite}`))) continue;
+    await disparar({ evento: 'chamado_sla', urgente: ['alta', 'urgente'].includes(ch.prioridade), link: `/chamados/${ch.id}`, tag: `chamado-${ch.id}`, titulo: `Fora do prazo: chamado #${ch.id}`, texto: `${ch.cliente} · ${ch.titulo}\nPrioridade ${PRIO[ch.prioridade] || ch.prioridade}.` });
+    r.sla = (r.sla || 0) + 1;
   }
 
   // Licenças vencendo (7, 3 e 0 dias, por padrão)
@@ -497,4 +510,4 @@ if (TESTE) {
   router.post('/_teste/limpar', (req, res) => { saidaTeste.length = 0; res.json({ ok: true }); });
 }
 
-module.exports = { router, migrate, iniciar, tick, verificar, disparar, aoSalvarChamado, vincularTelegram, EVENTOS };
+module.exports = { router, migrate, iniciar, tick, verificar, disparar, aoSalvarChamado, vincularTelegram, EVENTOS, enviarEmailCru, emailCfg, primeiraVez };

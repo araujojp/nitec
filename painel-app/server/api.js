@@ -29,7 +29,7 @@ router.get('/dashboard', wrap(async (req, res) => {
   [hoje.slice(0, 7), hoje, hoje, hoje + ' 23:59:59']);
   const [kr, chamados, sinais, vencendo, atrasadas, novos, receita, funil, lembretes] = await Promise.all([
     kpiRow,
-    q(`SELECT c.id, c.titulo, c.prioridade, c.status, c.created_at, cl.nome_fantasia cliente
+    q(`SELECT c.id, c.titulo, c.prioridade, c.status, c.created_at, c.sla_limite, c.resolvido_em, cl.nome_fantasia cliente
     FROM chamados c JOIN clientes cl ON cl.id=c.cliente_id WHERE c.status IN ('aberto','andamento','aguardando')
     ORDER BY FIELD(c.prioridade,'urgente','alta','media','baixa'), c.created_at DESC LIMIT 8`),
     q(`SELECT i.id, i.codigo, i.versao_instalada, i.ultimo_contato, cl.nome_fantasia cliente,

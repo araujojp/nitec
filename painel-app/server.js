@@ -15,6 +15,7 @@ const device = require('./server/device');
 const marketing = require('./server/marketing');
 const alertas = require('./server/alertas');
 const asaas = require('./server/asaas');
+const chamados = require('./server/chamados');
 const { wrap } = require('./server/util');
 
 const app = express();
@@ -56,6 +57,7 @@ app.use('/api/arquivos', files.router);
 app.use('/api/marketing', marketing.router);
 app.use('/api/alertas', alertas.router);
 app.use('/api/asaas', asaas.router);
+app.use('/api', chamados.router);
 app.use('/api', api.router);
 app.use('/api', crud.router);
 
@@ -110,6 +112,7 @@ const PORT = process.env.PORT || 3000;
     await migrate();
     await alertas.migrate();
     await asaas.migrate();
+    await chamados.migrate();
     await seed();
     await auth.ensureAdmin();
     await files.ensureDirs();

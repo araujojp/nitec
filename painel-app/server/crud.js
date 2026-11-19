@@ -141,6 +141,7 @@ const hooks = {
   chamados: {
     async before(data, old) {
       const st = data.status;
+      await require('./chamados').definirSla(data, old);
       if (st && ['resolvido', 'fechado'].includes(st) && !(old && old.resolvido_em)) data.resolvido_em = nowSql();
       if (st && ['aberto', 'andamento', 'aguardando'].includes(st)) data.resolvido_em = null;
       if (data.instalacao_id) {
@@ -151,6 +152,7 @@ const hooks = {
     },
     async after(row, old) {
       require('./alertas').aoSalvarChamado(row, old); // não espera: os avisos saem em segundo plano
+      require('./chamados').aposSalvar(row, old);
     },
   },
   cobrancas: {

@@ -99,7 +99,7 @@ const DashboardPage = defineComponent({
               }))]),
           ]),
           h('div', { class: 'grid g3', style: { marginTop: '16px' } }, [
-            Lista('Chamados em aberto', 'lifebuoy', '/chamados', v.chamados, (c) => h('a', { class: 'li', href: `/chamados/${c.id}` }, [h('div', { class: 'grow' }, [h('div', { class: 't' }, c.titulo), h('div', { class: 's' }, `#${c.id} · ${c.cliente} · ${fmt.ago(c.created_at)}`)]), h(Badge, { field: ent('chamados').fields.prioridade, value: c.prioridade })]), 'Nenhum chamado aberto 🎉'),
+            Lista('Chamados em aberto', 'lifebuoy', '/chamados', v.chamados, (c) => h('a', { class: 'li', href: `/chamados/${c.id}` }, [h('div', { class: 'grow' }, [h('div', { class: 't' }, c.titulo), h('div', { class: 's row gap-s', style: { flexWrap: 'wrap' } }, [`#${c.id} · ${c.cliente} · ${fmt.ago(c.created_at)}`, c.sla_limite ? SlaTag(c) : null])]), h(Badge, { field: ent('chamados').fields.prioridade, value: c.prioridade })]), 'Nenhum chamado aberto 🎉'),
             Lista('Equipamentos que deram sinal', 'signal', '/sinais', v.sinais, (s) => h('a', { class: 'li', href: `/instalacoes/${s.id}` }, [h('span', { class: 'pulse' + (s.online ? '' : ' off') }), h('div', { class: 'grow' }, [h('div', { class: 't mono' }, s.codigo), h('div', { class: 's' }, `${s.cliente} · v${s.versao_instalada || '?'}`)]), h('span', { class: 'muted small nowrap' }, fmt.ago(s.ultimo_contato))]), 'Nenhum sinal recebido ainda.'),
             Lista('Lembretes e próximos passos', 'bell', '/agenda', v.lembretes, (l) => h('a', { class: 'li', href: `/clientes/${l.cliente_id}` }, [h('div', { class: 'grow' }, [h('div', { class: 't' }, l.proximo_passo || l.resumo), h('div', { class: 's' }, l.cliente)]), h('span', { class: 'small nowrap', style: { color: toDate(l.lembrete) < new Date() ? 'var(--red)' : 'var(--muted)' } }, fmt.dt(l.lembrete))]), 'Sem lembretes pendentes.'),
             Lista('Licenças vencendo', 'key', '/licencas', v.vencendo, (l) => h('a', { class: 'li', href: `/licencas/${l.id}` }, [h('div', { class: 'grow' }, [h('div', { class: 't' }, l.cliente), h('div', { class: 's mono' }, `${l.codigo} · ${fmt.money(l.valor_mensal)}`)]), h('span', { class: 'small nowrap', style: { color: l.vencimento < hojeISO() ? 'var(--red)' : 'var(--yellow)' } }, fmt.date(l.vencimento))]), 'Nenhuma licença vencendo.'),
@@ -207,7 +207,7 @@ const DetailPage = defineComponent({
       if (!E || !r) return h('div', null, [h('div', { class: 'skeleton', style: { height: '110px', marginBottom: '16px' } }), h('div', { class: 'skeleton', style: { height: '400px' } })]);
       const titulo = isNew.value ? `${E.fem ? 'Nova' : 'Novo'} ${E.singular.toLowerCase()}` : (r[E.title] ?? `#${r.id}`);
       const statusF = E.fields.status;
-      const tabs = isNew.value ? [] : [['dados', 'Dados'], ...(E.children || []).map((c) => [c.entity + ':' + c.fk, c.label]), ['hist', 'Histórico de alterações']];
+      const tabs = isNew.value ? [] : [['dados', 'Dados'], ...(p.entity === 'chamados' ? [['conversa', 'Conversa']] : []), ...(E.children || []).map((c) => [c.entity + ':' + c.fk, c.label]), ['hist', 'Histórico de alterações']];
       const form = h('div', null, [
         extras(p.entity, r, labels.value, isNew.value, acao, load),
         h('div', { class: 'card' }, h(EntityForm, { entity: p.entity, row: r, labels: labels.value, readonly: !can.write() || E.readonly })),
@@ -223,6 +223,7 @@ const DetailPage = defineComponent({
         heroFor(p.entity, r, labels.value, titulo, statusF, isNew.value, resumo.value),
         tabs.length > 1 ? h('div', { class: 'tabs' }, tabs.map(([k, l]) => h('button', { class: tab.value === k ? 'on' : '', onClick: () => { tab.value = k; if (k === 'hist') carregarHist(); } }, l))) : null,
         tab.value === 'dados' ? form
+          : tab.value === 'conversa' ? h(ChamadoConversa, { chamado: r, key: 'conv' + r.id })
           : tab.value === 'hist' ? h('div', { class: 'card' }, hist.value.length ? h('div', { class: 'timeline' }, hist.value.map((a) => h('div', { class: 'tl' }, [h('div', { class: 'when' }, `${fmt.dt(a.created_at)} · ${a.usuario_nome || 'Sistema'}`), h('div', null, a.resumo), a.mudancas ? h('div', { class: 'tiny muted' }, Object.entries(typeof a.mudancas === 'string' ? JSON.parse(a.mudancas) : a.mudancas).map(([k, [de, para]]) => `${E.fields[k]?.label || k}: ${de ?? '—'} → ${para ?? '—'}`).join(' · ')) : null]))) : h('div', { class: 'empty' }, 'Sem alterações registradas.'))
             : h(EntityList, { entity: tabEnt, key: tab.value, embedded: true, fixed: { [tabFk]: r.id }, newExtra: { [tabFk]: r.id, ...(tabEnt === 'cobrancas' || tabEnt === 'chamados' || tabEnt === 'contatos' ? {} : {}) }, hideNew: tabEnt === 'checkins' || (tabEnt === 'licencas' && p.entity === 'clientes') }),
       ]);
@@ -235,6 +236,7 @@ function heroFor(entity, r, labels, titulo, statusF, isNew, resumo) {
   const meta = [];
   if (!isNew) {
     if (entity === 'clientes') { if (r.cidade) meta.push([h(Icon, { n: 'map', s: 14 }), ` ${r.cidade}${r.uf ? '/' + r.uf : ''}`]); if (r.contato_nome) meta.push([h(Icon, { n: 'user', s: 14 }), ' ' + r.contato_nome]); meta.push(`Último contato: ${fmt.ago(r.ultimo_contato)}`); }
+    if (entity === 'chamados' && r.sla_limite) meta.push(SlaTag(r));
     if (entity === 'instalacoes') { meta.push(h('span', { class: 'row gap-s' }, [h('span', { class: 'pulse' + (r.online ? '' : ' off') }), r.online ? 'Online' : 'Offline', ` · último sinal ${fmt.ago(r.ultimo_contato)}`])); meta.push(`Cliente: ${labels.cliente_id?.[r.cliente_id] || ''}`); }
     if (r.cliente_id && entity !== 'instalacoes' && labels.cliente_id) meta.push(h('a', { href: `/clientes/${r.cliente_id}` }, labels.cliente_id[r.cliente_id]));
     if (r.created_at) meta.push(`Criado ${fmt.ago(r.created_at)}`);
@@ -494,7 +496,7 @@ const ConfigPage = defineComponent({
     async function ativar2fa() { try { await post('auth/2fa/ativar', { codigo: codigo.value }); store.user.totp_ativo = true; tfa.value = null; toast('Verificação em duas etapas ativada! 🔐'); } catch (e) { erro(e); } }
     async function desativar2fa() { try { await post('auth/2fa/desativar', { senha: off.value }); store.user.totp_ativo = false; off.value = ''; toast('2FA desativado.'); } catch (e) { erro(e); } }
     const inp = (obj, k, label, extra = {}) => h('div', { class: 'field' + (extra.full ? ' full' : '') }, [h('label', null, label), h(extra.area ? 'textarea' : 'input', { value: obj[k] ?? '', type: extra.type || 'text', rows: extra.area ? 4 : null, onInput: (e) => { obj[k] = e.target.value; } }), extra.help ? h('div', { class: 'help' }, extra.help) : null]);
-    const abas = [['conta', 'Minha conta'], ['seguranca', 'Senha e 2FA'], ['alertas', 'Alertas'], ...(can.admin() ? [['empresa', 'Empresa'], ['asaas', 'Asaas'], ['backup', 'Backup']] : []), ['aparencia', 'Aparência']];
+    const abas = [['conta', 'Minha conta'], ['seguranca', 'Senha e 2FA'], ['alertas', 'Alertas'], ...(can.admin() ? [['empresa', 'Empresa'], ['chamados', 'Chamados'], ['asaas', 'Asaas'], ['backup', 'Backup']] : []), ['aparencia', 'Aparência']];
     return () => h('div', null, [
       h('div', { class: 'page-head' }, [h('div', null, [h('h1', null, 'Configurações')])]),
       h('div', { class: 'tabs' }, abas.map(([k, l]) => h('button', { class: tab.value === k ? 'on' : '', onClick: () => { tab.value = k; setQuery({ aba: k }); } }, l))),
@@ -508,6 +510,7 @@ const ConfigPage = defineComponent({
       ]) : null,
       tab.value === 'alertas' ? h(AlertasMeus) : null,
       tab.value === 'asaas' ? h(AsaasConfig) : null,
+      tab.value === 'chamados' ? h(ChamadosConfig) : null,
       tab.value === 'empresa' ? h('div', { class: 'card', style: { maxWidth: '820px' } }, [h('div', { class: 'form' }, [
         inp(cfg, 'empresa_nome', 'Nome da empresa'), inp(cfg, 'empresa_cnpj', 'CNPJ'), inp(cfg, 'empresa_whatsapp', 'WhatsApp'), inp(cfg, 'empresa_email', 'E-mail'),
         inp(cfg, 'empresa_pix', 'Chave Pix (vai junto na mensagem de cobrança)', { full: true }),

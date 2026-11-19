@@ -166,10 +166,10 @@ const ENTITIES = {
     title: 'titulo', subtitle: 'cliente_id',
     search: ['titulo', 'descricao', 'solucao'],
     defaultSort: '-created_at',
-    list: ['id', 'titulo', 'cliente_id', 'prioridade', 'status', 'responsavel_id', 'created_at'],
+    list: ['id', 'titulo', 'cliente_id', 'prioridade', 'status', 'sla_limite', 'responsavel_id', 'created_at'],
     filters: ['status', 'prioridade', 'canal', 'responsavel_id', 'cliente_id'],
     sections: [
-      { title: 'Chamado', fields: ['cliente_id', 'instalacao_id', 'titulo', 'prioridade', 'status', 'canal', 'responsavel_id', 'prazo'] },
+      { title: 'Chamado', fields: ['cliente_id', 'instalacao_id', 'titulo', 'prioridade', 'status', 'canal', 'responsavel_id', 'prazo', 'sla_limite'] },
       { title: 'Detalhes', fields: ['descricao', 'solucao', 'anexos'] },
     ],
     fields: {
@@ -185,6 +185,7 @@ const ENTITIES = {
       solucao: { label: 'Solução aplicada', type: 'textarea', full: true, rows: 4 },
       anexos: { label: 'Anexos (prints, arquivos)', type: 'files', folder: 'chamados', full: true },
       resolvido_em: { label: 'Resolvido em', type: 'datetime', readonly: true },
+      sla_limite: { label: 'Prazo de atendimento (SLA)', type: 'datetime', readonly: true, help: 'Calculado pela prioridade (Configurações → Chamados).' },
     },
   },
 

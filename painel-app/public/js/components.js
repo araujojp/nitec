@@ -25,6 +25,7 @@ function cellValue(e, key, row, labels) {
   const v = row[key];
   if (key === 'id') return h('span', { class: 'dim mono' }, '#' + v);
   if (key === 'created_at') return h('span', { class: 'muted', title: fmt.dt(v) }, fmt.ago(v));
+  if (key === 'sla_limite') return SlaTag(row);
   if (!f) return v ?? '—';
   if (v == null || v === '') return h('span', { class: 'dim' }, '—');
   switch (f.type) {
