@@ -96,3 +96,6 @@ html.cv-all #neon-motel,html.cv-all #pabx-neon,html.cv-all #voz,html.cv-all #com
 @media (pointer:fine){.hero .stage{cursor:grab}.hero .stage.grabbing{cursor:grabbing}}
 .hero .stage .float,.hero .stage .chip-float{will-change:transform}
 #heroCanvas,.glow-hero{will-change:transform}
+/* ---- novidades: só aparece quando houver conteúdo publicado ---- */
+#novidades{display:none!important}
+#novidades.tem{display:block!important}

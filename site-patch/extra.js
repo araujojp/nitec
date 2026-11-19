@@ -25,6 +25,10 @@ window.NEON_CALC=calc;calc();})();
  var n=0,lastY=-1,still=0;var iv=setInterval(function(){var y=Math.round(scrollY);if(y===lastY)still++;else still=0;lastY=y;
   if(still>=2){var d=el.getBoundingClientRect().top-pad();if(Math.abs(d)>3&&n<5){n++;still=0;window.scrollTo({top:scrollY+d,behavior:'auto'});}else clearInterval(iv);}},120);
  setTimeout(function(){clearInterval(iv);},6000);},false);})();
+// ---- novidades: mostra a seção só se o painel publicou algo ----
+(function(){var sec=document.getElementById('novidades'),box=document.getElementById('neon-novidades');if(!sec||!box)return;
+ var chk=function(){var tem=!!box.querySelector('a[href]');sec.classList.toggle('tem',tem);return tem;};
+ if(!chk()&&'MutationObserver' in window)new MutationObserver(chk).observe(box,{childList:true,subtree:true});})();
 // ---- PABX: conversa da URA sempre mostra a última mensagem ----
 (function(){var ph=document.querySelector('#pabx-neon .screen');if(!ph||!('MutationObserver' in window))return;
 new MutationObserver(function(){var c=document.getElementById('conv');if(c)c.scrollTop=c.scrollHeight;}).observe(ph,{childList:true,subtree:true});})();
