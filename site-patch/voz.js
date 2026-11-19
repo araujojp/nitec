@@ -51,14 +51,32 @@ function parse(raw){var s=N(raw),m;
  if(/luz|luces|light|lumiere|licht|灯/.test(s)){if(/diminu|abaix|suave|fraca|\bdim|bajar|baisse|dimm|暗/.test(s))return ['luz_dim'];return [off?'luz_off':'luz_on'];}
  return ['nao'];}
 var SR=window.SpeechRecognition||window.webkitSpeechRecognition,rec=null;
+var MSG={pt:{neg:'O microfone está bloqueado. Toque no cadeado ao lado do endereço do site e permita o microfone.',mudo:'Não ouvi nada. Toque no microfone e fale perto do celular.',rede:'O reconhecimento do navegador não respondeu. Tente de novo ou toque num comando abaixo.',parar:'Toque de novo para parar'},
+ en:{neg:'The microphone is blocked. Tap the lock next to the site address and allow the microphone.',mudo:'I didn’t hear anything. Tap the mic and speak close to the phone.',rede:'The browser’s speech service didn’t respond. Try again or tap a command below.',parar:'Tap again to stop'},
+ es:{neg:'El micrófono está bloqueado. Toque el candado junto a la dirección y permita el micrófono.',mudo:'No escuché nada. Toque el micrófono y hable cerca del celular.',rede:'El reconocimiento del navegador no respondió. Intente de nuevo o toque un comando abajo.',parar:'Toque de nuevo para detener'},
+ fr:{neg:'Le micro est bloqué. Touchez le cadenas à côté de l’adresse et autorisez le micro.',mudo:'Je n’ai rien entendu. Touchez le micro et parlez près du téléphone.',rede:'La reconnaissance du navigateur n’a pas répondu. Réessayez ou touchez une commande ci-dessous.',parar:'Touchez à nouveau pour arrêter'},
+ de:{neg:'Das Mikrofon ist blockiert. Tippen Sie auf das Schloss neben der Adresse und erlauben Sie das Mikrofon.',mudo:'Ich habe nichts gehört. Tippen Sie aufs Mikrofon und sprechen Sie nah am Handy.',rede:'Die Spracherkennung des Browsers hat nicht geantwortet. Versuchen Sie es erneut oder tippen Sie unten auf einen Befehl.',parar:'Erneut tippen zum Beenden'},
+ zh:{neg:'麦克风被阻止。请点击网址旁的锁形图标并允许使用麦克风。',mudo:'没有听到声音。请点击麦克风并靠近手机说话。',rede:'浏览器语音识别没有响应。请重试或点击下方的指令。',parar:'再次点击即可停止'}};
+function M(k){return (MSG[L()]||MSG.pt)[k];}
+var ouvindo=false,tStart=null;
+function aviso(txt){clear();busy=false;ouvindo=false;box.classList.remove('on');hint.textContent='';line.textContent=txt;box.classList.add('pulse');setTimeout(function(){box.classList.remove('pulse');},1200);}
 mic.addEventListener('click',function(){
- if(!SR){clear();hint.textContent='';line.textContent=T().semmic;box.classList.add('pulse');setTimeout(function(){box.classList.remove('pulse');},1200);return;}
- try{if(rec)rec.abort();rec=new SR();rec.lang=SL[L()];rec.interimResults=true;rec.maxAlternatives=1;
-  clear();box.classList.add('on');hint.textContent=T().ouvindo;line.textContent='';
-  var fim='';rec.onresult=function(e){var t='';for(var i=0;i<e.results.length;i++)t+=e.results[i][0].transcript;fim=t;line.textContent='“'+t+'”';};
-  rec.onerror=function(){box.classList.remove('on');hint.textContent='';line.textContent=T().semmic;};
-  rec.onend=function(){box.classList.remove('on');if(!fim)return;var r=parse(fim);run(r[0],r[1],fim);};
-  rec.start();}catch(e){line.textContent=T().semmic;}
+ if(!SR)return aviso(T().semmic);
+ if(ouvindo&&rec){try{rec.stop();}catch(e){}return;}
+ try{if(rec){try{rec.abort();}catch(e){}}
+  rec=new SR();rec.lang=SL[L()];rec.interimResults=true;rec.maxAlternatives=1;rec.continuous=false;
+  clear();busy=true;ouvindo=true;box.classList.add('on');box.classList.remove('ok');hint.textContent=T().ouvindo;line.textContent=M('parar');
+  var fim='',erro='';
+  clearTimeout(tStart);tStart=setTimeout(function(){if(ouvindo&&!fim){try{rec.abort();}catch(e){}aviso(M('rede'));}},12000);
+  rec.onresult=function(e){var t='';for(var i=0;i<e.results.length;i++)t+=e.results[i][0].transcript;fim=t;line.textContent='“'+t+'”';};
+  rec.onerror=function(e){erro=(e&&e.error)||'erro';};
+  rec.onend=function(){clearTimeout(tStart);ouvindo=false;box.classList.remove('on');
+   if(fim){busy=false;var r=parse(fim);return run(r[0],r[1],fim);}
+   if(erro==='not-allowed'||erro==='service-not-allowed')return aviso(M('neg'));
+   if(erro==='network')return aviso(M('rede'));
+   if(erro==='aborted')return;
+   aviso(M('mudo'));};
+  rec.start();}catch(e){aviso(M('rede'));}
 });
 // botão da seção de apresentação
 document.addEventListener('click',function(e){var a=e.target.closest('[data-voz-ir]');if(!a)return;e.preventDefault();
