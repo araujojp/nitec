@@ -93,10 +93,10 @@ FAQHTML='''
 '''
 NEWSEC=open(HERE+'/newsec.html',encoding='utf-8').read()
 EXJS=open(HERE+'/extra.js',encoding='utf-8').read()
-EXCSS=open(HERE+'/extra.css',encoding='utf-8').read()+open(HERE+'/voz.css',encoding='utf-8').read()+open(HERE+'/depo.css',encoding='utf-8').read()
+EXCSS=open(HERE+'/extra.css',encoding='utf-8').read()+open(HERE+'/voz.css',encoding='utf-8').read()+open(HERE+'/depo.css',encoding='utf-8').read()+open(HERE+'/light.css',encoding='utf-8').read()
 HEROJS=open(HERE+'/hero.js',encoding='utf-8').read()
 DEPOHTML=open(HERE+'/depo.html',encoding='utf-8').read()
-DEPOJS=open(HERE+'/depo.js',encoding='utf-8').read()
+DEPOJS=open(HERE+'/depo.js',encoding='utf-8').read()+open(HERE+'/theme.js',encoding='utf-8').read()
 VOZJS=open(HERE+'/voz.js',encoding='utf-8').read()
 VOZSEC=open(HERE+'/vozsec.html',encoding='utf-8').read()
 VOZAPI="""
@@ -224,6 +224,8 @@ for p in sys.argv[1:]:
     lang=re.search(r'data-page="(\w+)"',s).group(1)
     assert s.count('</head>\n<body>')==1
     s=s.replace('</head>\n<body>',_faqld(lang)+'</head>\n<body>',1)
+    st0='<style>html,body{margin:0;background:#070a12}'; assert s.count(st0)==1
+    s=s.replace(st0,"<script>(function(){try{var t=localStorage.getItem('neon-tema');if(t!=='light'&&t!=='dark')t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script><style>html,body{margin:0;background:#070a12}html[data-theme=light],html[data-theme=light] body{background:#f6f7fb}",1)
     s=s.replace('href="/assets/icon.png"','href="/assets/icon.png?v=2"')
     m=re.search(r"K=\[([0-9,]+)\],P='([A-Za-z0-9+/=]+)'",s)
     s2=s[:m.start(2)]+base64.b64encode(enc).decode()+s[m.end(2):]
