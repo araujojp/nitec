@@ -15,6 +15,19 @@ function calc(){var l=window.NEON_LANG||'pt',u=U[l]||U.pt;
  g('calcWa').href='https://wa.me/5534984302083?text='+encodeURIComponent(msg);}
 f.addEventListener('input',function(){calc();if(!usou){usou=true;if(window.NEON_STAT)NEON_STAT('calculadora');}});
 window.NEON_CALC=calc;calc();})();
+// ---- mede uma vez as seções (para a rolagem saber a altura real), depois só desenha o que está na tela ----
+(function(){var h=document.documentElement;var go=function(){h.classList.add('cv-all');requestAnimationFrame(function(){requestAnimationFrame(function(){setTimeout(function(){h.classList.remove('cv-all');},50);});});};
+ var idle=function(){(window.requestIdleCallback||function(f){setTimeout(f,1500);})(go,{timeout:3000});};
+ if(document.readyState==='complete')idle();else addEventListener('load',idle);})();
+// ---- links do menu param exatamente no início da seção ----
+(function(){document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a[href^="#"]');if(!a)return;var id=a.getAttribute('href').slice(1);var el=id&&document.getElementById(id);if(!el)return;
+ var pad=function(){var v=parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop);if(v)return v;var n=document.querySelector('.nav');return n?n.offsetHeight+8:80;};
+ var n=0,lastY=-1,still=0;var iv=setInterval(function(){var y=Math.round(scrollY);if(y===lastY)still++;else still=0;lastY=y;
+  if(still>=2){var d=el.getBoundingClientRect().top-pad();if(Math.abs(d)>3&&n<5){n++;still=0;window.scrollTo({top:scrollY+d,behavior:'auto'});}else clearInterval(iv);}},120);
+ setTimeout(function(){clearInterval(iv);},6000);},false);})();
+// ---- PABX: conversa da URA sempre mostra a última mensagem ----
+(function(){var ph=document.querySelector('#pabx-neon .screen');if(!ph||!('MutationObserver' in window))return;
+new MutationObserver(function(){var c=document.getElementById('conv');if(c)c.scrollTop=c.scrollHeight;}).observe(ph,{childList:true,subtree:true});})();
 // ---- estatísticas próprias (sem cookies, sem IP) ----
 (function(){if(/bot|crawl|spider|slurp|headless|lighthouse|pagespeed|preview|facebookexternalhit|whatsapp|telegram/i.test(navigator.userAgent))return;
 if(!/^https?:$/.test(location.protocol)||location.hostname!=='neonsistemas.com')return;

@@ -168,12 +168,26 @@ for p in sys.argv[1:]:
     h1="const floats = $$('.float, .chip-float');"; h2='if (!reduce) heroLoop();'
     ha=J.find(h1); hb=J.find(h2); assert ha>0 and hb>ha and J.count(h1)==1
     J=J[:ha]+'let px = 0, py = 0;\n  {\n  '+HEROJS+'\n  if (!reduce) requestAnimationFrame(heroLoop);\n  }'+J[hb+len(h2):]
+    # desempenho: animações param quando estão fora da tela
+    g1="(function loopGlow() { gx += (tx - gx) * 0.12; gy += (ty - gy) * 0.12; glow.style.left = gx + 'px'; glow.style.top = gy + 'px'; requestAnimationFrame(loopGlow); })();"
+    assert J.count(g1)==1
+    J=J.replace(g1,"if (matchMedia('(pointer:fine)').matches) { let gRun = false; glow.style.left = '0px'; glow.style.top = '0px'; const gStep = () => { gx += (tx - gx) * 0.12; gy += (ty - gy) * 0.12; glow.style.transform = 'translate3d(' + (gx - 240).toFixed(1) + 'px,' + (gy - 240).toFixed(1) + 'px,0)'; if (Math.abs(tx - gx) + Math.abs(ty - gy) > 0.6) requestAnimationFrame(gStep); else gRun = false; }; addEventListener('pointermove', () => { if (!gRun) { gRun = true; requestAnimationFrame(gStep); } }, { passive: true }); } else glow.style.display = 'none';")
+    g2="setInterval(() => wb.forEach((b) => {"; assert J.count(g2)==1
+    J=J.replace(g2,"setInterval(() => window.__heroVis !== false && wb.forEach((b) => {")
+    g3="function loop(t) {\n    requestAnimationFrame(loop);"; assert J.count(g3)==1
+    J=J.replace(g3,"let pVis = true; if ('IntersectionObserver' in window) new IntersectionObserver(([e]) => { pVis = e.isIntersecting; }, { rootMargin: '150px 0px' }).observe(document.getElementById('painel-neon'));\n  function loop(t) {\n    requestAnimationFrame(loop);\n    if (!pVis || document.hidden) return;")
+    g4="    dpr = Math.min(devicePixelRatio || 1, 2); W = cv.clientWidth; H = cv.clientHeight;"; assert J.count(g4)==1
+    J=J.replace(g4,"    if (W && cv.clientWidth === W && Math.abs(cv.clientHeight - H) < 160) return;\n    dpr = cv.clientWidth < 820 ? 1 : Math.min(devicePixelRatio || 1, 1.5); W = cv.clientWidth; H = cv.clientHeight;")
+    g5="function draw(t) {\n    requestAnimationFrame(draw);\n    if (!visible) return;"; assert J.count(g5)==1
+    J=J.replace(g5,"function draw(t) {\n    requestAnimationFrame(draw);\n    if (!visible || document.hidden) return;\n    if (W < 820) { if (t - (draw.l || 0) < 31) return; draw.l = t; }")
     v3="window.dispatchEvent(new Event('neonsuite'));"; assert J.count(v3)==1; J=J.replace(v3,VOZAPI+'  '+v3)
     J=J.replace("if(window.NEON_CALC)NEON_CALC();","if(window.NEON_CALC)NEON_CALC();if(window.NEON_VOZ)NEON_VOZ();")
     d['j']=J+'\n'+EXJS+'\n'+VOZJS
     if 'm' in d:
         c1='Ct=mt(1.3,dt+.65,9)'; c2='be.position.x=_e?-.65:.65'
         assert d['m'].count(c1)==1 and d['m'].count(c2)==1
+        assert d['m'].count('{rootMargin:"700px 0px"}')==1
+        d['m']=d['m'].replace('{rootMargin:"700px 0px"}','{rootMargin:"3000px 0px"}')
         t1='Be.addEventListener("pointerdown",B=>{Se='; t2='addEventListener("pointercancel",()=>{Se=null});'
         assert d['m'].count(t1)==1 and d['m'].count(t2)==1
         TOUCH=('{let T0=null;Be.addEventListener("touchstart",B=>{if(B.touches.length!==1){T0=null;return}let t=B.touches[0];T0={x:t.clientX,y:t.clientY,l:null};ne.mexeu=!0},{passive:!0});'
@@ -191,7 +205,7 @@ for p in sys.argv[1:]:
         root=p.split('/')[0]; os.makedirs(root+'/assets',exist_ok=True)
         open(root+'/assets/s3d.bin','wb').write(enc3)
     OLDL="if(d.m){var ms=document.createElement('script');ms.type='module';ms.textContent=d.m;document.body.appendChild(ms);}"
-    NEWL=("var rm=document.getElementById('room');function L3(){if(L3.d)return;L3.d=1;fetch('/assets/s3d.bin?v=4').then(function(r){return r.arrayBuffer();}).then(function(a){var b=new Uint8Array(a),k=[];for(var i=0;i<64;i++)k.push((i*73+29)%251);"
+    NEWL=("var rm=document.getElementById('room');function L3(){if(L3.d)return;L3.d=1;fetch('/assets/s3d.bin?v=5').then(function(r){return r.arrayBuffer();}).then(function(a){var b=new Uint8Array(a),k=[];for(var i=0;i<64;i++)k.push((i*73+29)%251);"
           "for(var i=0;i<b.length;i++)b[i]^=k[i%64]^((i*37+11)&255);var ms=document.createElement('script');ms.type='module';ms.textContent=new TextDecoder().decode(b);document.body.appendChild(ms);});}"
           "var gl=false;try{var cv=document.createElement('canvas');gl=!!(cv.getContext('webgl2')||cv.getContext('webgl'));}catch(e){}"
           "if(rm&&gl){rm.classList.add('w3d');setTimeout(function(){if(!rm.classList.contains('has3d'))rm.classList.remove('w3d');},25000);}"

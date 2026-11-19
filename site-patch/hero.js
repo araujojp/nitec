@@ -52,8 +52,13 @@ const floats = $$('.float, .chip-float');
   };
   medir(); addEventListener('resize', medir); addEventListener('load', medir); setTimeout(medir, 1200);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(medir);
+  // pausa tudo quando o topo do site não está na tela
+  let heroVis = true;
+  if ('IntersectionObserver' in window) new IntersectionObserver(([e]) => { heroVis = e.isIntersecting; window.__heroVis = heroVis; }, { rootMargin: '80px 0px' }).observe(heroSec);
+  addEventListener('visibilitychange', () => { last = performance.now(); });
   let last = performance.now();
   function heroLoop(now) {
+    if (!heroVis || document.hidden) { last = now; requestAnimationFrame(heroLoop); return; }
     const dt = Math.min(0.05, (now - last) / 1000) || 0.016; last = now; const k = dt * 60;
     // alvo final: arraste > mouse > giroscópio
     let ax = tgx, ay = tgy;
@@ -62,7 +67,15 @@ const floats = $$('.float, .chip-float');
     P.vx += (ax - P.x) * 0.075 * k; P.vy += (ay - P.y) * 0.075 * k;
     P.vx *= Math.pow(0.82, k); P.vy *= Math.pow(0.82, k);
     P.x += P.vx * k; P.y += P.vy * k;
+    // leituras primeiro (uma só medição por quadro), escritas depois
     const rs = stage.getBoundingClientRect();
+    const vwN = document.documentElement.clientWidth;
+    floats.forEach((f) => {
+      const r = f.getBoundingClientRect(); if (!r.width) return;
+      let c = f._cx || 0;
+      if (r.right > vwN - 6) c -= r.right - (vwN - 6); else if (r.left < 6) c += 6 - r.left; else c *= 0.9;
+      f._cx = Math.abs(c) < 0.2 ? 0 : c;
+    });
     const s = Math.max(0, Math.min(700, innerHeight * 0.45 - (rs.top + rs.height / 2))), t = now / 1000, sp = Math.hypot(P.vx, P.vy);
     floats.forEach((f) => {
       const d = Number(f.dataset.depth || 20), chip = !f.classList.contains('float');
@@ -74,14 +87,6 @@ const floats = $$('.float, .chip-float');
       const rz = f._rot + P.x * (chip ? 4 : 2.5) + f._side * s * 0.012;
       const sc = 1 + Math.min(0.02, sp * 0.25);
       f.style.transform = `translate3d(${X.toFixed(1)}px, ${Y.toFixed(1)}px, 0) rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg) rotate(${rz.toFixed(2)}deg) scale(${sc.toFixed(3)})`;
-    });
-    // correção fina: mede a posição real (já inclinada) e puxa de volta se passar da borda
-    const vwN = document.documentElement.clientWidth;
-    floats.forEach((f) => {
-      const r = f.getBoundingClientRect(); if (!r.width) return;
-      let c = f._cx || 0;
-      if (r.right > vwN - 6) c -= r.right - (vwN - 6); else if (r.left < 6) c += 6 - r.left; else c *= 0.9;
-      f._cx = Math.abs(c) < 0.2 ? 0 : c;
     });
     px = clamp(P.x * 0.5, 0.8); py = clamp(P.y * 0.5, 0.8);
     if (heroCv) heroCv.style.transform = `translate3d(${(-P.x * 26).toFixed(1)}px, ${(-P.y * 16).toFixed(1)}px, 0) scale(1.08)`;
