@@ -178,6 +178,8 @@ for p in sys.argv[1:]:
     J=J.replace(g3,"let pVis = true; if ('IntersectionObserver' in window) new IntersectionObserver(([e]) => { pVis = e.isIntersecting; }, { rootMargin: '150px 0px' }).observe(document.getElementById('painel-neon'));\n  function loop(t) {\n    requestAnimationFrame(loop);\n    if (!pVis || document.hidden) return;")
     g4="    dpr = Math.min(devicePixelRatio || 1, 2); W = cv.clientWidth; H = cv.clientHeight;"; assert J.count(g4)==1
     J=J.replace(g4,"    if (W && cv.clientWidth === W && Math.abs(cv.clientHeight - H) < 160) return;\n    dpr = cv.clientWidth < 820 ? 1 : Math.min(devicePixelRatio || 1, 1.5); W = cv.clientWidth; H = cv.clientHeight;")
+    g6='length: Math.min(90, Math.floor(W / 14))'; assert J.count(g6)==1
+    J=J.replace(g6,'length: Math.floor(Math.min(90, Math.floor(W / 14)) * (W < 820 ? 0.5 : 1))')
     g5="function draw(t) {\n    requestAnimationFrame(draw);\n    if (!visible) return;"; assert J.count(g5)==1
     J=J.replace(g5,"function draw(t) {\n    requestAnimationFrame(draw);\n    if (!visible || document.hidden) return;\n    if (W < 820) { if (t - (draw.l || 0) < 31) return; draw.l = t; }")
     v3="window.dispatchEvent(new Event('neonsuite'));"; assert J.count(v3)==1; J=J.replace(v3,VOZAPI+'  '+v3)
