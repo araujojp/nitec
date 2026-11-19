@@ -94,6 +94,7 @@ FAQHTML='''
 NEWSEC=open(HERE+'/newsec.html',encoding='utf-8').read()
 EXJS=open(HERE+'/extra.js',encoding='utf-8').read()
 EXCSS=open(HERE+'/extra.css',encoding='utf-8').read()+open(HERE+'/voz.css',encoding='utf-8').read()+open(HERE+'/depo.css',encoding='utf-8').read()+open(HERE+'/light.css',encoding='utf-8').read()
+import palette as PAL
 HEROJS=open(HERE+'/hero.js',encoding='utf-8').read()
 DEPOHTML=open(HERE+'/depo.html',encoding='utf-8').read()
 DEPOJS=open(HERE+'/depo.js',encoding='utf-8').read()+open(HERE+'/theme.js',encoding='utf-8').read()
@@ -189,6 +190,8 @@ for p in sys.argv[1:]:
     v3="window.dispatchEvent(new Event('neonsuite'));"; assert J.count(v3)==1; J=J.replace(v3,VOZAPI+'  '+v3)
     J=J.replace("if(window.NEON_CALC)NEON_CALC();","if(window.NEON_CALC)NEON_CALC();if(window.NEON_VOZ)NEON_VOZ();if(window.NEON_DEPO)NEON_DEPO();")
     d['j']=J+'\n'+EXJS+'\n'+VOZJS+'\n'+DEPOJS
+    d['j']=PAL.js_dynamic(d['j']); d['b']=PAL.body_dynamic(d['b'])
+    d['c2']=PAL.recolor_css(d['c'])+PAL.BLUE_EXTRA
     if 'm' in d:
         c1='Ct=mt(1.3,dt+.65,9)'; c2='be.position.x=_e?-.65:.65'
         assert d['m'].count(c1)==1 and d['m'].count(c2)==1
@@ -219,13 +222,16 @@ for p in sys.argv[1:]:
           "function idle(){(window.requestIdleCallback||function(f){setTimeout(f,1200);})(L3);}if(document.readyState==='complete')idle();else window.addEventListener('load',idle);")
     assert s.count(OLDL)==1
     s=s.replace(OLDL,NEWL)
+    LO="var st=document.createElement('style');st.textContent=d.c;document.head.appendChild(st);"
+    assert s.count(LO)==1, 'loader'
+    s=s.replace(LO,"var st=document.createElement('style');st.id='cssL';st.textContent=d.c;document.head.appendChild(st);if(d.c2){var s2=document.createElement('style');s2.id='cssA';s2.textContent=d.c2;document.head.appendChild(s2);}if(window.NEON_SET_TEMA)NEON_SET_TEMA(document.documentElement.getAttribute('data-theme')+'-'+document.documentElement.getAttribute('data-cor'));")
     raw=json.dumps(d,ensure_ascii=False,separators=(',',':')).encode()
     enc=bytes(x^k[i%len(k)]^((i*131+17)&255) for i,x in enumerate(raw))
     lang=re.search(r'data-page="(\w+)"',s).group(1)
     assert s.count('</head>\n<body>')==1
     s=s.replace('</head>\n<body>',_faqld(lang)+'</head>\n<body>',1)
     st0='<style>html,body{margin:0;background:#070a12}'; assert s.count(st0)==1
-    s=s.replace(st0,"<script>(function(){try{var t=localStorage.getItem('neon-tema');if(t!=='light'&&t!=='dark')t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script><style>html,body{margin:0;background:#070a12}html[data-theme=light],html[data-theme=light] body{background:#f6f7fb}",1)
+    s=s.replace(st0,"<script>(function(){var H=document.documentElement,P={azul:['37,99,235','56,189,248','59,130,246','#2563eb','#38bdf8'],laranja:['255,106,0','255,162,58','255,140,40','#ff6a00','#ffa23a']};window.NEON_SET_TEMA=function(v){var p=String(v).split('-'),t=p[0]==='light'?'light':'dark',c=p[1]==='laranja'?'laranja':'azul',k=P[c];H.setAttribute('data-theme',t);H.setAttribute('data-cor',c);window.__o1=k[0];window.__o2=k[1];window.__o3=k[2];window.__o1h=k[3];window.__o2h=k[4];var a=document.getElementById('cssA'),l=document.getElementById('cssL');if(a&&l){a.disabled=c!=='azul';l.disabled=c==='azul';}var mc=document.querySelector('meta[name=theme-color]');if(mc)mc.content=t==='light'?'#f6f7fb':'#05070f';};var v=null;try{v=localStorage.getItem('neon-tema2');}catch(e){}if(!/^(light|dark)-(azul|laranja)$/.test(v||''))v=((window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches)?'light':'dark')+'-azul';window.NEON_SET_TEMA(v);})();</script><style>html,body{margin:0;background:#070a12}html[data-theme=light],html[data-theme=light] body{background:#f6f7fb}",1)
     s=s.replace('href="/assets/icon.png"','href="/assets/icon.png?v=2"')
     m=re.search(r"K=\[([0-9,]+)\],P='([A-Za-z0-9+/=]+)'",s)
     s2=s[:m.start(2)]+base64.b64encode(enc).decode()+s[m.end(2):]
