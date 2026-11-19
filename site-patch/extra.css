@@ -99,3 +99,7 @@ html.cv-all #neon-motel,html.cv-all #pabx-neon,html.cv-all #voz,html.cv-all #com
 /* ---- novidades: só aparece quando houver conteúdo publicado ---- */
 #novidades{display:none!important}
 #novidades.tem{display:block!important}
+/* ---- brilhos de fundo sempre ATRÁS dos textos e cartões ---- */
+.sec{position:relative;isolation:isolate}
+.sec>.glow-bg{z-index:0}
+.sec>.wrap{position:relative;z-index:1}
