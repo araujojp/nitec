@@ -17,10 +17,24 @@ Veja `.env.example`. Os dois domínios usam os mesmos valores de banco e storage
 Nunca commitar o `.env` nem as senhas.
 
 ## Publicar uma nova versão
-1. Zipar `server.js`, `server/`, `public/`, `package.json`, `package-lock.json` (sem `node_modules`).
-2. Enviar e iniciar o build (Node 22, tipo express, entrada server.js, build `build`) nos dois domínios.
-3. Limpar o cache no hPanel se necessário.
+Use o roteiro, que roda os testes, baixa um backup do banco, envia, faz o build e confere a versão em `/saude`:
+```
+NEON_EMAIL=... NEON_SENHA=... scripts/publicar.sh gestao   # primeiro aqui, para testar
+NEON_EMAIL=... NEON_SENHA=... scripts/publicar.sh painel   # depois no principal
+```
+O backup fica em `../.backups/` (fora do Git). Suba `version` no `package.json` a cada versão.
+Mudanças no banco são sempre aditivas (tabelas/colunas novas), então a versão antiga continua funcionando
+no outro endereço enquanto a nova é testada.
+
+Manual (se preciso): zipar `server.js`, `server/`, `public/`, `package.json`, `package-lock.json` (sem `node_modules`),
+enviar e iniciar o build (Node 22, tipo express, entrada server.js, build `build`).
 
 ## API dos equipamentos
 Compatível com o painel antigo (`/items/versoes`, `/assets/:id`, `/items/licencas`, `/items/checkins`)
 e com rotas novas em `/api/v1/equipamento`. Cada equipamento usa um token gerado em Instalações.
+
+## Integrações configuradas pelo painel (não por variáveis)
+- E-mail de avisos (SMTP da Hostinger): Configurações → Alertas → E-mail de avisos.
+- Asaas: Configurações → Asaas. O aviso de pagamento chega em `/publico/asaas/webhook`.
+- Notificação no celular: chaves geradas sozinhas na primeira ativação.
+As senhas e chaves ficam na tabela `integracoes` e nunca voltam para o navegador.

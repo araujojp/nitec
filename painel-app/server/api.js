@@ -20,6 +20,7 @@ router.get('/dashboard', wrap(async (req, res) => {
     (SELECT COUNT(*) FROM instalacoes WHERE status='ativa' AND ultimo_contato > UTC_TIMESTAMP() - INTERVAL 2 HOUR) online,
     (SELECT COUNT(*) FROM chamados WHERE status IN ('aberto','andamento','aguardando')) chamados_abertos,
     (SELECT COUNT(*) FROM chamados WHERE status IN ('aberto','andamento','aguardando') AND prioridade IN ('alta','urgente')) chamados_urgentes,
+    (SELECT COUNT(*) FROM chamados WHERE status IN ('aberto','andamento') AND sla_limite < UTC_TIMESTAMP()) chamados_fora_prazo,
     (SELECT COALESCE(SUM(valor_mensal),0) FROM licencas WHERE status='ativa') receita_mensal,
     (SELECT COALESCE(SUM(valor),0) FROM cobrancas WHERE status IN ('pendente','atrasado')) a_receber,
     (SELECT COALESCE(SUM(valor),0) FROM cobrancas WHERE status='atrasado') atrasado,
@@ -102,7 +103,8 @@ router.post('/funil/:id', wrap(async (req, res) => {
     const status = ['novo', 'qualificado'].includes(etapa) ? 'lead' : 'negociacao';
     await q('UPDATE clientes SET etapa_funil=?, status=? WHERE id=?', [etapa, status, id]);
   }
-  await audit(req, 'editar', 'clientes', id, `Funil: ${old.nome_fantasia} → ${etapa}`);
+  const novoStatus = etapa === 'ganho' ? 'ativo' : etapa === 'perdido' ? 'perdido' : ['novo', 'qualificado'].includes(etapa) ? 'lead' : 'negociacao';
+  await audit(req, 'editar', 'clientes', id, `Funil: ${old.nome_fantasia} → ${etapa}`, old.status !== novoStatus ? { status: [old.status, novoStatus] } : null);
   res.json({ ok: true });
 }));
 

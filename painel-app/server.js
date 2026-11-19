@@ -16,6 +16,7 @@ const marketing = require('./server/marketing');
 const alertas = require('./server/alertas');
 const asaas = require('./server/asaas');
 const chamados = require('./server/chamados');
+const relatorios = require('./server/relatorios');
 const { wrap } = require('./server/util');
 
 const app = express();
@@ -58,6 +59,7 @@ app.use('/api/marketing', marketing.router);
 app.use('/api/alertas', alertas.router);
 app.use('/api/asaas', asaas.router);
 app.use('/api', chamados.router);
+app.use('/api', relatorios.router);
 app.use('/api', api.router);
 app.use('/api', crud.router);
 

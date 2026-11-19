@@ -82,7 +82,7 @@ const DashboardPage = defineComponent({
           h('div', { class: 'grid g4' }, [
             K('users', '#22c55e', 'Clientes ativos', fmt.int(v.kpis.clientes_ativos), `${v.kpis.leads} em negociação`, '/clientes?f_status=ativo'),
             K('server', '#38bdf8', 'Instalações ativas', fmt.int(v.kpis.instalacoes_ativas), h('span', { class: 'row gap-s' }, [h('span', { class: 'pulse' + (v.kpis.online ? '' : ' off') }), `${v.kpis.online} online agora`]), '/instalacoes'),
-            K('lifebuoy', '#ef4444', 'Chamados abertos', fmt.int(v.kpis.chamados_abertos), v.kpis.chamados_urgentes ? `${v.kpis.chamados_urgentes} alta/urgente` : 'nenhum urgente', '/chamados?f_status=aberto'),
+            K('lifebuoy', '#ef4444', 'Chamados abertos', fmt.int(v.kpis.chamados_abertos), v.kpis.chamados_fora_prazo ? `${v.kpis.chamados_fora_prazo} fora do prazo` : v.kpis.chamados_urgentes ? `${v.kpis.chamados_urgentes} alta/urgente` : 'nenhum urgente', '/chamados?f_status=aberto,andamento,aguardando&sort=sla_limite', v.kpis.chamados_fora_prazo > 0),
             K('key', '#a78bfa', 'Licenças vencendo', fmt.int(v.kpis.licencas_vencendo), 'nos próximos 30 dias', '/licencas?f_status=ativa'),
             K('zap', '#ff7a1a', 'Receita mensal (licenças)', fmt.money(v.kpis.receita_mensal), 'soma das licenças ativas', '/licencas?f_status=ativa', true),
             K('money', '#f59e0b', 'A receber', fmt.money(v.kpis.a_receber), 'pendentes + atrasadas', '/cobrancas?f_status=pendente'),

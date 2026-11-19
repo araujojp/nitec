@@ -355,3 +355,16 @@ code { background: var(--panel2); border: 1px solid var(--line); border-radius: 
   .toolbar > span.muted { margin-right: auto; }
   .hero .meta { gap: 8px; }
 }
+
+/* Relatórios */
+.rel-h { font-size: 18px; margin: 26px 0 12px; }
+.relatorios .rel-sec .list { max-height: 420px; overflow-y: auto; }
+@media print {
+  .side, .top, .bottom-nav, .fab, .drawer-bg, .toasts, .no-print { display: none !important; }
+  .main { margin: 0 !important; padding: 0 !important; }
+  .content { padding: 0 !important; }
+  body, .app { background: #fff !important; color: #111 !important; }
+  .card { break-inside: avoid; box-shadow: none !important; border-color: #ccc !important; background: #fff !important; color: #111 !important; }
+  .relatorios .rel-sec .list { max-height: none; overflow: visible; }
+  .relatorios .kpi .val, .relatorios h1, .relatorios h2, .relatorios h3, .relatorios .t { color: #111 !important; }
+}

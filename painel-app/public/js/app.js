@@ -6,7 +6,7 @@ async function carregarMeta() {
 }
 
 const MENU = [
-  { t: 'Principal', items: [['/', 'home', 'Início'], ['/clientes', 'users', 'Clientes'], ['/funil', 'funnel', 'Funil de vendas'], ['/agenda', 'calendar', 'Agenda', 'lembretes']] },
+  { t: 'Principal', items: [['/', 'home', 'Início'], ['/clientes', 'users', 'Clientes'], ['/funil', 'funnel', 'Funil de vendas'], ['/agenda', 'calendar', 'Agenda', 'lembretes'], ['/relatorios', 'chart', 'Relatórios']] },
   { t: 'Operação', items: [['/instalacoes', 'server', 'Instalações'], ['/licencas', 'key', 'Licenças e contratos'], ['/atualizacoes', 'download', 'Atualizações'], ['/chamados', 'lifebuoy', 'Chamados', 'chamados'], ['/sinais', 'signal', 'Sinais dos equipamentos']] },
   { t: 'Financeiro', items: [['/cobrancas', 'money', 'Cobranças'], ['/historico', 'chat', 'Histórico de contatos']] },
   { t: 'Marketing', items: [['/marketing', 'megaphone', 'Visão geral'], ['/marketing/posts', 'image', 'Posts'], ['/marketing/calendario', 'calendar', 'Calendário'], ['/marketing/campanhas', 'star', 'Campanhas'], ['/depoimentos', 'sparkles', 'Depoimentos do site'], ['/marketing/integracoes', 'plug', 'Integrações e IAs']] },
@@ -24,7 +24,7 @@ function ativo(href) {
 function resolver() {
   const p = store.route.path;
   const parts = p.split('/').filter(Boolean);
-  const simples = { '': DashboardPage, funil: FunilPage, agenda: AgendaPage, arquivos: ArquivosPage, atividade: AtividadePage, configuracoes: ConfigPage, api: ApiPage };
+  const simples = { '': DashboardPage, relatorios: RelatoriosPage, funil: FunilPage, agenda: AgendaPage, arquivos: ArquivosPage, atividade: AtividadePage, configuracoes: ConfigPage, api: ApiPage };
   if (parts.length === 0) return [DashboardPage, {}];
   if (parts[0] === 'marketing') {
     if (parts.length === 1) return [MarketingHome, {}];
