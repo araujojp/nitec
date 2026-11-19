@@ -97,7 +97,7 @@ EXCSS=open(HERE+'/extra.css',encoding='utf-8').read()+open(HERE+'/voz.css',encod
 import palette as PAL
 HEROJS=open(HERE+'/hero.js',encoding='utf-8').read()
 DEPOHTML=open(HERE+'/depo.html',encoding='utf-8').read()
-DEPOJS=open(HERE+'/depo.js',encoding='utf-8').read()+open(HERE+'/theme.js',encoding='utf-8').read()
+DEPOJS=open(HERE+'/depo.js',encoding='utf-8').read()+open(HERE+'/theme.js',encoding='utf-8').read()+open(HERE+'/sons.js',encoding='utf-8').read()
 VOZJS=open(HERE+'/voz.js',encoding='utf-8').read()
 VOZSEC=open(HERE+'/vozsec.html',encoding='utf-8').read()
 VOZAPI="""
