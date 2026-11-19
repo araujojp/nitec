@@ -85,6 +85,12 @@ html.cv-all #neon-motel,html.cv-all #pabx-neon,html.cv-all #voz,html.cv-all #com
 @media (max-width:820px){
  *:not(.nav):not(.nav *){-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
 }
+/* ---- hero no celular: selo do frigobar abaixo do telefone, sem sobrepor botões ---- */
+@media (max-width:820px){
+ .hero .stage{height:640px!important}
+ .hero .chip-float.c3{top:600px!important;bottom:auto!important;right:auto!important;left:10%!important}
+ .hero .scroll-hint{display:none}
+}
 /* ---- hero: arrastar as telas ---- */
 .hero .stage{touch-action:pan-y}
 @media (pointer:fine){.hero .stage{cursor:grab}.hero .stage.grabbing{cursor:grabbing}}
