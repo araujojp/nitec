@@ -93,8 +93,10 @@ FAQHTML='''
 '''
 NEWSEC=open(HERE+'/newsec.html',encoding='utf-8').read()
 EXJS=open(HERE+'/extra.js',encoding='utf-8').read()
-EXCSS=open(HERE+'/extra.css',encoding='utf-8').read()+open(HERE+'/voz.css',encoding='utf-8').read()
+EXCSS=open(HERE+'/extra.css',encoding='utf-8').read()+open(HERE+'/voz.css',encoding='utf-8').read()+open(HERE+'/depo.css',encoding='utf-8').read()
 HEROJS=open(HERE+'/hero.js',encoding='utf-8').read()
+DEPOHTML=open(HERE+'/depo.html',encoding='utf-8').read()
+DEPOJS=open(HERE+'/depo.js',encoding='utf-8').read()
 VOZJS=open(HERE+'/voz.js',encoding='utf-8').read()
 VOZSEC=open(HERE+'/vozsec.html',encoding='utf-8').read()
 VOZAPI="""
@@ -155,13 +157,14 @@ for p in sys.argv[1:]:
     d['c']+=EXCSS
     B=d['b']
     b1='<!-- NOVIDADES -->'; assert B.count(b1)==1; B=B.replace(b1,NEWSEC+'\n  '+b1)
-    b2='<!-- CONTATO -->'; assert B.count(b2)==1; B=B.replace(b2,FAQHTML+'\n  '+b2)
+    b2='<!-- CONTATO -->'; assert B.count(b2)==1; B=B.replace(b2,DEPOHTML+FAQHTML+'\n  '+b2)
     b3='<a href="#contato">Contato</a></div>'; assert B.count(b3)==1
     B=B.replace(b3,'<a href="#contato">Contato</a><a href="#perguntas">Perguntas frequentes</a><a href="#calculadora">Calculadora</a><a href="/privacidade/">Privacidade</a></div><span class="priv">Sem cookies de rastreamento.</span>')
     B='<a class="skip" href="#topo">Pular para o conteúdo</a>'+B
     v1='<div class="clock" id="clock">--:--</div></div>'; assert B.count(v1)==1; B=B.replace(v1,v1+VOZTAB)
     v2='<!-- NEON MOTEL -->'; assert B.count(v2)==1; B=B.replace(v2,VOZSEC+'\n  '+v2)
     B=B.replace('/assets/icon.png"','/assets/icon.png?v=2"')
+    B=B.replace('>Tecnologia para motéis, hotéis e pousadas<','>Tecnologia em automação para motéis, hotéis e pousadas<')
     d['b']=B
     J=d['j']; a6='var NAMES='; assert J.count(a6)==1
     J=J.replace(a6,'Object.assign(D,'+json.dumps(NEWD,ensure_ascii=False)+');\n'+a6)
@@ -184,8 +187,8 @@ for p in sys.argv[1:]:
     g5="function draw(t) {\n    requestAnimationFrame(draw);\n    if (!visible) return;"; assert J.count(g5)==1
     J=J.replace(g5,"function draw(t) {\n    requestAnimationFrame(draw);\n    if (!visible || document.hidden) return;\n    if (W < 820) { if (t - (draw.l || 0) < 31) return; draw.l = t; }")
     v3="window.dispatchEvent(new Event('neonsuite'));"; assert J.count(v3)==1; J=J.replace(v3,VOZAPI+'  '+v3)
-    J=J.replace("if(window.NEON_CALC)NEON_CALC();","if(window.NEON_CALC)NEON_CALC();if(window.NEON_VOZ)NEON_VOZ();")
-    d['j']=J+'\n'+EXJS+'\n'+VOZJS
+    J=J.replace("if(window.NEON_CALC)NEON_CALC();","if(window.NEON_CALC)NEON_CALC();if(window.NEON_VOZ)NEON_VOZ();if(window.NEON_DEPO)NEON_DEPO();")
+    d['j']=J+'\n'+EXJS+'\n'+VOZJS+'\n'+DEPOJS
     if 'm' in d:
         c1='Ct=mt(1.3,dt+.65,9)'; c2='be.position.x=_e?-.65:.65'
         assert d['m'].count(c1)==1 and d['m'].count(c2)==1

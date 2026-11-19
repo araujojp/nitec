@@ -187,7 +187,7 @@ function copiar(texto, msg = 'Copiado!') {
 // Opções de um campo select
 function optOf(field, v) { return (field?.options || []).find((o) => o.value === v); }
 function ent(name) { return store.meta?.entities?.[name]; }
-const ROTA_ENTIDADE = { clientes: 'clientes', instalacoes: 'instalacoes', licencas: 'licencas', versoes: 'atualizacoes', chamados: 'chamados', cobrancas: 'cobrancas', contatos: 'historico', produtos: 'produtos', checkins: 'sinais', usuarios: 'equipe', campanhas: 'marketing/campanhas', posts: 'marketing/posts', tarefas: 'marketing/tarefas' };
+const ROTA_ENTIDADE = { clientes: 'clientes', instalacoes: 'instalacoes', licencas: 'licencas', versoes: 'atualizacoes', chamados: 'chamados', cobrancas: 'cobrancas', contatos: 'historico', produtos: 'produtos', checkins: 'sinais', usuarios: 'equipe', campanhas: 'marketing/campanhas', posts: 'marketing/posts', tarefas: 'marketing/tarefas', depoimentos: 'depoimentos' };
 const ENTIDADE_ROTA = Object.fromEntries(Object.entries(ROTA_ENTIDADE).map(([k, v]) => [v, k]));
 const linkTo = (entity, id) => `/${ROTA_ENTIDADE[entity] || entity}${id ? '/' + id : ''}`;
 const can = {

@@ -147,6 +147,7 @@ const SUBTITULOS = {
   chamados: 'Atendimentos de suporte.', cobrancas: 'Mensalidades. Vencidas viram "Atrasado" sozinhas.',
   contatos: 'Ligações, visitas e demonstrações, com lembretes.', produtos: 'O código é usado pela API dos equipamentos.',
   checkins: 'Sinais enviados pelos equipamentos instalados.', usuarios: 'Quem acessa o painel.',
+  depoimentos: 'Clientes satisfeitos no site neonsistemas.com. Só aparecem os marcados como "Mostrar no site" e com a autorização do cliente. Sem nenhum publicado, a seção some do site.',
 };
 
 // ---------------- Detalhe / cadastro genérico ----------------

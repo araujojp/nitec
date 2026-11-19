@@ -1,0 +1,42 @@
+
+/* ---- celular: seletor de idiomas encostado no botão de menu ---- */
+@media (max-width:820px){.nav .lgbox{margin-left:auto;margin-right:8px}.nav .burger{margin-left:0}}
+/* ---- depoimentos ---- */
+#depoimentos{display:none!important}
+#depoimentos.tem{display:block!important}
+.depo-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.depo-media{display:flex;align-items:center;gap:12px;padding:12px 18px;border:1px solid rgba(255,162,58,.35);border-radius:12px;background:linear-gradient(135deg,rgba(255,106,0,.12),rgba(255,61,139,.06))}
+.depo-media b{font:800 34px/1 'Space Grotesk',sans-serif;color:#fff}
+.depo-media small{color:var(--muted);font-size:13px;max-width:130px;line-height:1.35}
+.depo-stars{display:inline-flex;gap:2px;font-size:17px;line-height:1}
+.depo-stars i{font-style:normal;color:rgba(255,255,255,.18)}
+.depo-stars i.on{color:#ffb020;text-shadow:0 0 12px rgba(255,170,30,.55)}
+.depo-track{display:grid;grid-auto-flow:column;grid-auto-columns:calc((100% - 40px)/3);gap:20px;overflow-x:auto;scroll-snap-type:x mandatory;margin-top:28px;padding:6px 2px 18px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.depo-track::-webkit-scrollbar{display:none}
+.depo-card{position:relative;scroll-snap-align:start;display:flex;flex-direction:column;gap:12px;padding:26px 24px 22px;border-radius:14px;border:1px solid var(--line2);background:linear-gradient(165deg,rgba(255,255,255,.055),rgba(255,255,255,.015));overflow:hidden;transition:transform .35s,border-color .35s,box-shadow .35s;opacity:0;transform:translateY(18px);animation:depoIn .7s cubic-bezier(.2,.7,.2,1) forwards;animation-delay:calc(var(--i) * 90ms)}
+@keyframes depoIn{to{opacity:1;transform:none}}
+.depo-card:hover{border-color:rgba(255,140,40,.55);box-shadow:0 24px 60px -30px rgba(255,106,0,.55);transform:translateY(-4px)}
+.depo-card::before{content:'';position:absolute;inset:0 0 auto 0;height:3px;background:linear-gradient(90deg,var(--o),#ff3d8b,#a855f7);opacity:.75}
+.depo-card.big{border-color:rgba(255,140,40,.45);background:linear-gradient(165deg,rgba(255,106,0,.13),rgba(255,61,139,.05) 60%,rgba(255,255,255,.02))}
+.depo-card .dq{position:absolute;right:16px;top:-8px;font:800 110px/1 Georgia,serif;color:rgba(255,162,58,.13);pointer-events:none}
+.depo-card h3{margin:0;font-size:18px;line-height:1.35;color:#fff}
+.depo-card p{margin:0;color:#c9d2ea;font-size:15.5px;line-height:1.65;flex:1}
+.depo-card.big p{font-size:16.5px}
+.depo-prod{display:flex;flex-wrap:wrap;gap:6px}
+.depo-prod span{font-size:11.5px;font-weight:700;padding:4px 9px;border-radius:999px;background:rgba(255,106,0,.12);color:var(--o2);border:1px solid rgba(255,140,40,.28)}
+.depo-card footer{display:flex;align-items:center;gap:12px;padding-top:14px;border-top:1px solid var(--line)}
+.depo-av{flex:none;width:48px;height:48px;border-radius:50%;overflow:hidden;box-shadow:0 0 0 2px rgba(255,162,58,.55)}
+.depo-av img{width:100%;height:100%;object-fit:cover;display:block}
+.depo-av span{width:100%;height:100%;display:grid;place-items:center;font-weight:800;color:#fff;background:linear-gradient(135deg,hsl(var(--h) 80% 55%),hsl(calc(var(--h) + 50) 80% 40%))}
+.depo-card footer b{display:block;color:#fff;font-size:15px}
+.depo-card footer small{display:block;color:var(--muted);font-size:13px;line-height:1.4}
+.depo-card footer small.m{color:var(--dim);font-size:12px}
+.depo-nav{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:6px}
+.depo-nav button{width:40px;height:40px;border-radius:50%;border:1px solid var(--line2);background:rgba(255,255,255,.04);color:#fff;font-size:22px;line-height:1;cursor:pointer}
+.depo-nav button:hover{border-color:var(--o)}
+.dn-dots{display:flex;gap:7px}
+.dn-dots i{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.2);cursor:pointer;transition:.25s}
+.dn-dots i.on{width:22px;border-radius:5px;background:var(--o)}
+@media (max-width:1080px){.depo-track{grid-auto-columns:calc((100% - 20px)/2)}}
+@media (max-width:640px){.depo-track{grid-auto-columns:86%;gap:14px}.depo-card{padding:22px 18px 18px}.depo-media b{font-size:28px}}
+@media (prefers-reduced-motion:reduce){.depo-card{animation:none;opacity:1;transform:none}}

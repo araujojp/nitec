@@ -663,6 +663,19 @@ pub.get('/novidades/:slug', wrap(async (req, res) => {
   res.send(pageShell(`${r.titulo} | Neon Sistemas`, body, String(r.texto || '').slice(0, 160), r.imagem ? `${base}/publico/midia/${r.imagem}` : ''));
 }));
 
+// Depoimentos de clientes para o site (só os autorizados e marcados para publicar)
+pub.get('/publico/depoimentos.json', wrap(async (req, res) => {
+  const rows = await q(`SELECT id, nome, cargo, estabelecimento, tipo, cidade, uf, num_suites, cliente_desde, nota, titulo, texto, produtos, foto, destaque
+    FROM depoimentos WHERE publicado=1 AND autorizado=1 ORDER BY destaque DESC, ordem IS NULL, ordem, id DESC LIMIT ?`, [Math.min(Number(req.query.limite) || 12, 30)]);
+  const base = social.publicUrl();
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Cache-Control', 'public, max-age=300');
+  res.json({ data: rows.map((r) => {
+    let produtos = r.produtos; if (typeof produtos === 'string') { try { produtos = JSON.parse(produtos); } catch { produtos = []; } }
+    return { ...r, nota: Math.max(1, Math.min(5, Number(r.nota) || 5)), destaque: !!r.destaque, produtos: Array.isArray(produtos) ? produtos : [], foto_url: r.foto ? `${base}/publico/midia/${r.foto}` : null, foto: undefined };
+  }) });
+}));
+
 // Widget para colocar no site: <div id="neon-novidades"></div><script src="https://painel.neonsistemas.com/publico/widget.js" defer></script>
 pub.get('/publico/widget.js', (req, res) => {
   const base = social.publicUrl();

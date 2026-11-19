@@ -9,7 +9,7 @@ const MENU = [
   { t: 'Principal', items: [['/', 'home', 'Início'], ['/clientes', 'users', 'Clientes'], ['/funil', 'funnel', 'Funil de vendas'], ['/agenda', 'calendar', 'Agenda', 'lembretes']] },
   { t: 'Operação', items: [['/instalacoes', 'server', 'Instalações'], ['/licencas', 'key', 'Licenças e contratos'], ['/atualizacoes', 'download', 'Atualizações'], ['/chamados', 'lifebuoy', 'Chamados', 'chamados'], ['/sinais', 'signal', 'Sinais dos equipamentos']] },
   { t: 'Financeiro', items: [['/cobrancas', 'money', 'Cobranças'], ['/historico', 'chat', 'Histórico de contatos']] },
-  { t: 'Marketing', items: [['/marketing', 'megaphone', 'Visão geral'], ['/marketing/posts', 'image', 'Posts'], ['/marketing/calendario', 'calendar', 'Calendário'], ['/marketing/campanhas', 'star', 'Campanhas'], ['/marketing/integracoes', 'plug', 'Integrações e IAs']] },
+  { t: 'Marketing', items: [['/marketing', 'megaphone', 'Visão geral'], ['/marketing/posts', 'image', 'Posts'], ['/marketing/calendario', 'calendar', 'Calendário'], ['/marketing/campanhas', 'star', 'Campanhas'], ['/depoimentos', 'sparkles', 'Depoimentos do site'], ['/marketing/integracoes', 'plug', 'Integrações e IAs']] },
   { t: 'Sistema', items: [['/arquivos', 'folder', 'Arquivos'], ['/produtos', 'box', 'Produtos'], ['/equipe', 'user', 'Equipe', null, 'admin'], ['/marketing/tarefas', 'clock', 'Robôs e tarefas', null, 'admin'], ['/atividade', 'activity', 'Atividade', null, 'admin'], ['/api', 'code', 'API dos equipamentos'], ['/configuracoes', 'settings', 'Configurações']] },
 ];
 

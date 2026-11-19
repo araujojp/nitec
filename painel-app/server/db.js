@@ -307,6 +307,31 @@ const SCHEMA = [
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`,
 
+  `CREATE TABLE IF NOT EXISTS depoimentos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(120) NOT NULL,
+    cargo VARCHAR(80) NULL,
+    estabelecimento VARCHAR(160) NULL,
+    tipo VARCHAR(20) NULL,
+    cidade VARCHAR(100) NULL,
+    uf VARCHAR(2) NULL,
+    num_suites INT NULL,
+    cliente_desde INT NULL,
+    cliente_id INT NULL,
+    nota VARCHAR(2) NOT NULL DEFAULT '5',
+    titulo VARCHAR(120) NULL,
+    texto TEXT NOT NULL,
+    produtos JSON NULL,
+    foto VARCHAR(36) NULL,
+    autorizado TINYINT(1) NOT NULL DEFAULT 0,
+    publicado TINYINT(1) NOT NULL DEFAULT 0,
+    destaque TINYINT(1) NOT NULL DEFAULT 0,
+    ordem INT NULL DEFAULT 10,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX (publicado, ordem)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`,
+
   `CREATE TABLE IF NOT EXISTS configuracoes (
     chave VARCHAR(60) PRIMARY KEY,
     valor TEXT NULL
