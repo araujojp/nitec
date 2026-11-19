@@ -21,6 +21,7 @@ const EVENTOS = {
   licenca_vencendo: { nome: 'Licença vencendo', desc: 'Faltando 7, 3 e 0 dias (ajustável).', padrao: ['telegram', 'email'] },
   cobranca_atrasada: { nome: 'Cobrança atrasada', desc: 'Quando uma mensalidade passa do vencimento.', padrao: ['telegram'] },
   lembrete: { nome: 'Lembrete da agenda', desc: 'Na hora marcada (vai para quem registrou o contato).', padrao: ['push', 'telegram'], pessoal: true },
+  pagamento_recebido: { nome: 'Pagamento recebido (Asaas)', desc: 'Quando o cliente paga o boleto ou o Pix.', padrao: ['telegram', 'push'] },
   resumo_diario: { nome: 'Resumo do dia', desc: 'Todo dia de manhã: o que precisa de atenção hoje.', padrao: ['email', 'telegram'] },
 };
 

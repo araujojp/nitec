@@ -112,7 +112,7 @@ const Root = defineComponent({
       parseRoute();
       try {
         const me = await get('auth/me'); store.user = me.user;
-        if (store.user) { await carregarMeta(); sincronizarPush(); get('dashboard').then((d) => { store.contadores.chamados = d.kpis.chamados_abertos; store.contadores.lembretes = d.kpis.lembretes_hoje; }).catch(() => {}); }
+        if (store.user) { await carregarMeta(); sincronizarPush(); carregarAsaas(); get('dashboard').then((d) => { store.contadores.chamados = d.kpis.chamados_abertos; store.contadores.lembretes = d.kpis.lembretes_hoje; }).catch(() => {}); }
       } catch { store.user = null; }
       if (!store.user && store.route.path !== '/entrar') go('/entrar?voltar=' + encodeURIComponent(location.pathname), true);
       if (store.user && store.route.path === '/entrar') go('/', true);

@@ -162,6 +162,9 @@ const hooks = {
       if (st === 'pendente' && venc && venc < todaySql()) data.status = 'atrasado';
       if (st === 'atrasado' && venc && venc >= todaySql()) data.status = 'pendente';
     },
+    async after(row, old) {
+      require('./asaas').aoSalvarCobranca(row, old).catch(() => {}); // leva ao Asaas as mudanças feitas aqui
+    },
   },
   contatos: {
     async before(data, old, req) {

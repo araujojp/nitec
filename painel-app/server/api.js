@@ -39,7 +39,7 @@ router.get('/dashboard', wrap(async (req, res) => {
     q(`SELECT l.id, l.chave, l.vencimento, l.valor_mensal, i.codigo, cl.nome_fantasia cliente
     FROM licencas l JOIN instalacoes i ON i.id=l.instalacao_id JOIN clientes cl ON cl.id=i.cliente_id
     WHERE l.status='ativa' AND l.vencimento <= DATE_ADD(?, INTERVAL 30 DAY) ORDER BY l.vencimento LIMIT 8`, [hoje]),
-    q(`SELECT cb.id, cb.competencia, cb.valor, cb.vencimento, cl.nome_fantasia cliente, cl.whatsapp
+    q(`SELECT cb.id, cb.competencia, cb.valor, cb.vencimento, cb.status, cb.asaas_url, cl.nome_fantasia cliente, cl.whatsapp
     FROM cobrancas cb JOIN clientes cl ON cl.id=cb.cliente_id WHERE cb.status='atrasado' ORDER BY cb.vencimento LIMIT 8`),
     q(`SELECT DATE_FORMAT(created_at,'%Y-%m') mes, COUNT(*) n FROM clientes
     WHERE created_at >= DATE_SUB(DATE_FORMAT(UTC_TIMESTAMP(),'%Y-%m-01'), INTERVAL 11 MONTH) GROUP BY mes`),
@@ -139,6 +139,7 @@ router.post('/cobrancas/:id/pagar', wrap(async (req, res) => {
   await q("UPDATE cobrancas SET status='pago', pago_em=?, forma=?, comprovante=COALESCE(?, comprovante) WHERE id=?",
     [req.body.pago_em || todaySql(), forma, req.body.comprovante || null, id]);
   await audit(req, 'editar', 'cobrancas', id, `Cobrança ${c.competencia} marcada como paga`);
+  require('./asaas').aoSalvarCobranca(await one('SELECT * FROM cobrancas WHERE id=?', [id]), c).catch(() => {});
   res.json({ ok: true });
 }));
 

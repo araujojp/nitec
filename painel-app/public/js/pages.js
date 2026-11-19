@@ -11,7 +11,7 @@ const LoginPage = defineComponent({
         const r = await post('auth/login', f);
         if (r.precisa2fa) { precisa2fa.value = true; busy.value = false; return; }
         localStorage.setItem('neon_email', f.email);
-        store.user = r.user; await carregarMeta();
+        store.user = r.user; await carregarMeta(); carregarAsaas();
         go(store.route.query.voltar || '/', true);
       } catch (e) { msg.value = e.message; }
       busy.value = false;
@@ -121,8 +121,10 @@ function Lista(titulo, icon, href, rows, item, vazio) {
 }
 function msgCobranca(c) {
   const tpl = store.config.msg_cobranca || 'Olá, {cliente}! Lembrete da mensalidade {competencia} de {valor}, vencimento {vencimento}.';
-  return tpl.replace('{cliente}', c.cliente || c.nome_fantasia || '').replace('{competencia}', c.competencia || '').replace('{valor}', fmt.money(c.valor)).replace('{vencimento}', fmt.date(c.vencimento))
-    + (store.config.empresa_pix ? `\nChave Pix: ${store.config.empresa_pix}` : '');
+  const link = c.asaas_url && !['pago', 'cancelado'].includes(c.status) ? c.asaas_url : '';
+  return tpl.replace('{cliente}', c.cliente || c.nome_fantasia || '').replace('{competencia}', c.competencia || '').replace('{valor}', fmt.money(c.valor)).replace('{vencimento}', fmt.date(c.vencimento)).replace('{link}', link)
+    + (link && !tpl.includes('{link}') ? `\nPague por aqui (boleto ou Pix): ${link}` : '')
+    + (store.config.empresa_pix && !link ? `\nChave Pix: ${store.config.empresa_pix}` : '');
 }
 
 // ---------------- Lista genérica ----------------
@@ -267,11 +269,11 @@ function extras(entity, r, labels, isNew, acao, reload) {
     h('button', { class: 'btn', onClick: () => copiar(r.chave, 'Chave copiada!') }, [h(Icon, { n: 'copy', s: 16 }), 'Copiar']),
     can.write() ? h('button', { class: 'btn primary', onClick: () => acao(`licencas/${r.id}/renovar`, 'Licença renovada!') }, [h(Icon, { n: 'refresh', s: 16 }), `Renovar (${optOf(ent('licencas').fields.plano, r.plano)?.label || 'período'})`]) : null,
   ]));
-  if (entity === 'cobrancas' && r.status !== 'pago') return h('div', { class: 'card', style: { marginBottom: '16px' } }, h('div', { class: 'row wrap' }, [
+  if (entity === 'cobrancas') return h('div', null, [r.status !== 'pago' ? h('div', { class: 'card', style: { marginBottom: '16px' } }, h('div', { class: 'row wrap' }, [
     h('div', { class: 'grow' }, [h('div', { class: 'muted small' }, `Competência ${r.competencia} · vence ${fmt.date(r.vencimento)}`), h('div', { style: { fontSize: '24px', fontWeight: 800 } }, fmt.money(r.valor))]),
     can.write() ? h('button', { class: 'btn success', onClick: () => acao(`cobrancas/${r.id}/pagar`, 'Pagamento registrado!', { forma: r.forma || 'pix' }) }, [h(Icon, { n: 'check', s: 16 }), 'Marcar como pago']) : null,
     h(CobrarWa, { cobranca: r, cliente: labels.cliente_id?.[r.cliente_id] }),
-  ]));
+  ])) : null, h(AsaasCobranca, { cobranca: r, onChange: reload })]);
   if (entity === 'chamados' && can.write()) return h('div', { class: 'card', style: { marginBottom: '16px' } }, h('div', { class: 'row wrap' }, [h('span', { class: 'muted small' }, 'Mudar status rápido:'),
     ...ent('chamados').fields.status.options.filter((o) => o.value !== r.status).map((o) => h('button', { class: 'chip', onClick: async () => { try { await patch(`chamados/${r.id}`, { status: o.value }); toast(`Chamado: ${o.label}`); reload(); } catch (e) { erro(e); } } }, [h('span', { style: { width: '8px', height: '8px', borderRadius: '50%', background: o.color } }), o.label]))]));
   if (entity === 'versoes') return h('div', { class: 'card', style: { marginBottom: '16px' } }, h('div', { class: 'row wrap' }, [
@@ -492,7 +494,7 @@ const ConfigPage = defineComponent({
     async function ativar2fa() { try { await post('auth/2fa/ativar', { codigo: codigo.value }); store.user.totp_ativo = true; tfa.value = null; toast('Verificação em duas etapas ativada! 🔐'); } catch (e) { erro(e); } }
     async function desativar2fa() { try { await post('auth/2fa/desativar', { senha: off.value }); store.user.totp_ativo = false; off.value = ''; toast('2FA desativado.'); } catch (e) { erro(e); } }
     const inp = (obj, k, label, extra = {}) => h('div', { class: 'field' + (extra.full ? ' full' : '') }, [h('label', null, label), h(extra.area ? 'textarea' : 'input', { value: obj[k] ?? '', type: extra.type || 'text', rows: extra.area ? 4 : null, onInput: (e) => { obj[k] = e.target.value; } }), extra.help ? h('div', { class: 'help' }, extra.help) : null]);
-    const abas = [['conta', 'Minha conta'], ['seguranca', 'Senha e 2FA'], ['alertas', 'Alertas'], ...(can.admin() ? [['empresa', 'Empresa'], ['backup', 'Backup']] : []), ['aparencia', 'Aparência']];
+    const abas = [['conta', 'Minha conta'], ['seguranca', 'Senha e 2FA'], ['alertas', 'Alertas'], ...(can.admin() ? [['empresa', 'Empresa'], ['asaas', 'Asaas'], ['backup', 'Backup']] : []), ['aparencia', 'Aparência']];
     return () => h('div', null, [
       h('div', { class: 'page-head' }, [h('div', null, [h('h1', null, 'Configurações')])]),
       h('div', { class: 'tabs' }, abas.map(([k, l]) => h('button', { class: tab.value === k ? 'on' : '', onClick: () => { tab.value = k; setQuery({ aba: k }); } }, l))),
@@ -505,10 +507,11 @@ const ConfigPage = defineComponent({
               : [h('p', { class: 'muted' }, 'Protege sua conta mesmo que alguém descubra sua senha.'), h('button', { class: 'btn primary', onClick: iniciar2fa }, [h(Icon, { n: 'shield', s: 16 }), 'Ativar 2FA'])]]),
       ]) : null,
       tab.value === 'alertas' ? h(AlertasMeus) : null,
+      tab.value === 'asaas' ? h(AsaasConfig) : null,
       tab.value === 'empresa' ? h('div', { class: 'card', style: { maxWidth: '820px' } }, [h('div', { class: 'form' }, [
         inp(cfg, 'empresa_nome', 'Nome da empresa'), inp(cfg, 'empresa_cnpj', 'CNPJ'), inp(cfg, 'empresa_whatsapp', 'WhatsApp'), inp(cfg, 'empresa_email', 'E-mail'),
         inp(cfg, 'empresa_pix', 'Chave Pix (vai junto na mensagem de cobrança)', { full: true }),
-        inp(cfg, 'msg_cobranca', 'Mensagem de cobrança no WhatsApp', { full: true, area: true, help: 'Use {cliente}, {competencia}, {valor} e {vencimento}.' }),
+        inp(cfg, 'msg_cobranca', 'Mensagem de cobrança no WhatsApp', { full: true, area: true, help: 'Use {cliente}, {competencia}, {valor}, {vencimento} e {link} (link da fatura do Asaas, quando houver).' }),
       ]), h('div', { style: { marginTop: '16px' } }, h('button', { class: 'btn primary', onClick: salvarCfg }, 'Salvar'))]) : null,
       tab.value === 'backup' ? h('div', { class: 'card stack', style: { maxWidth: '720px' } }, [
         h('h2', { class: 'sec' }, [h(Icon, { n: 'shield' }), 'Cópia de segurança']),
