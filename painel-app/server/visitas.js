@@ -9,7 +9,7 @@ const { wrap, HttpError, clientIp, todaySql } = require('./util');
 
 const TESTE = process.env.NEON_TESTE === '1';
 const ORIGENS = ['https://neonsistemas.com', 'https://www.neonsistemas.com'];
-const INATIVA_MIN = 15; // visita encerrada depois de 15 min sem nada novo
+const INATIVA_MIN = 5; // visita encerrada depois de 5 min sem nada novo
 const TIPOS = new Set(['inicio', 'pagina', 'secao', 'rolagem', 'clique', 'whatsapp', 'form_campo', 'form_envio', 'calculadora', 'copia', 'idioma', 'oculta', 'visivel', 'fim', 'erro']);
 const ROBO_UA = /bot|crawl|spider|slurp|headless|lighthouse|pagespeed|preview|facebookexternalhit|whatsapp|telegram|curl|wget|python|java\/|go-http|axios|node-fetch|monitor|uptime|scan/i;
 
@@ -51,7 +51,7 @@ async function migrate() {
     dados JSON NOT NULL,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`);
-  const padroes = { visitas_ativo: '1', visitas_email: 'bignetsoluc@gmail.com', visitas_modo: 'todas', visitas_robos: '0', visitas_resumo: '1', visitas_resumo_hora: '21' };
+  const padroes = { visitas_ativo: '1', visitas_email: 'bignetsoluc@gmail.com', visitas_modo: 'todas', visitas_robos: '0', visitas_resumo: '1', visitas_resumo_hora: '21', visitas_imediato: '1' };
   for (const [k, v] of Object.entries(padroes)) await q('INSERT IGNORE INTO configuracoes (chave, valor) VALUES (?,?)', [k, v]);
 }
 
@@ -65,6 +65,7 @@ async function cfg() {
     robos: c.visitas_robos === '1',
     resumo: c.visitas_resumo !== '0',
     resumo_hora: Math.max(0, Math.min(23, Number(c.visitas_resumo_hora ?? 21) || 0)),
+    imediato: c.visitas_imediato !== '0',
   };
 }
 
@@ -190,7 +191,8 @@ pub.post('/publico/visitas', limiter, express.text({ type: '*/*', limit: '64kb' 
       [sessao, idOk(o.v), ip, txt(ua, 500), JSON.stringify(meta), txt(meta.ref, 500) || null, txt(meta.url, 500) || null, txt(meta.lang, 10) || null, robo]);
     v = await one('SELECT id, n_eventos, ip FROM site_visitas WHERE sessao=?', [sessao]);
     // localização em segundo plano
-    geoIp(ip).then((g) => q('UPDATE site_visitas SET geo=?, robo=GREATEST(robo, ?) WHERE id=?', [JSON.stringify(g), g.datacenter ? 1 : 0, v.id])).catch(() => {});
+    geoIp(ip).then((g) => q('UPDATE site_visitas SET geo=?, robo=GREATEST(robo, ?) WHERE id=?', [JSON.stringify(g), g.datacenter ? 1 : 0, v.id]))
+      .then(() => avisoImediato(v.id, 'chegada', {})).catch((e) => console.error('visitas chegada:', e.message));
   } else if (o.m) {
     const meta = limpar(o.m) || {};
     await q('UPDATE site_visitas SET meta=JSON_MERGE_PATCH(COALESCE(meta, JSON_OBJECT()), ?), origem=COALESCE(origem, ?), entrada=COALESCE(entrada, ?), idioma=COALESCE(idioma, ?), robo=GREATEST(robo, ?) WHERE id=?',
@@ -214,10 +216,47 @@ pub.post('/publico/visitas', limiter, express.text({ type: '*/*', limit: '64kb' 
     if (tipo === 'fim') fim = 1;
   }
   if (linhas.length) await q('INSERT INTO site_visita_eventos (visita_id, tipo, dados, em) VALUES ?', [linhas]);
+  // ações importantes viram e-mail na hora
+  for (const [, tipo, dados, em] of linhas) {
+    if (['form_envio', 'form_campo', 'whatsapp', 'calculadora'].includes(tipo)) avisoImediato(v.id, tipo, JSON.parse(dados), em).catch((e) => console.error('visitas aviso:', e.message));
+  }
   await q(`UPDATE site_visitas SET ultimo=UTC_TIMESTAMP(), n_eventos=n_eventos+?, paginas=paginas+?, formulario=GREATEST(formulario, ?),
     whatsapp=GREATEST(whatsapp, ?), terminou=GREATEST(terminou, ?), ip=COALESCE(ip, ?) WHERE id=?`, [linhas.length, paginas, form, wa, fim, ip, v.id]);
   res.status(204).end();
 }));
+
+// ---------- Avisos na hora (chegada e ações importantes) ----------
+async function avisoImediato(id, tipo, dados, em) {
+  const c = await cfg();
+  if (!c.ativo || !c.imediato || !c.email.length) return;
+  const al = require('./alertas');
+  if (!TESTE && !(await al.emailCfg()).pronto) return;
+  let v = await one('SELECT * FROM site_visitas WHERE id=?', [id]);
+  if (!v || (v.robo && !c.robos)) return;
+  if (!v.geo && v.ip) { const g = await geoIp(v.ip); await q('UPDATE site_visitas SET geo=? WHERE id=? AND geo IS NULL', [JSON.stringify(g), id]); v = await one('SELECT * FROM site_visitas WHERE id=?', [id]); }
+  const chave = tipo === 'chegada' ? 'chegada' : tipo === 'form_envio' ? 'form:' + em : tipo === 'whatsapp' ? 'wa:' + (dados.numero || '') : tipo;
+  if (!(await al.primeiraVez(`visita:${id}:${chave}`))) return;
+  const g = parseJ(v.geo, {}) || {}; const m = parseJ(v.meta, {}) || {}; const ap = aparelho(v.ua, m);
+  const local = g.cidade ? `${g.cidade}/${g.uf || g.pais}` : 'local não identificado';
+  const origem = origemLegivel(v.origem, m.utm || {});
+  const [ant] = v.visitante ? await q('SELECT COUNT(*) n FROM site_visitas WHERE visitante=? AND id<?', [v.visitante, id]) : [{ n: 0 }];
+  let titulo, corpo, quente = false;
+  if (tipo === 'chegada') { titulo = `👀 Visita agora no site · ${local} · ${ap.tipo.toLowerCase()}${ant.n ? ' · voltou' : ''}`; corpo = `Alguém acabou de entrar no site${ant.n ? ` (já veio ${ant.n} vez(es) antes)` : ''}.`; }
+  else if (tipo === 'form_envio') { quente = true; titulo = `🔥 Formulário enviado agora · ${dados.campos?.nome || 'sem nome'} · ${local}`; corpo = 'Acabou de enviar o formulário de contato:\n' + Object.entries(dados.campos || {}).map(([k, x]) => `${CAMPOS[k] || k}: ${x}`).join('\n'); }
+  else if (tipo === 'whatsapp') { quente = true; titulo = `🔥 Clicou no WhatsApp agora · ${local}`; corpo = `Tocou no botão do WhatsApp${dados.numero ? ' do número ' + dados.numero : ''}${dados.texto ? ` ("${dados.texto}")` : ''}. Fique de olho no WhatsApp.`; }
+  else if (tipo === 'form_campo') { titulo = `✍️ Começou a preencher o formulário · ${local}`; corpo = 'Está preenchendo o formulário de contato agora.'; }
+  else { titulo = `🧮 Usou a calculadora agora · ${local}`; corpo = 'Valores: ' + Object.entries(dados.valores || {}).map(([k, x]) => `${CAMPOS[k] || k} ${x}`).join(', ') + (dados.resultado ? `\nGanho estimado que viu: ${dados.resultado}` : ''); }
+  const base = String(process.env.PUBLIC_URL || '').replace(/\/$/, '');
+  const linhas = [['Local provável', `${local}${g.estado ? ' – ' + g.estado : ''}`], ['Aparelho', `${ap.tipo} · ${ap.modelo ? ap.modelo + ' · ' : ''}${ap.so} · ${ap.navegador}`], ['De onde veio', origem],
+    ['IP', `${v.ip || '—'}${g.provedor ? ' · ' + g.provedor : ''}${g.rede_movel ? ' · rede móvel' : ''}`], ['Entrou em', dtBr(v.inicio, true)]];
+  const html = `<!doctype html><html><body style="margin:0;background:#f3f5f9;font-family:Segoe UI,Roboto,Arial,sans-serif;color:#1d2433"><div style="max-width:600px;margin:0 auto;padding:20px 14px"><div style="background:#fff;border-radius:14px;padding:20px;border-top:4px solid ${quente ? '#e8650c' : '#38bdf8'}">
+<div style="font-size:12px;color:#7a8499;text-transform:uppercase;letter-spacing:.06em">neonsistemas.com · agora · visita #${id}</div>
+<h1 style="font-size:19px;margin:6px 0 10px">${esc(titulo)}</h1><p style="font-size:15px;line-height:1.55;white-space:pre-line;margin:0 0 12px">${esc(corpo)}</p>
+<table style="border-collapse:collapse;font-size:14px">${linhas.map(([k, x]) => `<tr><td style="padding:4px 12px 4px 0;color:#6b7489;vertical-align:top;white-space:nowrap">${esc(k)}</td><td style="padding:4px 0">${esc(x)}</td></tr>`).join('')}</table>
+${base ? `<a href="${esc(base)}/api/visitas/${id}/relatorio" style="display:inline-block;margin-top:16px;background:#ff7a1a;color:#fff;text-decoration:none;font-weight:700;padding:10px 18px;border-radius:10px">Ver tudo o que fez até agora</a>` : ''}
+<p style="font-size:12px;color:#8a93a6;margin:16px 0 0">O relatório completo desta visita chega quando a pessoa sair do site.</p></div></div></body></html>`;
+  for (const para of c.email) await al.enviarEmailCru({ para, assunto: titulo, html, texto: `${titulo}\n\n${corpo}\n\n${linhas.map(([k, x]) => k + ': ' + x).join('\n')}` });
+}
 
 // ---------- Relatório ----------
 const esc = (s) => String(s ?? '').replace(/[<&>"]/g, (ch) => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[ch]));
@@ -330,7 +369,7 @@ async function enviarPendentes() {
   // sem e-mail configurado: visitas com mais de 24 h ficam sem aviso (evita uma enxurrada depois)
   if (!pronto) { await q("UPDATE site_visitas SET email_status='não enviado: e-mail de avisos não configurado' WHERE email_status IS NULL AND ultimo < UTC_TIMESTAMP() - INTERVAL 24 HOUR"); return { enviados: 0, pronto: false }; }
   const rows = await q(`SELECT id, robo FROM site_visitas WHERE email_status IS NULL AND
-    (ultimo < UTC_TIMESTAMP() - INTERVAL ? MINUTE OR (terminou=1 AND ultimo < UTC_TIMESTAMP() - INTERVAL 1 MINUTE)) ORDER BY id LIMIT 20`, [INATIVA_MIN]);
+    (ultimo < UTC_TIMESTAMP() - INTERVAL ? MINUTE OR (terminou=1 AND ultimo < UTC_TIMESTAMP() - INTERVAL 20 SECOND)) ORDER BY id LIMIT 20`, [INATIVA_MIN]);
   let enviados = 0;
   for (const r of rows) {
     const marca = (s) => q('UPDATE site_visitas SET email_status=?, email_em=UTC_TIMESTAMP() WHERE id=?', [String(s).slice(0, 255), r.id]);
@@ -394,7 +433,7 @@ async function tick() {
     try { await enviarPendentes(); await resumoDiario(); await limparAntigas(); } finally { await conn.query("SELECT RELEASE_LOCK('neon_visitas')"); }
   } catch (e) { console.error('visitas:', e.message); } finally { conn.release(); rodando = false; }
 }
-function iniciar() { if (TESTE) return; setTimeout(tick, 25000); setInterval(tick, 60e3).unref(); }
+function iniciar() { if (TESTE) return; setTimeout(tick, 25000); setInterval(tick, 30e3).unref(); }
 
 // ---------- Rotas do painel (administradores) ----------
 const router = express.Router();
@@ -434,6 +473,7 @@ router.post('/config', wrap(async (req, res) => {
   if (b.modo !== undefined) set.visitas_modo = b.modo === 'interacao' ? 'interacao' : 'todas';
   if (b.robos !== undefined) set.visitas_robos = b.robos ? '1' : '0';
   if (b.resumo !== undefined) set.visitas_resumo = b.resumo ? '1' : '0';
+  if (b.imediato !== undefined) set.visitas_imediato = b.imediato ? '1' : '0';
   if (b.resumo_hora !== undefined) set.visitas_resumo_hora = String(Math.max(0, Math.min(23, Number(b.resumo_hora) || 0)));
   for (const [k, v] of Object.entries(set)) await q('INSERT INTO configuracoes (chave, valor) VALUES (?,?) ON DUPLICATE KEY UPDATE valor=VALUES(valor)', [k, v]);
   res.json({ ok: true });

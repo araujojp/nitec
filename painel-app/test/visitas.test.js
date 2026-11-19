@@ -10,6 +10,21 @@ const saida = async () => (await admin.get('/api/alertas/_teste/saida')).body.da
 const agora = () => Date.now();
 
 before(async () => { await start(); await admin.login(); });
+
+test('avisos na hora: chegada, formulário e WhatsApp (sem repetir)', async () => {
+  await admin.post('/api/alertas/_teste/limpar');
+  await manda({ s: 'sessaoAGORA001', m: { url: 'https://neonsistemas.com/' }, e: [{ k: 'inicio', t: Date.now() }] });
+  await manda({ s: 'sessaoAGORA001', e: [{ k: 'whatsapp', t: Date.now(), numero: '5534984302083' }, { k: 'form_envio', t: Date.now(), campos: { nome: 'Joana', msg: 'Me liga' } }] });
+  await manda({ s: 'sessaoAGORA001', e: [{ k: 'whatsapp', t: Date.now(), numero: '5534984302083' }] });
+  const t0 = Date.now(); let s = [];
+  while (Date.now() - t0 < 3000) { s = await saida(); if (s.length >= 3) break; await new Promise((r) => setTimeout(r, 100)); }
+  await new Promise((r) => setTimeout(r, 300)); s = await saida();
+  assert.ok(s.some((m) => /👀 Visita agora no site · Uberlândia\/MG/.test(m.assunto)), 'chegada');
+  assert.ok(s.some((m) => /🔥 Formulário enviado agora · Joana/.test(m.assunto) && m.html.includes('Me liga')), 'formulário');
+  assert.equal(s.filter((m) => /Clicou no WhatsApp agora/.test(m.assunto)).length, 1, 'WhatsApp uma vez');
+  await sql("DELETE FROM site_visita_eventos WHERE visita_id=(SELECT id FROM site_visitas WHERE sessao='sessaoAGORA001')");
+  await sql("DELETE FROM site_visitas WHERE sessao='sessaoAGORA001'");
+});
 after(stop);
 
 test('recebe a visita com aparelho, origem e eventos', async () => {
@@ -46,7 +61,7 @@ test('relatório completo e e-mail por visita para o destinatário', async () =>
   await admin.post('/api/alertas/_teste/limpar');
   const r = await admin.post('/api/visitas/_teste/rodar', {});
   assert.equal(r.body.enviados, 1, JSON.stringify(r.body));
-  const s = await saida();
+  const s = (await saida()).filter((m) => /Visita no site/.test(m.assunto));
   assert.equal(s.length, 1);
   assert.equal(s[0].para, 'bignetsoluc@gmail.com');
   assert.match(s[0].assunto, /🔥 Visita no site · Uberlândia\/MG · celular/);

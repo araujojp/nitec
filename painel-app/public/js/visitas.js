@@ -43,10 +43,11 @@ const VisitasPage = defineComponent({
           sw('ativo', 'Registro de visitas ligado', 'Registro de visitas desligado (nada é gravado nem enviado)'),
           h('div', { class: 'field' }, [h('label', { for: 'vis-email' }, 'Quem recebe (separe por vírgula)'), h('input', { id: 'vis-email', value: cfg.email, onInput: (e) => { cfg.email = e.target.value; } })]),
           h('div', { class: 'field' }, [h('label', null, 'Quais visitas viram e-mail'), h('div', { class: 'seg' }, [['todas', 'Todas'], ['interacao', 'Só com interação (clique, formulário ou mais de 30 s)']].map(([k, l]) => h('button', { class: cfg.modo === k ? 'on' : '', onClick: () => { cfg.modo = k; } }, l)))]),
+          sw('imediato', 'Avisar na hora: chegada, formulário, WhatsApp e calculadora', 'Só o relatório completo no fim da visita'),
           sw('robos', 'Mandar também visitas de robôs e servidores', 'Não mandar visitas de robôs e servidores'),
           sw('resumo', 'Resumo do dia por e-mail', 'Sem resumo do dia'),
           cfg.resumo ? h('div', { class: 'field', style: { maxWidth: '260px' } }, [h('label', { for: 'vis-hora' }, 'Hora do resumo (Brasília)'), h('input', { id: 'vis-hora', inputmode: 'numeric', value: cfg.resumo_hora, onInput: (e) => { cfg.resumo_hora = e.target.value; } })]) : null,
-          h('div', { class: 'small muted' }, 'Cada visita vira um e-mail cerca de 15 minutos depois que a pessoa sai do site (ou logo depois, se ela fechar a página). Os dados ficam guardados por 12 meses.'),
+          h('div', { class: 'small muted' }, 'Avisos na hora: quando alguém entra no site e a cada ação importante. O relatório completo, com todos os cliques, chega logo que a pessoa fecha o site (ou 5 minutos depois da última atividade). Os dados ficam guardados por 12 meses.'),
           h('div', null, h('button', { class: 'btn primary', disabled: busy.value === 's', onClick: salvar }, 'Salvar')),
         ]) : null,
       ]);
