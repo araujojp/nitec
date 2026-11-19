@@ -153,7 +153,7 @@ mark.achado { background: var(--accent-soft); color: inherit; border-radius: 4px
 <div class="wrap">
 <nav class="toc" aria-label="Sumário">
   <div class="brand">Neon Gestão</div>
-  <div class="ver">Manual completo · versão 1.6.0</div>
+  <div class="ver">Manual completo · versão 1.7.0</div>
   <ol id="toc-lista"></ol>
 </nav>
 
@@ -166,7 +166,7 @@ mark.achado { background: var(--accent-soft); color: inherit; border-radius: 4px
   <div class="meta-capa">
     <span>Endereço principal: <b>painel.neonsistemas.com</b></span>
     <span>Segundo endereço: <b>gestao.neonsistemas.com</b></span>
-    <span>Versão do sistema: <b>1.6.0</b> · novembro de 2026</span>
+    <span>Versão do sistema: <b>1.7.0</b> · novembro de 2026</span>
   </div>
   <details class="toc-m"><summary>Sumário</summary><ol id="toc-lista-m"></ol></details>
 </header>
@@ -268,7 +268,7 @@ mark.achado { background: var(--accent-soft); color: inherit; border-radius: 4px
   <div><b>Principal</b><span>Início, Clientes, Funil de vendas, Agenda, Relatórios</span></div>
   <div><b>Operação</b><span>Instalações, Licenças e contratos, Atualizações, Chamados, Sinais dos equipamentos</span></div>
   <div><b>Financeiro</b><span>Cobranças, Histórico de contatos</span></div>
-  <div><b>Marketing</b><span>Visão geral, Posts, Calendário, Campanhas, Depoimentos do site, Integrações e IAs</span></div>
+  <div><b>Marketing</b><span>Visão geral, Posts, Calendário, Campanhas, Depoimentos do site, Visitas do site*, Integrações e IAs</span></div>
   <div><b>Sistema</b><span>Arquivos, Produtos, Equipe*, Robôs e tarefas*, Atividade*, API dos equipamentos, Configurações, Ajuda</span></div>
 </div>
 <p>Os itens com * aparecem só para administradores. Outros elementos da tela:</p>
@@ -1088,7 +1088,7 @@ mark.achado { background: var(--accent-soft); color: inherit; border-radius: 4px
 <!-- ============================================================ -->
 <section class="parte" id="site">
 <h2><span class="n">10</span>Integração com o site</h2>
-<p class="intro">O que o painel publica para o neonsistemas.com.</p>
+<p class="intro">O que o painel publica para o neonsistemas.com e o que ele recebe do site.</p>
 <ul>
   <li><b>Depoimentos:</b> o site lê os depoimentos autorizados e marcados para mostrar (endereço público <code>/publico/depoimentos.json</code>). Os destaques vêm primeiro, depois pela Ordem. Sem nenhum publicado, a seção some.</li>
   <li><b>Novidades:</b> posts com <b>Publicar também no site</b> entram, depois de publicados, na página <code>painel.neonsistemas.com/novidades</code> (cada post tem a sua página, com botão de WhatsApp) e no feed do site (<code>/publico/novidades.json</code>).</li>
@@ -1096,6 +1096,39 @@ mark.achado { background: var(--accent-soft); color: inherit; border-radius: 4px
 <pre><code>&lt;div id="neon-novidades" data-limite="6"&gt;&lt;/div&gt;
 &lt;script src="https://painel.neonsistemas.com/publico/widget.js" defer&gt;&lt;/script&gt;</code></pre></li>
 </ul>
+<h3 id="visitas-site">Visitas do site (relatório por e-mail)</h3>
+<p>Cada visita ao neonsistemas.com é registrada e vira um relatório por e-mail. A tela fica em <span class="ui">Marketing → Visitas do site</span>, só para administradores.</p>
+<h4>O que o relatório mostra</h4>
+<ul>
+  <li><b>Resumo:</b> quando foi, quanto tempo ficou (e quanto tempo com a aba aberta e ativa), quantas páginas viu e se é a primeira visita ou se a pessoa voltou (com as visitas anteriores).</li>
+  <li><b>Interesse em destaque:</b> se enviou o formulário, começou a preencher, clicou no WhatsApp ou usou a calculadora. Visitas com formulário ou WhatsApp chegam com 🔥 no assunto.</li>
+  <li><b>Formulário enviado:</b> nome, empresa, interesse e mensagem. Se a pessoa só começou a preencher, aparece quais campos ela usou (o texto não enviado não é registrado).</li>
+  <li><b>Calculadora:</b> os números que a pessoa digitou e o ganho estimado que viu.</li>
+  <li><b>De onde veio:</b> busca do Google, Instagram, Facebook, LinkedIn, WhatsApp, outro site, anúncio do Google (gclid), anúncio da Meta (fbclid), campanha com UTM, ou acesso direto.</li>
+  <li><b>Localização provável pelo IP:</b> cidade, bairro (quando houver), estado, país, CEP aproximado, coordenadas com link para o mapa e fuso horário. A localização pelo IP é aproximada: costuma acertar a cidade, mas às vezes indica a cidade do provedor.</li>
+  <li><b>Rede:</b> IP, DNS reverso, provedor, organização, ASN, se é rede móvel (4G/5G) ou fixa, se parece proxy/VPN e se vem de data center (provável robô), e quantas outras visitas vieram do mesmo IP.</li>
+  <li><b>Aparelho:</b> celular, tablet ou computador, modelo (quando o navegador informa, comum no Android), sistema, navegador (inclusive se abriu dentro do Instagram ou Facebook), tela, janela, idiomas, fuso, tipo de conexão, memória, processador, toque e tema claro/escuro.</li>
+  <li><b>O que viu:</b> o tempo em cada seção do site (Painel Neon, Neon Motel, PABX, calculadora, depoimentos, contato…) e até onde rolou a página.</li>
+  <li><b>Linha do tempo:</b> tudo em ordem, com horário: entrada, seções, cliques em botões e links (com o texto), WhatsApp (com o número), campos do formulário, calculadora, troca de idioma, texto copiado, saída da aba e saída do site.</li>
+</ul>
+<h4>Quando o e-mail chega</h4>
+<p>Cerca de 15 minutos depois que a pessoa sai do site, ou logo depois de ela fechar a página. Os e-mails saem da caixa de avisos (<code>contato@neonsistemas.com</code>), que precisa estar configurada em <a href="#alertas-email">Configurações → Alertas</a>. Enquanto ela não estiver, as visitas ficam registradas no painel, mas os e-mails não saem.</p>
+<h4>Na tela</h4>
+<ul>
+  <li><b>Indicadores de hoje:</b> visitas, formulários enviados e cliques no WhatsApp.</li>
+  <li><b>Filtros:</b> todas, com formulário ou WhatsApp, visitantes que voltaram, e robôs e servidores.</li>
+  <li>Toque numa visita para abrir o <b>relatório completo</b> numa aba nova. O botão <span class="ui">Enviar</span> manda aquele relatório por e-mail de novo.</li>
+</ul>
+<h4>Configurar</h4>
+<ul>
+  <li><b>Registro de visitas ligado/desligado:</b> desligado, nada é gravado nem enviado.</li>
+  <li><b>Quem recebe:</b> um ou mais e-mails, separados por vírgula. De fábrica: <code>bignetsoluc@gmail.com</code>.</li>
+  <li><b>Quais visitas viram e-mail:</b> <b>Todas</b>, ou <b>Só com interação</b> (algum clique, formulário, calculadora ou mais de 30 segundos no site).</li>
+  <li><b>Robôs e servidores:</b> de fábrica, visitas de robôs (Google, ferramentas de teste) e de data centers não geram e-mail, mas ficam no filtro "Robôs e servidores".</li>
+  <li><b>Resumo do dia:</b> um e-mail por dia (de fábrica às 21h) com o total de visitas, cidades, origens, aparelhos e quem enviou o formulário.</li>
+</ul>
+<div class="nota info"><b>Privacidade</b><p>A política de privacidade do site (neonsistemas.com/privacidade) explica esse registro em todos os idiomas, como pede a LGPD. Os dados ficam guardados por 12 meses e depois são apagados automaticamente. Robôs que não rodam JavaScript não são registrados.</p></div>
+
 </section>
 
 <!-- ============================================================ -->
@@ -1313,7 +1346,7 @@ mark.achado { background: var(--accent-soft); color: inherit; border-radius: 4px
 <p>Peça a um administrador para definir uma senha nova em <span class="ui">Equipe</span>. Se ninguém conseguir entrar, use a conta de administrador de emergência guardada com a Neon.</p>
 
 <hr>
-<footer>Manual do Neon Gestão · versão do sistema 1.6.0 · Neon Sistemas, novembro de 2026.</footer>
+<footer>Manual do Neon Gestão · versão do sistema 1.7.0 · Neon Sistemas, novembro de 2026.</footer>
 </section>
 </main>
 </div>

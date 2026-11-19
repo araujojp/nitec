@@ -17,6 +17,7 @@ const alertas = require('./server/alertas');
 const asaas = require('./server/asaas');
 const chamados = require('./server/chamados');
 const relatorios = require('./server/relatorios');
+const visitas = require('./server/visitas');
 const { wrap } = require('./server/util');
 
 const app = express();
@@ -50,6 +51,7 @@ app.use(device.compat);
 app.use('/api/v1/equipamento', device.v1);
 app.use(marketing.pub);
 app.use(asaas.pub);
+app.use(visitas.pub);
 
 // Sessão do painel
 app.use(auth.loadUser);
@@ -58,6 +60,7 @@ app.use('/api/arquivos', files.router);
 app.use('/api/marketing', marketing.router);
 app.use('/api/alertas', alertas.router);
 app.use('/api/asaas', asaas.router);
+app.use('/api/visitas', visitas.router);
 app.use('/api', chamados.router);
 app.use('/api', relatorios.router);
 app.use('/api', api.router);
@@ -124,12 +127,14 @@ const PORT = process.env.PORT || 3000;
     await alertas.migrate();
     await asaas.migrate();
     await chamados.migrate();
+    await visitas.migrate();
     await seed();
     await auth.ensureAdmin();
     await files.ensureDirs();
     marketing.startScheduler();
     alertas.iniciar();
     asaas.iniciar();
+    visitas.iniciar();
   } catch (e) {
     console.error('Falha ao preparar o banco:', e.message);
   }

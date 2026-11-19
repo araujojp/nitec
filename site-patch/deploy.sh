@@ -2,6 +2,7 @@ set -e
 cd "$(dirname "$0")"
 cp fix5/pt.html site5/index.html; for l in en es fr de zh; do cp fix5/$l.html site5/$l/index.html; done
 python3 -I patch.py site5/index.html site5/en/index.html site5/es/index.html site5/fr/index.html site5/de/index.html site5/zh/index.html >/dev/null
+cp privacidade.html site5/privacidade/index.html
 [ "$1" = build ] && exit 0
 rm -f site.zip; (cd site5 && zip -qr ../site.zip . -x '.*' && zip -q ../site.zip .htaccess)
 API=https://developers.hostinger.com

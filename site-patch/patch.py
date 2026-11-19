@@ -93,6 +93,7 @@ FAQHTML='''
 '''
 NEWSEC=open(HERE+'/newsec.html',encoding='utf-8').read()
 EXJS=open(HERE+'/extra.js',encoding='utf-8').read()
+RASTROJS=open(HERE+'/rastro.js',encoding='utf-8').read()
 EXCSS=open(HERE+'/extra.css',encoding='utf-8').read()+open(HERE+'/voz.css',encoding='utf-8').read()+open(HERE+'/depo.css',encoding='utf-8').read()+open(HERE+'/wa.css',encoding='utf-8').read()+open(HERE+'/light.css',encoding='utf-8').read()
 import palette as PAL
 HEROJS=open(HERE+'/hero.js',encoding='utf-8').read()
@@ -193,7 +194,7 @@ for p in sys.argv[1:]:
     J=J.replace(g5,"function draw(t) {\n    requestAnimationFrame(draw);\n    if (!visible || document.hidden) return;\n    if (W < 820) { if (t - (draw.l || 0) < 31) return; draw.l = t; }")
     v3="window.dispatchEvent(new Event('neonsuite'));"; assert J.count(v3)==1; J=J.replace(v3,VOZAPI+'  '+v3)
     J=J.replace("if(window.NEON_CALC)NEON_CALC();","if(window.NEON_CALC)NEON_CALC();if(window.NEON_VOZ)NEON_VOZ();if(window.NEON_DEPO)NEON_DEPO();")
-    d['j']=J+'\n'+EXJS+'\n'+VOZJS+'\n'+DEPOJS
+    d['j']=J+'\n'+EXJS+'\n'+VOZJS+'\n'+DEPOJS+'\n'+RASTROJS
     f1="const w = window.open(url, '_blank', 'noopener');"; assert d['j'].count(f1)==1
     d['j']=d['j'].replace(f1,"if (window.NEON_WA) { NEON_WA(txt); return; }\n    "+f1)
     d['j']=PAL.js_dynamic(d['j']); d['b']=PAL.body_dynamic(d['b'])
