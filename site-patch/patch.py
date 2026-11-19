@@ -93,11 +93,11 @@ FAQHTML='''
 '''
 NEWSEC=open(HERE+'/newsec.html',encoding='utf-8').read()
 EXJS=open(HERE+'/extra.js',encoding='utf-8').read()
-EXCSS=open(HERE+'/extra.css',encoding='utf-8').read()+open(HERE+'/voz.css',encoding='utf-8').read()+open(HERE+'/depo.css',encoding='utf-8').read()+open(HERE+'/light.css',encoding='utf-8').read()
+EXCSS=open(HERE+'/extra.css',encoding='utf-8').read()+open(HERE+'/voz.css',encoding='utf-8').read()+open(HERE+'/depo.css',encoding='utf-8').read()+open(HERE+'/wa.css',encoding='utf-8').read()+open(HERE+'/light.css',encoding='utf-8').read()
 import palette as PAL
 HEROJS=open(HERE+'/hero.js',encoding='utf-8').read()
 DEPOHTML=open(HERE+'/depo.html',encoding='utf-8').read()
-DEPOJS=open(HERE+'/depo.js',encoding='utf-8').read()+open(HERE+'/theme.js',encoding='utf-8').read()+open(HERE+'/sons.js',encoding='utf-8').read()
+DEPOJS=open(HERE+'/depo.js',encoding='utf-8').read()+open(HERE+'/theme.js',encoding='utf-8').read()+open(HERE+'/sons.js',encoding='utf-8').read()+open(HERE+'/wa.js',encoding='utf-8').read()
 VOZJS=open(HERE+'/voz.js',encoding='utf-8').read()
 VOZSEC=open(HERE+'/vozsec.html',encoding='utf-8').read()
 VOZAPI="""
@@ -166,6 +166,10 @@ for p in sys.argv[1:]:
     v2='<!-- NEON MOTEL -->'; assert B.count(v2)==1; B=B.replace(v2,VOZSEC+'\n  '+v2)
     B=B.replace('/assets/icon.png"','/assets/icon.png?v=2"')
     B=B.replace('>Tecnologia para motéis, hotéis e pousadas<','>Tecnologia em automação para motéis, hotéis e pousadas<')
+    w1='📱 (34) 98430-2083<br>'; assert B.count(w1)==1
+    B=B.replace(w1,'📱 WhatsApp: <a href="https://wa.me/5534984302083">(34) 98430-2083</a> · <a href="https://wa.me/5562992147679">(62) 99214-7679</a><br>')
+    w2='<span class="priv">Sem cookies de rastreamento.</span>'; assert B.count(w2)==1
+    B=B.replace(w2,'<span class="wa-nums">WhatsApp: <a href="https://wa.me/5534984302083">(34) 98430-2083</a> · <a href="https://wa.me/5562992147679">(62) 99214-7679</a></span>'+w2)
     d['b']=B
     J=d['j']; a6='var NAMES='; assert J.count(a6)==1
     J=J.replace(a6,'Object.assign(D,'+json.dumps(NEWD,ensure_ascii=False)+');\n'+a6)
@@ -190,6 +194,8 @@ for p in sys.argv[1:]:
     v3="window.dispatchEvent(new Event('neonsuite'));"; assert J.count(v3)==1; J=J.replace(v3,VOZAPI+'  '+v3)
     J=J.replace("if(window.NEON_CALC)NEON_CALC();","if(window.NEON_CALC)NEON_CALC();if(window.NEON_VOZ)NEON_VOZ();if(window.NEON_DEPO)NEON_DEPO();")
     d['j']=J+'\n'+EXJS+'\n'+VOZJS+'\n'+DEPOJS
+    f1="const w = window.open(url, '_blank', 'noopener');"; assert d['j'].count(f1)==1
+    d['j']=d['j'].replace(f1,"if (window.NEON_WA) { NEON_WA(txt); return; }\n    "+f1)
     d['j']=PAL.js_dynamic(d['j']); d['b']=PAL.body_dynamic(d['b'])
     d['c2']=PAL.recolor_css(d['c'])+PAL.BLUE_EXTRA
     if 'm' in d:
