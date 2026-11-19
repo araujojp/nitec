@@ -122,9 +122,18 @@ async function enviarTelegram(chatId, m) {
 }
 
 let transporter = null, transporterKey = '';
+// Sem a senha da caixa, usa o envio do próprio servidor da hospedagem (sendmail), se existir
+function sendmailPath() {
+  if (process.env.NEON_SEM_SENDMAIL === '1') return null;
+  const fs = require('fs');
+  for (const p of ['/usr/sbin/sendmail', '/usr/lib/sendmail', '/usr/bin/sendmail']) { try { fs.accessSync(p, fs.constants.X_OK); return p; } catch { /* tenta o próximo */ } }
+  return null;
+}
 async function emailCfg() {
   const c = await getIntegracao('email');
-  return { host: c.host || 'smtp.hostinger.com', porta: Number(c.porta) || 465, usuario: c.usuario || EMAIL_PADRAO, senha: c.senha || '', nome: c.nome || 'Neon Gestão', pronto: !!c.senha };
+  const sm = c.senha ? null : sendmailPath();
+  return { host: c.host || 'smtp.hostinger.com', porta: Number(c.porta) || 465, usuario: c.usuario || EMAIL_PADRAO, senha: c.senha || '', nome: c.nome || 'Neon Gestão',
+    modo: c.senha ? 'smtp' : sm ? 'servidor' : null, sendmail: sm, pronto: !!(c.senha || sm) };
 }
 async function enviarEmail(para, m) {
   return enviarEmailCru({ para, assunto: (m.urgente ? '🚨 ' : '') + m.titulo, html: emailHtml(m), texto: `${m.titulo}\n\n${m.texto}${m.link && baseUrl() ? `\n\n${baseUrl()}${m.link}` : ''}` });
@@ -134,9 +143,11 @@ async function enviarEmailCru({ para, assunto, html, texto, responderPara }) {
   if (TESTE) { saidaTeste.push({ canal: 'email', para, assunto, html, responderPara }); return; }
   const c = await emailCfg();
   if (!c.pronto) throw new Error('E-mail de avisos não configurado.');
-  const key = [c.host, c.porta, c.usuario, crypto.createHash('sha256').update(c.senha).digest('hex')].join('|');
+  const key = c.modo === 'servidor' ? 'sendmail|' + c.sendmail : [c.host, c.porta, c.usuario, crypto.createHash('sha256').update(c.senha).digest('hex')].join('|');
   if (!transporter || key !== transporterKey) {
-    transporter = require('nodemailer').createTransport({ host: c.host, port: c.porta, secure: c.porta === 465, auth: { user: c.usuario, pass: c.senha }, connectionTimeout: 15000, greetingTimeout: 15000 });
+    transporter = c.modo === 'servidor'
+      ? require('nodemailer').createTransport({ sendmail: true, newline: 'unix', path: c.sendmail })
+      : require('nodemailer').createTransport({ host: c.host, port: c.porta, secure: c.porta === 465, auth: { user: c.usuario, pass: c.senha }, connectionTimeout: 15000, greetingTimeout: 15000 });
     transporterKey = key;
   }
   await transporter.sendMail({ from: { name: c.nome, address: c.usuario }, to: para, subject: assunto, html, text: texto, replyTo: responderPara || undefined });
@@ -459,6 +470,7 @@ router.get('/config', requireAdmin, wrap(async (req, res) => {
   const e = await getIntegracao('email');
   const log = await q('SELECT id, evento, titulo, enviados, falhas, created_at FROM alertas_log ORDER BY id DESC LIMIT 60');
   res.json({ geral: { ativo: g.ativo, offline_horas: g.offline_horas, resumo_hora: g.resumo_hora, licenca_dias: g.licenca_dias.join(',') },
+    email_modo: (await emailCfg()).modo,
     email: { host: e.host || 'smtp.hostinger.com', porta: e.porta || 465, usuario: e.usuario || EMAIL_PADRAO, senha: maskSenha(e.senha), nome: e.nome || 'Neon Gestão' },
     telegram_pronto: !!(await tgToken()), log, eventos: EVENTOS });
 }));
@@ -491,10 +503,11 @@ router.post('/email/testar', requireAdmin, wrap(async (req, res) => {
   const para = String(req.body.para || req.user.email).trim();
   const c = await emailCfg();
   if (!c.pronto && !TESTE) throw new HttpError(400, 'Preencha o e-mail e a senha da caixa de avisos e salve antes de testar.');
+  if (c.modo === 'servidor') transporter = null;
   try {
-    await enviarEmail(para, { titulo: 'Teste do e-mail de avisos', texto: `O envio de e-mails do Neon Gestão está funcionando.\nRemetente: ${c.usuario}`, link: '/configuracoes?aba=alertas' });
+    await enviarEmail(para, { titulo: 'Teste do e-mail de avisos', texto: `O envio de e-mails do Neon Gestão está funcionando.\nRemetente: ${c.usuario}\nEnvio: ${c.modo === 'servidor' ? 'pelo servidor da hospedagem (sem senha da caixa)' : 'pela caixa de e-mail (SMTP)'}`, link: '/configuracoes?aba=alertas' });
   } catch (e) { throw new HttpError(400, 'Não consegui enviar: ' + e.message); }
-  res.json({ ok: true, para });
+  res.json({ ok: true, para, modo: c.modo });
 }));
 
 router.post('/rodar', requireAdmin, wrap(async (req, res) => {

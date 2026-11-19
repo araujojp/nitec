@@ -25,7 +25,7 @@ async function start(extraEnv = {}) {
     cwd: path.join(__dirname, '..'),
     env: { ...process.env, DB_HOST: DB.host, DB_PORT: String(DB.port), DB_USER: DB.user, DB_PASSWORD: DB.password, DB_DATABASE: DB_NAME,
       SECRET: 'segredo-de-teste-automatico-123456', ADMIN_EMAIL: ADMIN.email, ADMIN_PASSWORD: ADMIN.senha,
-      PUBLIC_URL: BASE, STORAGE_DIR: storage, PORT: String(PORT), NEON_TESTE: '1', ...extraEnv },
+      PUBLIC_URL: BASE, STORAGE_DIR: storage, PORT: String(PORT), NEON_TESTE: '1', NEON_SEM_SENDMAIL: '1', ...extraEnv },
     stdio: ['ignore', 'pipe', 'pipe'],
   });
   let log = '';
