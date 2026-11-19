@@ -149,6 +149,7 @@ test('desligar os alertas para tudo', async () => {
 
 test('configuração de e-mail nunca devolve a senha', async () => {
   assert.equal((await admin.post('/api/alertas/config', { email: { usuario: 'sem-arroba' } })).status, 400);
+  assert.equal((await admin.get('/api/alertas/config')).body.email.usuario, 'contato@neonsistemas.com'); // padrão
   await admin.post('/api/alertas/config', { email: { usuario: 'avisos@neonsistemas.com', senha: 'SuperSecreta99' } });
   const c = await admin.get('/api/alertas/config');
   assert.equal(c.body.email.usuario, 'avisos@neonsistemas.com');

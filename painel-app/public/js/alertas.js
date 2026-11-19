@@ -118,9 +118,9 @@ const AlertasAdmin = defineComponent({
             h('div', { class: 'row gap-s', style: { flexWrap: 'wrap' } }, [h('button', { class: 'btn primary', disabled: !!ocupado.value, onClick: () => fazer('g', () => post('alertas/config', { geral }), 'Regras salvas.') }, 'Salvar regras'), h('button', { class: 'btn', disabled: !!ocupado.value, onClick: () => fazer('r', async () => { const r = await post('alertas/resumo/enviar'); toast(r.enviados ? 'Resumo enviado para você.' : 'Nenhum canal seu está pronto para o resumo.', r.enviados ? 'ok' : 'err'); }) }, 'Mandar o resumo agora (para mim)')]),
           ]),
           h('div', { class: 'card stack' }, [h('h2', { class: 'sec' }, [h(Icon, { n: 'mail' }), 'E-mail de avisos']),
-            h('p', { class: 'muted small', style: { margin: 0 } }, ['Caixa que envia os alertas. Crie em hPanel → E-mails → ', h('b', null, 'avisos@neonsistemas.com'), ' e coloque a senha aqui (ela fica guardada só no servidor).']),
+            h('p', { class: 'muted small', style: { margin: 0 } }, ['Caixa que envia os alertas: ', h('b', null, 'contato@neonsistemas.com'), '. Coloque aqui a senha dessa caixa (a mesma do webmail da Hostinger). Ela fica guardada só no servidor.']),
             h('div', { class: 'form' }, [
-              campo(email, 'usuario', 'E-mail (usuário)', { ph: 'avisos@neonsistemas.com' }),
+              campo(email, 'usuario', 'E-mail (usuário)', { ph: 'contato@neonsistemas.com' }),
               campo(email, 'senha', 'Senha da caixa', { type: 'password' }),
               campo(email, 'nome', 'Nome do remetente'),
               campo(email, 'host', 'Servidor SMTP', { help: 'Hostinger: smtp.hostinger.com' }),

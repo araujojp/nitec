@@ -10,6 +10,7 @@ const { wrap, HttpError, audit, todaySql, nowSql } = require('./util');
 const TESTE = process.env.NEON_TESTE === '1';
 const saidaTeste = []; // em teste, os envios ficam aqui em vez de sair
 
+const EMAIL_PADRAO = 'contato@neonsistemas.com'; // caixa que já existe na Hostinger
 const CANAIS = { telegram: 'Telegram', email: 'E-mail', push: 'Celular (notificação)' };
 
 const EVENTOS = {
@@ -123,7 +124,7 @@ async function enviarTelegram(chatId, m) {
 let transporter = null, transporterKey = '';
 async function emailCfg() {
   const c = await getIntegracao('email');
-  return { host: c.host || 'smtp.hostinger.com', porta: Number(c.porta) || 465, usuario: c.usuario || '', senha: c.senha || '', nome: c.nome || 'Neon Gestão', pronto: !!(c.usuario && c.senha) };
+  return { host: c.host || 'smtp.hostinger.com', porta: Number(c.porta) || 465, usuario: c.usuario || EMAIL_PADRAO, senha: c.senha || '', nome: c.nome || 'Neon Gestão', pronto: !!c.senha };
 }
 async function enviarEmail(para, m) {
   return enviarEmailCru({ para, assunto: (m.urgente ? '🚨 ' : '') + m.titulo, html: emailHtml(m), texto: `${m.titulo}\n\n${m.texto}${m.link && baseUrl() ? `\n\n${baseUrl()}${m.link}` : ''}` });
@@ -458,7 +459,7 @@ router.get('/config', requireAdmin, wrap(async (req, res) => {
   const e = await getIntegracao('email');
   const log = await q('SELECT id, evento, titulo, enviados, falhas, created_at FROM alertas_log ORDER BY id DESC LIMIT 60');
   res.json({ geral: { ativo: g.ativo, offline_horas: g.offline_horas, resumo_hora: g.resumo_hora, licenca_dias: g.licenca_dias.join(',') },
-    email: { host: e.host || 'smtp.hostinger.com', porta: e.porta || 465, usuario: e.usuario || '', senha: maskSenha(e.senha), nome: e.nome || 'Neon Gestão' },
+    email: { host: e.host || 'smtp.hostinger.com', porta: e.porta || 465, usuario: e.usuario || EMAIL_PADRAO, senha: maskSenha(e.senha), nome: e.nome || 'Neon Gestão' },
     telegram_pronto: !!(await tgToken()), log, eventos: EVENTOS });
 }));
 
@@ -478,7 +479,7 @@ router.post('/config', requireAdmin, wrap(async (req, res) => {
     for (const k of ['host', 'usuario', 'nome']) if (e[k] !== undefined) novo[k] = String(e[k]).trim().slice(0, 160);
     if (e.porta !== undefined) novo.porta = Number(e.porta) || 465;
     if (typeof e.senha === 'string' && e.senha && !e.senha.startsWith('••••••')) novo.senha = e.senha;
-    if (novo.usuario && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(novo.usuario)) throw new HttpError(400, 'O usuário do e-mail precisa ser o endereço completo (ex.: avisos@neonsistemas.com).');
+    if (novo.usuario && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(novo.usuario)) throw new HttpError(400, 'O usuário do e-mail precisa ser o endereço completo (ex.: contato@neonsistemas.com).');
     await setIntegracao('email', novo);
     transporter = null;
   }
