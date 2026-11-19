@@ -161,6 +161,7 @@ for p in sys.argv[1:]:
     B='<a class="skip" href="#topo">Pular para o conteúdo</a>'+B
     v1='<div class="clock" id="clock">--:--</div></div>'; assert B.count(v1)==1; B=B.replace(v1,v1+VOZTAB)
     v2='<!-- NEON MOTEL -->'; assert B.count(v2)==1; B=B.replace(v2,VOZSEC+'\n  '+v2)
+    B=B.replace('/assets/icon.png"','/assets/icon.png?v=2"')
     d['b']=B
     J=d['j']; a6='var NAMES='; assert J.count(a6)==1
     J=J.replace(a6,'Object.assign(D,'+json.dumps(NEWD,ensure_ascii=False)+');\n'+a6)
@@ -220,6 +221,7 @@ for p in sys.argv[1:]:
     lang=re.search(r'data-page="(\w+)"',s).group(1)
     assert s.count('</head>\n<body>')==1
     s=s.replace('</head>\n<body>',_faqld(lang)+'</head>\n<body>',1)
+    s=s.replace('href="/assets/icon.png"','href="/assets/icon.png?v=2"')
     m=re.search(r"K=\[([0-9,]+)\],P='([A-Za-z0-9+/=]+)'",s)
     s2=s[:m.start(2)]+base64.b64encode(enc).decode()+s[m.end(2):]
     open(p,'w',encoding='utf-8').write(s2); print('ok',p)
