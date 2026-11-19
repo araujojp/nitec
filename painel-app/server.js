@@ -75,11 +75,20 @@ app.get('/assets/:id', wrap(async (req, res) => {
   return device.assetForDevice(req, res, d);
 }));
 
+// Ajuda (manual do sistema), só para quem está logado
+const ajudaDir = path.join(__dirname, 'ajuda');
+app.get(['/ajuda', '/ajuda/'], (req, res) => {
+  if (!req.user) return res.redirect('/entrar?voltar=' + encodeURIComponent('/ajuda'));
+  res.setHeader('Cache-Control', 'no-cache');
+  res.sendFile(path.join(ajudaDir, 'index.html'));
+});
+for (const f of ['ajuda.js', 'tema.js']) app.get('/ajuda/' + f, (req, res) => { res.setHeader('Cache-Control', 'no-cache'); res.sendFile(path.join(ajudaDir, f)); });
+
 // Interface (SPA)
 const pub = path.join(__dirname, 'public');
 app.use(express.static(pub, { index: false, maxAge: '1h', setHeaders: (res, p) => { if (p.endsWith('.html') || p.endsWith('sw.js')) res.setHeader('Cache-Control', 'no-cache'); } }));
 app.use('/api', (req, res) => res.status(404).json({ erro: 'Rota não encontrada.' }));
-app.get(/^\/(?!api\/|assets\/|items\/|publico\/|novidades).*/, (req, res) => {
+app.get(/^\/(?!api\/|assets\/|items\/|publico\/|novidades|ajuda).*/, (req, res) => {
   res.setHeader('Cache-Control', 'no-cache');
   res.sendFile(path.join(pub, 'index.html'));
 });

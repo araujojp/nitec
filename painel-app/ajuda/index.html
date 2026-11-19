@@ -1,18 +1,27 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
 <title>Manual do Neon Gestão</title>
-<meta name="claude:viewport-fit-sides" content="cover">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="icon" type="image/png" href="/img/icon.png">
+<script src="/ajuda/tema.js?v=1"></script>
+</head>
+<body>
 <style>
+@font-face { font-family: "Inter"; font-weight: 400; font-display: swap; src: url(/fonts/inter-latin-400-normal.woff2) format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 500 700; font-display: swap; src: url(/fonts/inter-latin-700-normal.woff2) format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 800; font-display: swap; src: url(/fonts/inter-latin-800-normal.woff2) format("woff2"); }
 /* Layout: sumário fixo à esquerda + coluna de leitura; no celular o sumário vira um bloco recolhível no topo. */
 :root {
   --bg: #f6f7fa; --surface: #ffffff; --surface2: #eef1f6; --fg: #182033; --muted: #59627a; --line: #dde2ec;
   --accent: #e8650c; --accent-soft: #fff1e6; --navy: #13203f;
   --ok: #157a3c; --ok-soft: #e7f6ec; --warn: #9a5a00; --warn-soft: #fff6dd; --info: #1d5fb8; --info-soft: #e8f0fc;
   --code-bg: #f1f3f8;
-  --f-display: "Space Grotesk", "Segoe UI", system-ui, sans-serif;
+  --f-display: "Inter", "Segoe UI", system-ui, sans-serif;
   --f-body: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
-  --f-mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+  --f-mono: ui-monospace, "Cascadia Mono", Consolas, "Liberation Mono", monospace;
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
   --bg: #0b1020; --surface: #121a2e; --surface2: #18223a; --fg: #e3e8f4; --muted: #9aa6c2; --line: #263252;
@@ -126,24 +135,38 @@ footer { margin-top: 40px; color: var(--muted); font-size: 13px; }
   .tabela, .nota, pre, ol.passos > li { break-inside: avoid; }
   a { color: inherit; text-decoration: none; }
 }
+.voltar { display: inline-flex; align-items: center; gap: 6px; font-size: 13.5px; font-weight: 600; text-decoration: none; margin-bottom: 14px; }
+.busca-ajuda { margin: 4px 0 6px; }
+.busca-ajuda input { width: 100%; font: inherit; font-size: 14px; color: var(--fg); background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; }
+.busca-ajuda input:focus { outline: 2px solid var(--accent); outline-offset: 0; border-color: transparent; }
+ol.resultados { list-style: none; margin: 8px 0 0; padding: 0; }
+ol.resultados li { margin: 0; border-bottom: 1px solid var(--line); }
+ol.resultados a { display: block; padding: 7px 0; color: var(--fg); }
+ol.resultados a b { display: block; font-size: 13px; color: var(--accent); }
+ol.resultados a span { display: block; font-size: 12.5px; color: var(--muted); }
+ol.resultados .vazio { color: var(--muted); padding: 8px 0; border: 0; }
+.achado { background: var(--accent-soft); transition: background .6s; border-radius: 6px; }
+mark.achado { background: var(--accent-soft); color: inherit; border-radius: 4px; }
+@media print { .voltar { display: none; } }
 </style>
 
 <div class="wrap">
 <nav class="toc" aria-label="Sumário">
   <div class="brand">Neon Gestão</div>
-  <div class="ver">Manual completo · versão 1.5.1</div>
+  <div class="ver">Manual completo · versão 1.6.0</div>
   <ol id="toc-lista"></ol>
 </nav>
 
 <main>
 <header class="capa">
+  <a class="voltar" href="/">← Voltar ao painel</a>
   <div class="eyebrow">Neon Sistemas · Manual de uso e configuração</div>
   <h1>Manual do Neon Gestão</h1>
   <p class="lead">Tudo o que existe no painel, tela por tela: para que serve, como usar, como configurar e o que o sistema faz sozinho. Vale para os dois endereços, que são o mesmo sistema.</p>
   <div class="meta-capa">
     <span>Endereço principal: <b>painel.neonsistemas.com</b></span>
     <span>Segundo endereço: <b>gestao.neonsistemas.com</b></span>
-    <span>Versão do sistema: <b>1.5.1</b> · novembro de 2026</span>
+    <span>Versão do sistema: <b>1.6.0</b> · novembro de 2026</span>
   </div>
   <details class="toc-m"><summary>Sumário</summary><ol id="toc-lista-m"></ol></details>
 </header>
@@ -246,13 +269,14 @@ footer { margin-top: 40px; color: var(--muted); font-size: 13px; }
   <div><b>Operação</b><span>Instalações, Licenças e contratos, Atualizações, Chamados, Sinais dos equipamentos</span></div>
   <div><b>Financeiro</b><span>Cobranças, Histórico de contatos</span></div>
   <div><b>Marketing</b><span>Visão geral, Posts, Calendário, Campanhas, Depoimentos do site, Integrações e IAs</span></div>
-  <div><b>Sistema</b><span>Arquivos, Produtos, Equipe*, Robôs e tarefas*, Atividade*, API dos equipamentos, Configurações</span></div>
+  <div><b>Sistema</b><span>Arquivos, Produtos, Equipe*, Robôs e tarefas*, Atividade*, API dos equipamentos, Configurações, Ajuda</span></div>
 </div>
 <p>Os itens com * aparecem só para administradores. Outros elementos da tela:</p>
 <ul>
   <li><b>Contadores no menu:</b> <span class="ui">Chamados</span> mostra quantos estão em aberto; <span class="ui">Agenda</span> mostra os lembretes até hoje.</li>
   <li><b>Seu nome</b> no rodapé do menu: um toque abre as Configurações; o ícone ao lado faz sair.</li>
   <li><b>Sol/lua</b> no topo: alterna entre o tema escuro e o claro. A escolha fica salva no aparelho.</li>
+  <li><b>Ajuda</b> (ícone <span class="ui">?</span> no topo, e o item <span class="ui">Ajuda</span> no fim do menu): abre este manual numa aba nova, já na parte que explica a tela em que você está. Dentro da Ajuda há uma busca por palavra.</li>
   <li><b>Sino</b> no topo: abre a Agenda. Um ponto no sino indica lembrete para hoje.</li>
   <li><b>Botão laranja <span class="ui">+</span></b> no canto: cria algo novo de acordo com a tela. Numa lista, cria um registro daquele tipo; no Marketing, um post novo; nas outras telas, um cliente novo.</li>
   <li><b>No celular:</b> o menu abre pelo ícone <span class="ui">☰</span>. Embaixo fica uma barra fixa com Início, Clientes, Chamados, Marketing e Mais (que abre o menu completo).</li>
@@ -1289,32 +1313,11 @@ footer { margin-top: 40px; color: var(--muted); font-size: 13px; }
 <p>Peça a um administrador para definir uma senha nova em <span class="ui">Equipe</span>. Se ninguém conseguir entrar, use a conta de administrador de emergência guardada com a Neon.</p>
 
 <hr>
-<footer>Manual do Neon Gestão · versão do sistema 1.5.1 · Neon Sistemas, novembro de 2026.</footer>
+<footer>Manual do Neon Gestão · versão do sistema 1.6.0 · Neon Sistemas, novembro de 2026.</footer>
 </section>
 </main>
 </div>
 
-<script>
-(function () {
-  var secoes = document.querySelectorAll('main section.parte');
-  function montar(alvo) {
-    if (!alvo) return;
-    secoes.forEach(function (s) {
-      var h2 = s.querySelector('h2'); if (!h2) return;
-      var li = document.createElement('li');
-      var a = document.createElement('a'); a.href = '#' + s.id; a.textContent = h2.textContent.replace(/^\d+/, function (n) { return n + '. '; });
-      li.appendChild(a);
-      var subs = s.querySelectorAll('h3[id]');
-      if (subs.length) {
-        var ol = document.createElement('ol');
-        subs.forEach(function (h3) { var l = document.createElement('li'); var x = document.createElement('a'); x.href = '#' + h3.id; x.textContent = h3.textContent; l.appendChild(x); ol.appendChild(l); });
-        li.appendChild(ol);
-      }
-      alvo.appendChild(li);
-    });
-  }
-  montar(document.getElementById('toc-lista'));
-  montar(document.getElementById('toc-lista-m'));
-  document.querySelectorAll('#toc-lista-m a').forEach(function (a) { a.addEventListener('click', function () { var d = document.querySelector('details.toc-m'); if (d) d.open = false; }); });
-})();
-</script>
+<script src="/ajuda/ajuda.js?v=1"></script>
+</body>
+</html>

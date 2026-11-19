@@ -10,8 +10,30 @@ const MENU = [
   { t: 'Operação', items: [['/instalacoes', 'server', 'Instalações'], ['/licencas', 'key', 'Licenças e contratos'], ['/atualizacoes', 'download', 'Atualizações'], ['/chamados', 'lifebuoy', 'Chamados', 'chamados'], ['/sinais', 'signal', 'Sinais dos equipamentos']] },
   { t: 'Financeiro', items: [['/cobrancas', 'money', 'Cobranças'], ['/historico', 'chat', 'Histórico de contatos']] },
   { t: 'Marketing', items: [['/marketing', 'megaphone', 'Visão geral'], ['/marketing/posts', 'image', 'Posts'], ['/marketing/calendario', 'calendar', 'Calendário'], ['/marketing/campanhas', 'star', 'Campanhas'], ['/depoimentos', 'sparkles', 'Depoimentos do site'], ['/marketing/integracoes', 'plug', 'Integrações e IAs']] },
-  { t: 'Sistema', items: [['/arquivos', 'folder', 'Arquivos'], ['/produtos', 'box', 'Produtos'], ['/equipe', 'user', 'Equipe', null, 'admin'], ['/marketing/tarefas', 'clock', 'Robôs e tarefas', null, 'admin'], ['/atividade', 'activity', 'Atividade', null, 'admin'], ['/api', 'code', 'API dos equipamentos'], ['/configuracoes', 'settings', 'Configurações']] },
+  { t: 'Sistema', items: [['/arquivos', 'folder', 'Arquivos'], ['/produtos', 'box', 'Produtos'], ['/equipe', 'user', 'Equipe', null, 'admin'], ['/marketing/tarefas', 'clock', 'Robôs e tarefas', null, 'admin'], ['/atividade', 'activity', 'Atividade', null, 'admin'], ['/api', 'code', 'API dos equipamentos'], ['/configuracoes', 'settings', 'Configurações'], ['/ajuda', 'help', 'Ajuda']] },
 ];
+
+// Ajuda: abre o manual já na parte que explica a tela atual
+const AJUDA_TELA = {
+  '': 'inicio', clientes: 'clientes', funil: 'funil', agenda: 'agenda', relatorios: 'relatorios', instalacoes: 'instalacoes', licencas: 'licencas',
+  atualizacoes: 'atualizacoes', chamados: 'chamados', sinais: 'sinais', cobrancas: 'cobrancas', historico: 'contatos', produtos: 'produtos',
+  arquivos: 'arquivos', equipe: 'equipe', atividade: 'atividade', api: 'api', depoimentos: 'depoimentos', marketing: 'mkt-visao',
+  'marketing/posts': 'post-editor', 'marketing/calendario': 'calendario', 'marketing/campanhas': 'campanhas', 'marketing/tarefas': 'robos', 'marketing/integracoes': 'integracoes',
+};
+const AJUDA_ABA = {
+  configuracoes: { conta: 'cfg-conta', seguranca: 'cfg-seguranca', alertas: 'alertas', empresa: 'cfg-empresa', chamados: 'cfg-chamados', asaas: 'asaas', backup: 'cfg-backup', aparencia: 'cfg-aparencia' },
+  'marketing/integracoes': { ia: 'ias', redes: 'redes', telegram: 'telegram-robo', prefs: 'prefs-mkt', robos: 'robos' },
+};
+function ajudaLink() {
+  const partes = store.route.path.split('/').filter(Boolean);
+  const dois = partes.slice(0, 2).join('/');
+  const chave = AJUDA_TELA[dois] || AJUDA_ABA[dois] ? dois : (partes[0] || '');
+  const aba = store.route.query.aba;
+  const ancora = (AJUDA_ABA[chave] && AJUDA_ABA[chave][aba || (chave === 'configuracoes' ? 'conta' : 'ia')]) || AJUDA_TELA[chave] || (chave === 'configuracoes' ? 'configuracoes' : '');
+  if (partes[0] === 'chamados' && partes[1]) return '/ajuda#conversa';
+  if (partes[0] === 'cobrancas' && partes[1] && store.asaas?.ativo) return '/ajuda#asaas';
+  return '/ajuda' + (ancora ? '#' + ancora : '');
+}
 
 function ativo(href) {
   const p = store.route.path;
@@ -78,7 +100,7 @@ const Layout = defineComponent({
         h('div', { class: 'drawer-bg' + (store.menuAberto ? ' open' : ''), onClick: () => { store.menuAberto = false; } }),
         h('aside', { class: 'side' + (store.menuAberto ? ' open' : '') }, [
           h('a', { class: 'brand', href: '/' }, [h('img', { src: '/img/logo.png', alt: 'Neon Sistemas' })]),
-          h('nav', { class: 'nav' }, MENU.map((g) => [h('h6', null, g.t), ...g.items.filter((it) => it[4] !== 'admin' || can.admin()).map(([href, ic, label, cnt]) => h('a', { href, class: ativo(href) ? 'on' : '' }, [h(Icon, { n: ic }), label, cnt && store.contadores[cnt] ? h('span', { class: 'count' }, store.contadores[cnt]) : null]))])),
+          h('nav', { class: 'nav' }, MENU.map((g) => [h('h6', null, g.t), ...g.items.filter((it) => it[4] !== 'admin' || can.admin()).map(([href, ic, label, cnt]) => h('a', { href: href === '/ajuda' ? ajudaLink() : href, target: href === '/ajuda' ? '_blank' : null, rel: href === '/ajuda' ? 'noopener' : null, class: ativo(href) ? 'on' : '' }, [h(Icon, { n: ic }), label, cnt && store.contadores[cnt] ? h('span', { class: 'count' }, store.contadores[cnt]) : null]))])),
           h('div', { class: 'side-foot' }, h('div', { class: 'me', onClick: () => go('/configuracoes') }, [h('div', { class: 'avatar' }, fmt.initials(u.nome)), h('div', { class: 'grow' }, [h('b', null, u.nome), h('span', null, optOf(ent('usuarios').fields.funcao, u.funcao)?.label)]), h('button', { class: 'btn ghost sm icon', title: 'Sair', onClick: (e) => { e.stopPropagation(); sair(); } }, h(Icon, { n: 'logout', s: 16 }))])),
         ]),
         h('div', { class: 'main' }, [
@@ -88,6 +110,7 @@ const Layout = defineComponent({
             h('div', { class: window.innerWidth <= 980 && !buscaMobile.value ? 'search collapsed' : 'grow', style: { maxWidth: '520px' } }, h(BuscaGlobal)),
             h('div', { class: 'top-actions' }, [
               window.innerWidth <= 980 ? h('button', { class: 'icon-btn', onClick: () => { buscaMobile.value = !buscaMobile.value; } }, h(Icon, { n: buscaMobile.value ? 'x' : 'search' })) : null,
+              h('a', { class: 'icon-btn', href: ajudaLink(), target: '_blank', rel: 'noopener', title: 'Ajuda: abre o manual nesta tela', 'aria-label': 'Ajuda' }, h(Icon, { n: 'help' })),
               h('button', { class: 'icon-btn', title: 'Tema', onClick: () => setTema(store.tema === 'escuro' ? 'claro' : 'escuro') }, h(Icon, { n: store.tema === 'escuro' ? 'sun' : 'moon' })),
               h('a', { class: 'icon-btn', href: '/agenda', title: 'Lembretes' }, [h(Icon, { n: 'bell' }), store.contadores.lembretes ? h('span', { class: 'dot' }) : null]),
             ]),

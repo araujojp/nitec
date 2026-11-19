@@ -12,7 +12,8 @@ const LoginPage = defineComponent({
         if (r.precisa2fa) { precisa2fa.value = true; busy.value = false; return; }
         localStorage.setItem('neon_email', f.email);
         store.user = r.user; await carregarMeta(); carregarAsaas();
-        go(store.route.query.voltar || '/', true);
+        const voltar = store.route.query.voltar || '/';
+        if (voltar.startsWith('/ajuda')) location.href = voltar; else go(voltar, true);
       } catch (e) { msg.value = e.message; }
       busy.value = false;
     }

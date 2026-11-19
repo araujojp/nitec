@@ -144,3 +144,15 @@ test('interface e rotas públicas', async () => {
   assert.equal((await anon.get('/publico/novidades.json')).status, 200);
   assert.equal((await anon.get('/publico/depoimentos.json')).status, 200);
 });
+
+test('ajuda: só para quem está logado, com o manual completo', async () => {
+  const anon = new Client();
+  const r = await fetch(require('./helpers').BASE + '/ajuda', { redirect: 'manual' });
+  assert.equal(r.status, 302); assert.match(r.headers.get('location'), /\/entrar\?voltar=%2Fajuda/);
+  const a = await admin.get('/ajuda');
+  assert.equal(a.status, 200);
+  for (const t of ['Manual do Neon Gestão', 'id="asaas"', 'id="alertas"', 'id="telegram-robo"', '/ajuda/ajuda.js']) assert.ok(String(a.body).includes(t), t);
+  assert.equal((await admin.get('/ajuda/ajuda.js')).status, 200);
+  assert.equal((await admin.get('/ajuda/tema.js')).status, 200);
+  assert.ok(anon);
+});

@@ -24,7 +24,7 @@ node -e "const b=require(process.argv[1]); if(!b.tabelas||!b.tabelas.clientes) p
 
 echo "== 3/5 pacote"
 ZIP=app-$VERSAO.zip; rm -f "/tmp/$ZIP"
-zip -qr "/tmp/$ZIP" server.js server public package.json package-lock.json -x '*.DS_Store'
+zip -qr "/tmp/$ZIP" server.js server public ajuda package.json package-lock.json -x '*.DS_Store'
 SIZE=$(wc -c < "/tmp/$ZIP")
 
 echo "== 4/5 envio e build ($DOM, v$VERSAO)"
