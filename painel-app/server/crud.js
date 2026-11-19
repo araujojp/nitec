@@ -149,6 +149,9 @@ const hooks = {
         if (inst && cli && inst.cliente_id !== cli) throw new HttpError(400, 'Essa instalação é de outro cliente.');
       }
     },
+    async after(row, old) {
+      require('./alertas').aoSalvarChamado(row, old); // não espera: os avisos saem em segundo plano
+    },
   },
   cobrancas: {
     async before(data, old) {
@@ -211,7 +214,7 @@ const hooks = {
 
 function stripSecrets(name, row) {
   if (!row) return row;
-  if (name === 'usuarios') { delete row.senha_hash; delete row.totp_secret; delete row.sessao_versao; }
+  if (name === 'usuarios') { delete row.senha_hash; delete row.totp_secret; delete row.sessao_versao; delete row.telegram_codigo; delete row.alertas; }
   if (name === 'instalacoes') { delete row.token_hash; }
   for (const k of ['anexos', 'detalhes', 'redes', 'textos', 'resultado', 'parametros', 'arte']) {
     if (typeof row[k] === 'string') { try { row[k] = JSON.parse(row[k]); } catch { /* mantém */ } }

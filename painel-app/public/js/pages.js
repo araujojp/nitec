@@ -492,7 +492,7 @@ const ConfigPage = defineComponent({
     async function ativar2fa() { try { await post('auth/2fa/ativar', { codigo: codigo.value }); store.user.totp_ativo = true; tfa.value = null; toast('Verificação em duas etapas ativada! 🔐'); } catch (e) { erro(e); } }
     async function desativar2fa() { try { await post('auth/2fa/desativar', { senha: off.value }); store.user.totp_ativo = false; off.value = ''; toast('2FA desativado.'); } catch (e) { erro(e); } }
     const inp = (obj, k, label, extra = {}) => h('div', { class: 'field' + (extra.full ? ' full' : '') }, [h('label', null, label), h(extra.area ? 'textarea' : 'input', { value: obj[k] ?? '', type: extra.type || 'text', rows: extra.area ? 4 : null, onInput: (e) => { obj[k] = e.target.value; } }), extra.help ? h('div', { class: 'help' }, extra.help) : null]);
-    const abas = [['conta', 'Minha conta'], ['seguranca', 'Senha e 2FA'], ...(can.admin() ? [['empresa', 'Empresa'], ['backup', 'Backup']] : []), ['aparencia', 'Aparência']];
+    const abas = [['conta', 'Minha conta'], ['seguranca', 'Senha e 2FA'], ['alertas', 'Alertas'], ...(can.admin() ? [['empresa', 'Empresa'], ['backup', 'Backup']] : []), ['aparencia', 'Aparência']];
     return () => h('div', null, [
       h('div', { class: 'page-head' }, [h('div', null, [h('h1', null, 'Configurações')])]),
       h('div', { class: 'tabs' }, abas.map(([k, l]) => h('button', { class: tab.value === k ? 'on' : '', onClick: () => { tab.value = k; setQuery({ aba: k }); } }, l))),
@@ -504,6 +504,7 @@ const ConfigPage = defineComponent({
             : tfa.value ? [h('p', { class: 'muted' }, '1. Abra o Google Authenticator (ou similar) e leia o QR Code. 2. Digite o código de 6 dígitos.'), h('img', { src: tfa.value.qr, style: { width: '200px', borderRadius: '12px', background: '#fff', padding: '8px' } }), h('div', { class: 'tiny muted mono' }, 'Chave manual: ' + tfa.value.segredo), h('div', { class: 'field' }, [h('label', null, 'Código'), h('input', { inputmode: 'numeric', maxlength: 6, value: codigo.value, onInput: (e) => { codigo.value = e.target.value; } })]), h('button', { class: 'btn primary', onClick: ativar2fa }, 'Ativar')]
               : [h('p', { class: 'muted' }, 'Protege sua conta mesmo que alguém descubra sua senha.'), h('button', { class: 'btn primary', onClick: iniciar2fa }, [h(Icon, { n: 'shield', s: 16 }), 'Ativar 2FA'])]]),
       ]) : null,
+      tab.value === 'alertas' ? h(AlertasMeus) : null,
       tab.value === 'empresa' ? h('div', { class: 'card', style: { maxWidth: '820px' } }, [h('div', { class: 'form' }, [
         inp(cfg, 'empresa_nome', 'Nome da empresa'), inp(cfg, 'empresa_cnpj', 'CNPJ'), inp(cfg, 'empresa_whatsapp', 'WhatsApp'), inp(cfg, 'empresa_email', 'E-mail'),
         inp(cfg, 'empresa_pix', 'Chave Pix (vai junto na mensagem de cobrança)', { full: true }),

@@ -104,6 +104,9 @@ async function handleUpdate(update, deps) {
   if (!msg) return;
   const chatId = String(msg.chat.id);
   const reply = (text, extra = {}) => api('sendMessage', { chat_id: chatId, text, parse_mode: 'HTML', disable_web_page_preview: true, ...extra }, cfg.token).catch(() => {});
+  // Vínculo dos alertas da equipe (/start v_CODIGO), aceito de qualquer chat
+  const vinculo = await require('./alertas').vincularTelegram(msg.text, chatId);
+  if (vinculo) return reply(vinculo);
   if (!cfg.chats.includes(chatId)) {
     return reply(`🔒 Este chat ainda não está autorizado.\nSeu ID é <code>${chatId}</code>.\nCole esse número em <b>Marketing → Integrações → Telegram → Chats autorizados</b> no painel.`);
   }

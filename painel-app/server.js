@@ -13,6 +13,7 @@ const files = require('./server/files');
 const api = require('./server/api');
 const device = require('./server/device');
 const marketing = require('./server/marketing');
+const alertas = require('./server/alertas');
 const { wrap } = require('./server/util');
 
 const app = express();
@@ -51,6 +52,7 @@ app.use(auth.loadUser);
 app.use('/api/auth', auth.router);
 app.use('/api/arquivos', files.router);
 app.use('/api/marketing', marketing.router);
+app.use('/api/alertas', alertas.router);
 app.use('/api', api.router);
 app.use('/api', crud.router);
 
@@ -68,7 +70,7 @@ app.get('/assets/:id', wrap(async (req, res) => {
 
 // Interface (SPA)
 const pub = path.join(__dirname, 'public');
-app.use(express.static(pub, { index: false, maxAge: '1h', setHeaders: (res, p) => { if (p.endsWith('.html')) res.setHeader('Cache-Control', 'no-cache'); } }));
+app.use(express.static(pub, { index: false, maxAge: '1h', setHeaders: (res, p) => { if (p.endsWith('.html') || p.endsWith('sw.js')) res.setHeader('Cache-Control', 'no-cache'); } }));
 app.use('/api', (req, res) => res.status(404).json({ erro: 'Rota não encontrada.' }));
 app.get(/^\/(?!api\/|assets\/|items\/|publico\/|novidades).*/, (req, res) => {
   res.setHeader('Cache-Control', 'no-cache');
@@ -103,10 +105,12 @@ const PORT = process.env.PORT || 3000;
 (async () => {
   try {
     await migrate();
+    await alertas.migrate();
     await seed();
     await auth.ensureAdmin();
     await files.ensureDirs();
     marketing.startScheduler();
+    alertas.iniciar();
   } catch (e) {
     console.error('Falha ao preparar o banco:', e.message);
   }
