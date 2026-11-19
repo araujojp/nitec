@@ -12,41 +12,45 @@ router.use(requireUser);
 // ---------------- Dashboard ----------------
 router.get('/dashboard', wrap(async (req, res) => {
   const hoje = todaySql();
-  const n = async (sql, p = []) => Number((await one(sql, p)).n || 0);
-  const kpis = {
-    clientes_ativos: await n("SELECT COUNT(*) n FROM clientes WHERE status='ativo'"),
-    leads: await n("SELECT COUNT(*) n FROM clientes WHERE status IN ('lead','negociacao')"),
-    instalacoes_ativas: await n("SELECT COUNT(*) n FROM instalacoes WHERE status='ativa'"),
-    online: await n("SELECT COUNT(*) n FROM instalacoes WHERE status='ativa' AND ultimo_contato > UTC_TIMESTAMP() - INTERVAL 2 HOUR"),
-    chamados_abertos: await n("SELECT COUNT(*) n FROM chamados WHERE status IN ('aberto','andamento','aguardando')"),
-    chamados_urgentes: await n("SELECT COUNT(*) n FROM chamados WHERE status IN ('aberto','andamento','aguardando') AND prioridade IN ('alta','urgente')"),
-    receita_mensal: Number((await one("SELECT COALESCE(SUM(valor_mensal),0) n FROM licencas WHERE status='ativa'")).n),
-    a_receber: Number((await one("SELECT COALESCE(SUM(valor),0) n FROM cobrancas WHERE status IN ('pendente','atrasado')")).n),
-    atrasado: Number((await one("SELECT COALESCE(SUM(valor),0) n FROM cobrancas WHERE status='atrasado'")).n),
-    recebido_mes: Number((await one("SELECT COALESCE(SUM(valor),0) n FROM cobrancas WHERE status='pago' AND DATE_FORMAT(pago_em,'%Y-%m')=?", [hoje.slice(0, 7)])).n),
-    licencas_vencendo: await n("SELECT COUNT(*) n FROM licencas WHERE status='ativa' AND vencimento BETWEEN ? AND DATE_ADD(?, INTERVAL 30 DAY)", [hoje, hoje]),
-    lembretes_hoje: await n('SELECT COUNT(*) n FROM contatos WHERE concluido=0 AND lembrete IS NOT NULL AND lembrete <= ?', [hoje + ' 23:59:59']),
-  };
-  const chamados = await q(`SELECT c.id, c.titulo, c.prioridade, c.status, c.created_at, cl.nome_fantasia cliente
+  // Indicadores numa única consulta; listas em paralelo
+  const kpiRow = one(`SELECT
+    (SELECT COUNT(*) FROM clientes WHERE status='ativo') clientes_ativos,
+    (SELECT COUNT(*) FROM clientes WHERE status IN ('lead','negociacao')) leads,
+    (SELECT COUNT(*) FROM instalacoes WHERE status='ativa') instalacoes_ativas,
+    (SELECT COUNT(*) FROM instalacoes WHERE status='ativa' AND ultimo_contato > UTC_TIMESTAMP() - INTERVAL 2 HOUR) online,
+    (SELECT COUNT(*) FROM chamados WHERE status IN ('aberto','andamento','aguardando')) chamados_abertos,
+    (SELECT COUNT(*) FROM chamados WHERE status IN ('aberto','andamento','aguardando') AND prioridade IN ('alta','urgente')) chamados_urgentes,
+    (SELECT COALESCE(SUM(valor_mensal),0) FROM licencas WHERE status='ativa') receita_mensal,
+    (SELECT COALESCE(SUM(valor),0) FROM cobrancas WHERE status IN ('pendente','atrasado')) a_receber,
+    (SELECT COALESCE(SUM(valor),0) FROM cobrancas WHERE status='atrasado') atrasado,
+    (SELECT COALESCE(SUM(valor),0) FROM cobrancas WHERE status='pago' AND DATE_FORMAT(pago_em,'%Y-%m')=?) recebido_mes,
+    (SELECT COUNT(*) FROM licencas WHERE status='ativa' AND vencimento BETWEEN ? AND DATE_ADD(?, INTERVAL 30 DAY)) licencas_vencendo,
+    (SELECT COUNT(*) FROM contatos WHERE concluido=0 AND lembrete IS NOT NULL AND lembrete <= ?) lembretes_hoje`,
+  [hoje.slice(0, 7), hoje, hoje, hoje + ' 23:59:59']);
+  const [kr, chamados, sinais, vencendo, atrasadas, novos, receita, funil, lembretes] = await Promise.all([
+    kpiRow,
+    q(`SELECT c.id, c.titulo, c.prioridade, c.status, c.created_at, cl.nome_fantasia cliente
     FROM chamados c JOIN clientes cl ON cl.id=c.cliente_id WHERE c.status IN ('aberto','andamento','aguardando')
-    ORDER BY FIELD(c.prioridade,'urgente','alta','media','baixa'), c.created_at DESC LIMIT 8`);
-  const sinais = await q(`SELECT i.id, i.codigo, i.versao_instalada, i.ultimo_contato, cl.nome_fantasia cliente,
+    ORDER BY FIELD(c.prioridade,'urgente','alta','media','baixa'), c.created_at DESC LIMIT 8`),
+    q(`SELECT i.id, i.codigo, i.versao_instalada, i.ultimo_contato, cl.nome_fantasia cliente,
     (i.ultimo_contato > UTC_TIMESTAMP() - INTERVAL 2 HOUR) online,
     (SELECT evento FROM checkins WHERE instalacao_id=i.id ORDER BY id DESC LIMIT 1) evento
-    FROM instalacoes i JOIN clientes cl ON cl.id=i.cliente_id WHERE i.ultimo_contato IS NOT NULL ORDER BY i.ultimo_contato DESC LIMIT 8`);
-  const vencendo = await q(`SELECT l.id, l.chave, l.vencimento, l.valor_mensal, i.codigo, cl.nome_fantasia cliente
+    FROM instalacoes i JOIN clientes cl ON cl.id=i.cliente_id WHERE i.ultimo_contato IS NOT NULL ORDER BY i.ultimo_contato DESC LIMIT 8`),
+    q(`SELECT l.id, l.chave, l.vencimento, l.valor_mensal, i.codigo, cl.nome_fantasia cliente
     FROM licencas l JOIN instalacoes i ON i.id=l.instalacao_id JOIN clientes cl ON cl.id=i.cliente_id
-    WHERE l.status='ativa' AND l.vencimento <= DATE_ADD(?, INTERVAL 30 DAY) ORDER BY l.vencimento LIMIT 8`, [hoje]);
-  const atrasadas = await q(`SELECT cb.id, cb.competencia, cb.valor, cb.vencimento, cl.nome_fantasia cliente, cl.whatsapp
-    FROM cobrancas cb JOIN clientes cl ON cl.id=cb.cliente_id WHERE cb.status='atrasado' ORDER BY cb.vencimento LIMIT 8`);
-  const novos = await q(`SELECT DATE_FORMAT(created_at,'%Y-%m') mes, COUNT(*) n FROM clientes
-    WHERE created_at >= DATE_SUB(DATE_FORMAT(UTC_TIMESTAMP(),'%Y-%m-01'), INTERVAL 11 MONTH) GROUP BY mes`);
-  const receita = await q(`SELECT DATE_FORMAT(pago_em,'%Y-%m') mes, SUM(valor) total FROM cobrancas
-    WHERE status='pago' AND pago_em >= DATE_SUB(DATE_FORMAT(?, '%Y-%m-01'), INTERVAL 11 MONTH) GROUP BY mes`, [hoje]);
-  const funil = await q("SELECT etapa_funil etapa, COUNT(*) n, COALESCE(SUM(valor_estimado),0) valor FROM clientes WHERE status IN ('lead','negociacao') GROUP BY etapa_funil");
-  const lembretes = await q(`SELECT ct.id, ct.proximo_passo, ct.resumo, ct.lembrete, ct.cliente_id, cl.nome_fantasia cliente, cl.whatsapp
+    WHERE l.status='ativa' AND l.vencimento <= DATE_ADD(?, INTERVAL 30 DAY) ORDER BY l.vencimento LIMIT 8`, [hoje]),
+    q(`SELECT cb.id, cb.competencia, cb.valor, cb.vencimento, cl.nome_fantasia cliente, cl.whatsapp
+    FROM cobrancas cb JOIN clientes cl ON cl.id=cb.cliente_id WHERE cb.status='atrasado' ORDER BY cb.vencimento LIMIT 8`),
+    q(`SELECT DATE_FORMAT(created_at,'%Y-%m') mes, COUNT(*) n FROM clientes
+    WHERE created_at >= DATE_SUB(DATE_FORMAT(UTC_TIMESTAMP(),'%Y-%m-01'), INTERVAL 11 MONTH) GROUP BY mes`),
+    q(`SELECT DATE_FORMAT(pago_em,'%Y-%m') mes, SUM(valor) total FROM cobrancas
+    WHERE status='pago' AND pago_em >= DATE_SUB(DATE_FORMAT(?, '%Y-%m-01'), INTERVAL 11 MONTH) GROUP BY mes`, [hoje]),
+    q("SELECT etapa_funil etapa, COUNT(*) n, COALESCE(SUM(valor_estimado),0) valor FROM clientes WHERE status IN ('lead','negociacao') GROUP BY etapa_funil"),
+    q(`SELECT ct.id, ct.proximo_passo, ct.resumo, ct.lembrete, ct.cliente_id, cl.nome_fantasia cliente, cl.whatsapp
     FROM contatos ct JOIN clientes cl ON cl.id=ct.cliente_id WHERE ct.concluido=0 AND ct.lembrete IS NOT NULL
-    ORDER BY ct.lembrete LIMIT 8`);
+    ORDER BY ct.lembrete LIMIT 8`),
+  ]);
+  const kpis = Object.fromEntries(Object.entries(kr).map(([k, v]) => [k, Number(v || 0)]));
   const meses = [];
   const base = new Date(hoje + 'T12:00:00Z');
   for (let i = 11; i >= 0; i--) { const d = new Date(Date.UTC(base.getUTCFullYear(), base.getUTCMonth() - i, 1)); meses.push(d.toISOString().slice(0, 7)); }
@@ -222,9 +226,11 @@ router.post('/config', requireAdmin, wrap(async (req, res) => {
 }));
 
 // Backup completo em JSON (sem senhas nem tokens)
+const BACKUP_EXTRA = []; // tabelas novas se registram aqui
+
 router.get('/backup', requireAdmin, wrap(async (req, res) => {
   const out = { gerado_em: new Date().toISOString(), sistema: 'Neon Gestão', tabelas: {} };
-  for (const t of ['produtos', 'clientes', 'instalacoes', 'licencas', 'versoes', 'chamados', 'cobrancas', 'contatos', 'arquivos', 'configuracoes']) {
+  for (const t of ['produtos', 'clientes', 'instalacoes', 'licencas', 'versoes', 'chamados', 'cobrancas', 'contatos', 'arquivos', 'configuracoes', 'campanhas', 'posts', 'depoimentos', 'tarefas', ...BACKUP_EXTRA]) {
     out.tabelas[t] = await q(`SELECT * FROM ${t}`);
   }
   out.tabelas.instalacoes.forEach((r) => delete r.token_hash);
@@ -238,4 +244,4 @@ router.post('/automacoes/rodar', requireAdmin, wrap(async (req, res) => {
   res.json({ data: await runAutomations() });
 }));
 
-module.exports = { router };
+module.exports = { router, BACKUP_EXTRA };

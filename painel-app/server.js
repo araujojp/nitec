@@ -38,7 +38,8 @@ app.use(compression({ filter: (req, res) => !req.path.startsWith('/assets/') && 
 app.use(cookieParser());
 app.use(express.json({ limit: '25mb' }));
 
-app.get('/saude', (req, res) => res.json({ ok: true, sistema: 'Neon Gestão' }));
+const VERSAO = require('./package.json').version;
+app.get('/saude', (req, res) => res.json({ ok: true, sistema: 'Neon Gestão', versao: VERSAO }));
 
 // API dos equipamentos (compatível com o painel antigo + rotas novas)
 app.use(device.compat);

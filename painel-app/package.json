@@ -1,6 +1,6 @@
 {
   "name": "neon-gestao",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "description": "Neon Gestão — painel de gestão da Neon Sistemas",
   "main": "server.js",
@@ -11,7 +11,8 @@
   "scripts": {
     "start": "node server.js",
     "build": "node -e \"console.log('ok')\"",
-    "dev": "node --watch server.js"
+    "dev": "node --watch server.js",
+    "test": "node --test --test-concurrency=1 test/*.test.js"
   },
   "dependencies": {
     "@napi-rs/canvas": "^1.1.1",
