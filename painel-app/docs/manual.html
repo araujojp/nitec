@@ -1,0 +1,1320 @@
+<title>Manual do Neon Gestão</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: sumário fixo à esquerda + coluna de leitura; no celular o sumário vira um bloco recolhível no topo. */
+:root {
+  --bg: #f6f7fa; --surface: #ffffff; --surface2: #eef1f6; --fg: #182033; --muted: #59627a; --line: #dde2ec;
+  --accent: #e8650c; --accent-soft: #fff1e6; --navy: #13203f;
+  --ok: #157a3c; --ok-soft: #e7f6ec; --warn: #9a5a00; --warn-soft: #fff6dd; --info: #1d5fb8; --info-soft: #e8f0fc;
+  --code-bg: #f1f3f8;
+  --f-display: "Space Grotesk", "Segoe UI", system-ui, sans-serif;
+  --f-body: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0b1020; --surface: #121a2e; --surface2: #18223a; --fg: #e3e8f4; --muted: #9aa6c2; --line: #263252;
+  --accent: #ff8a3d; --accent-soft: #2a1c12; --navy: #c9d6f5;
+  --ok: #5fd08a; --ok-soft: #10261a; --warn: #f2c25c; --warn-soft: #2a2210; --info: #7fb2ff; --info-soft: #121f38;
+  --code-bg: #0f1628; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #0b1020; --surface: #121a2e; --surface2: #18223a; --fg: #e3e8f4; --muted: #9aa6c2; --line: #263252;
+  --accent: #ff8a3d; --accent-soft: #2a1c12; --navy: #c9d6f5;
+  --ok: #5fd08a; --ok-soft: #10261a; --warn: #f2c25c; --warn-soft: #2a2210; --info: #7fb2ff; --info-soft: #121f38;
+  --code-bg: #0f1628; color-scheme: dark; }
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 16px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { background: var(--bg); color: var(--fg); font: 15.5px/1.65 var(--f-body); margin: 0; }
+a { color: var(--accent); text-underline-offset: 2px; }
+a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+
+.wrap { display: grid; grid-template-columns: 290px minmax(0, 1fr); gap: 40px; max-width: 1280px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 28px 80px; }
+nav.toc { position: sticky; top: calc(16px + env(safe-area-inset-top, 0px)); align-self: start; max-height: calc(100vh - 32px); overflow-y: auto;
+  font-size: 13.5px; border-right: 1px solid var(--line); padding-right: 18px; }
+nav.toc .brand { font-family: var(--f-display); font-weight: 700; font-size: 17px; color: var(--fg); margin-bottom: 4px; }
+nav.toc .ver { color: var(--muted); font-size: 12px; margin-bottom: 14px; }
+nav.toc ol { list-style: none; margin: 0; padding: 0; }
+nav.toc > ol > li { margin-top: 12px; }
+nav.toc > ol > li > a { font-weight: 600; color: var(--fg); }
+nav.toc ol ol { margin: 4px 0 0 0; padding-left: 12px; border-left: 1px solid var(--line); }
+nav.toc ol ol a { color: var(--muted); display: block; padding: 2px 0; }
+nav.toc a { text-decoration: none; }
+nav.toc a:hover { color: var(--accent); }
+details.toc-m { display: none; }
+
+main { min-width: 0; max-width: 820px; }
+header.capa { padding: 8px 0 26px; border-bottom: 1px solid var(--line); margin-bottom: 8px; }
+.eyebrow { font: 600 12px/1.45 var(--f-body); letter-spacing: .12em; text-transform: uppercase; color: var(--accent); }
+h1 { font: 700 40px/1.1 var(--f-display); margin: 10px 0 12px; text-wrap: balance; letter-spacing: -.01em; }
+.lead { font-size: 17px; color: var(--muted); max-width: 64ch; margin: 0; }
+.meta-capa { display: flex; flex-wrap: wrap; gap: 10px 22px; margin-top: 18px; font-size: 13.5px; color: var(--muted); }
+.meta-capa b { color: var(--fg); font-weight: 600; }
+
+section.parte { padding-top: 34px; }
+h2 { font: 700 28px/1.2 var(--f-display); margin: 0 0 6px; text-wrap: balance; }
+h2 .n { color: var(--accent); margin-right: 8px; }
+.parte > .intro { color: var(--muted); margin: 0 0 8px; }
+h3 { font: 600 20px/1.3 var(--f-display); margin: 30px 0 8px; text-wrap: balance; padding-top: 6px; }
+h4 { font: 600 15.5px/1.4 var(--f-body); margin: 20px 0 6px; }
+p { margin: 8px 0; max-width: 72ch; }
+ul, ol { padding-left: 22px; margin: 8px 0; }
+li { margin: 4px 0; }
+li::marker { color: var(--muted); }
+b, strong { font-weight: 600; }
+
+.ui { font-weight: 600; background: var(--surface2); border: 1px solid var(--line); border-radius: 6px; padding: 0 6px; font-size: .94em; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+.cam { color: var(--fg); font-weight: 600; }
+code, kbd { font-family: var(--f-mono); font-size: .86em; background: var(--code-bg); border: 1px solid var(--line); border-radius: 5px; padding: 1px 5px; }
+kbd { box-shadow: inset 0 -1px 0 var(--line); }
+pre { font-family: var(--f-mono); font-size: 13px; line-height: 1.55; background: var(--code-bg); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; overflow-x: auto; margin: 10px 0; }
+pre code { background: none; border: 0; padding: 0; font-size: inherit; }
+
+ol.passos { list-style: none; counter-reset: p; padding-left: 0; }
+ol.passos > li { counter-increment: p; position: relative; padding-left: 38px; margin: 10px 0; }
+ol.passos > li::before { content: counter(p); position: absolute; left: 0; top: 1px; width: 26px; height: 26px; border-radius: 50%;
+  background: var(--accent-soft); color: var(--accent); font: 700 13px/26px var(--f-display); text-align: center; }
+
+.nota { border-radius: 10px; padding: 11px 14px 11px 14px; margin: 14px 0; border: 1px solid var(--line); background: var(--surface); }
+.nota > b:first-child { display: block; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 2px; }
+.nota.dica { background: var(--ok-soft); border-color: transparent; } .nota.dica > b:first-child { color: var(--ok); }
+.nota.atencao { background: var(--warn-soft); border-color: transparent; } .nota.atencao > b:first-child { color: var(--warn); }
+.nota.info { background: var(--info-soft); border-color: transparent; } .nota.info > b:first-child { color: var(--info); }
+.nota p { margin: 4px 0; }
+
+.tabela { overflow-x: auto; margin: 12px 0; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; vertical-align: top; padding: 9px 12px; border-bottom: 1px solid var(--line); }
+th { font-size: 12px; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); background: var(--surface2); font-weight: 600; white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+td:first-child { font-weight: 600; }
+td.c, th.c { text-align: center; }
+.sim { color: var(--ok); font-weight: 700; } .nao { color: var(--muted); }
+
+.mapa { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; margin: 14px 0; }
+.mapa div { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: 14px; }
+.mapa div b { display: block; font-family: var(--f-display); font-size: 15px; margin-bottom: 2px; }
+.mapa div span { color: var(--muted); }
+
+.fluxo { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 10px 0; font-size: 13.5px; }
+.fluxo span { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 3px 10px; font-weight: 600; }
+.fluxo i { font-style: normal; color: var(--muted); }
+
+hr { border: 0; border-top: 1px solid var(--line); margin: 30px 0 0; }
+footer { margin-top: 40px; color: var(--muted); font-size: 13px; }
+
+@media (max-width: 980px) {
+  .wrap { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  nav.toc { display: none; }
+  details.toc-m { display: block; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; margin: 16px 0 0; font-size: 14px; }
+  details.toc-m summary { cursor: pointer; font-weight: 600; }
+  details.toc-m ol { margin: 8px 0 0; }
+  h1 { font-size: 31px; }
+  h2 { font-size: 24px; }
+}
+@media print {
+  nav.toc, details.toc-m { display: none !important; }
+  .wrap { display: block; padding: 0; max-width: none; }
+  main { max-width: none; }
+  body { font-size: 11pt; background: #fff; color: #111; }
+  section.parte { break-before: page; padding-top: 0; }
+  h3, h4 { break-after: avoid; }
+  .tabela, .nota, pre, ol.passos > li { break-inside: avoid; }
+  a { color: inherit; text-decoration: none; }
+}
+</style>
+
+<div class="wrap">
+<nav class="toc" aria-label="Sumário">
+  <div class="brand">Neon Gestão</div>
+  <div class="ver">Manual completo · versão 1.5.1</div>
+  <ol id="toc-lista"></ol>
+</nav>
+
+<main>
+<header class="capa">
+  <div class="eyebrow">Neon Sistemas · Manual de uso e configuração</div>
+  <h1>Manual do Neon Gestão</h1>
+  <p class="lead">Tudo o que existe no painel, tela por tela: para que serve, como usar, como configurar e o que o sistema faz sozinho. Vale para os dois endereços, que são o mesmo sistema.</p>
+  <div class="meta-capa">
+    <span>Endereço principal: <b>painel.neonsistemas.com</b></span>
+    <span>Segundo endereço: <b>gestao.neonsistemas.com</b></span>
+    <span>Versão do sistema: <b>1.5.1</b> · novembro de 2026</span>
+  </div>
+  <details class="toc-m"><summary>Sumário</summary><ol id="toc-lista-m"></ol></details>
+</header>
+
+<!-- ============================================================ -->
+<section class="parte" id="visao-geral">
+<h2><span class="n">1</span>Visão geral</h2>
+<p class="intro">O que é o Neon Gestão, onde ele fica e quem pode usar.</p>
+
+<h3 id="o-que-e">O que é</h3>
+<p>O Neon Gestão é o sistema interno da Neon Sistemas. Num só lugar ele reúne:</p>
+<ul>
+  <li><b>Vendas:</b> clientes, leads, funil de vendas, agenda de retornos e histórico de contatos.</li>
+  <li><b>Operação:</b> produtos, instalações nos clientes, licenças e contratos, atualizações dos sistemas e os sinais enviados pelos equipamentos.</li>
+  <li><b>Suporte:</b> chamados, com prazo de atendimento (SLA), conversa e e-mails automáticos para o cliente.</li>
+  <li><b>Financeiro:</b> mensalidades geradas sozinhas, cobranças, cobrança pelo WhatsApp e boleto/Pix pelo Asaas com baixa automática.</li>
+  <li><b>Alertas:</b> avisos para a equipe por Telegram, e-mail e notificação no celular.</li>
+  <li><b>Marketing:</b> posts com IA ou com modelos prontos, campanhas, calendário, aprovação pelo Telegram, publicação nas redes sociais e no site, e robôs com horário.</li>
+  <li><b>Relatórios:</b> financeiro, inadimplência, entrada e saída de clientes e números do suporte.</li>
+  <li><b>Sistema:</b> arquivos (até 2 GB cada), equipe com verificação em duas etapas, registro de atividades, cópia de segurança e a API que os equipamentos usam.</li>
+</ul>
+
+<h3 id="enderecos">Os dois endereços</h3>
+<p><b>painel.neonsistemas.com</b> e <b>gestao.neonsistemas.com</b> abrem <b>o mesmo sistema</b>: mesmo banco de dados, mesmos arquivos, mesmos usuários e senhas. Tudo o que você faz em um aparece no outro na hora.</p>
+<ul>
+  <li>Use o <b>painel.neonsistemas.com</b> no dia a dia. É o endereço principal.</li>
+  <li>O <b>gestao.neonsistemas.com</b> serve de segundo acesso e de ambiente para testar versões novas antes de liberar no principal.</li>
+  <li>Os links que vão nos alertas e nos e-mails apontam para o endereço que enviou o aviso. Por isso, configure as integrações (Telegram, Asaas) estando no endereço principal.</li>
+</ul>
+
+<h3 id="celular">Usar no celular (como aplicativo)</h3>
+<p>O painel funciona no navegador do computador e do celular. No celular, dá para instalar como aplicativo, com ícone na tela inicial:</p>
+<ul>
+  <li><b>Android (Chrome):</b> abra o endereço, toque no menu <span class="ui">⋮</span> e em <span class="ui">Instalar aplicativo</span> (ou <span class="ui">Adicionar à tela inicial</span>).</li>
+  <li><b>iPhone (Safari):</b> abra o endereço, toque em <span class="ui">Compartilhar</span> e em <span class="ui">Adicionar à Tela de Início</span>. No iPhone, as notificações só funcionam quando o painel é aberto por esse ícone.</li>
+</ul>
+
+<h3 id="perfis">Perfis de acesso</h3>
+<p>Cada pessoa da equipe tem uma função. A função decide o que ela pode fazer:</p>
+<div class="tabela"><table>
+<thead><tr><th>O que pode fazer</th><th class="c">Administrador</th><th class="c">Equipe</th><th class="c">Só leitura</th></tr></thead>
+<tbody>
+<tr><td>Ver todas as telas e registros</td><td class="c sim">Sim</td><td class="c sim">Sim</td><td class="c sim">Sim</td></tr>
+<tr><td>Cadastrar e editar (clientes, chamados, cobranças…)</td><td class="c sim">Sim</td><td class="c sim">Sim</td><td class="c nao">Não</td></tr>
+<tr><td>Importar planilhas, comentar em chamados, gerar boleto/Pix</td><td class="c sim">Sim</td><td class="c sim">Sim</td><td class="c nao">Não</td></tr>
+<tr><td>Apagar registros e arquivos</td><td class="c sim">Sim</td><td class="c nao">Não</td><td class="c nao">Não</td></tr>
+<tr><td>Gerenciar a equipe (criar usuários, trocar funções)</td><td class="c sim">Sim</td><td class="c nao">Não</td><td class="c nao">Não</td></tr>
+<tr><td>Configurações da empresa, Chamados, Asaas, Backup, regras dos alertas</td><td class="c sim">Sim</td><td class="c nao">Não</td><td class="c nao">Não</td></tr>
+<tr><td>Integrações do Marketing e Robôs e tarefas</td><td class="c sim">Sim</td><td class="c nao">Não</td><td class="c nao">Não</td></tr>
+<tr><td>Ver o Registro de atividades</td><td class="c sim">Sim</td><td class="c nao">Não</td><td class="c nao">Não</td></tr>
+<tr><td>Escolher os próprios alertas, trocar a própria senha, ativar 2FA</td><td class="c sim">Sim</td><td class="c sim">Sim</td><td class="c sim">Sim</td></tr>
+</tbody></table></div>
+<div class="nota info"><b>Regra de segurança</b><p>O sistema exige pelo menos um administrador ativo: não deixa remover a função de administrador nem desativar o último. Ninguém consegue apagar o próprio usuário.</p></div>
+</section>
+
+<!-- ============================================================ -->
+<section class="parte" id="primeira-configuracao">
+<h2><span class="n">2</span>Configuração inicial, na ordem certa</h2>
+<p class="intro">Uma lista para deixar tudo funcionando. Os itens marcados como opcionais podem ficar para depois.</p>
+<ol class="passos">
+  <li><b>Entre e proteja sua conta.</b> Troque a senha inicial e ative a verificação em duas etapas em <span class="ui">Configurações → Senha e 2FA</span>. Veja <a href="#cfg-seguranca">Senha e 2FA</a>.</li>
+  <li><b>Preencha os dados da empresa</b> em <span class="ui">Configurações → Empresa</span>: nome, CNPJ, WhatsApp, e-mail, chave Pix e a mensagem de cobrança. Veja <a href="#cfg-empresa">Empresa</a>.</li>
+  <li><b>Configure o e-mail de avisos</b> em <span class="ui">Configurações → Alertas → E-mail de avisos</span>: o remetente já vem como <code>contato@neonsistemas.com</code>, basta colocar a senha dessa caixa e enviar um teste. Veja <a href="#alertas-email">E-mail</a>.</li>
+  <li><b>Cadastre a equipe</b> em <span class="ui">Equipe</span>, com a função certa para cada pessoa. Veja <a href="#equipe">Equipe</a>.</li>
+  <li><b>Confira os produtos</b> em <span class="ui">Produtos</span>. Os três produtos da Neon já vêm cadastrados. Veja <a href="#produtos">Produtos</a>.</li>
+  <li><b>Cadastre (ou importe) os clientes</b> em <span class="ui">Clientes</span>. Para receber boleto/Pix, o cliente precisa de CNPJ ou CPF; para receber e-mails de chamados, de e-mail. Veja <a href="#clientes">Clientes</a> e <a href="#importar">Importar planilha</a>.</li>
+  <li><b>Cadastre as instalações e as licenças</b> de cada cliente. A licença gera a mensalidade sozinha todo mês. Veja <a href="#instalacoes">Instalações</a> e <a href="#licencas">Licenças</a>.</li>
+  <li><b>Gere o token de cada equipamento</b> na ficha da instalação e configure no equipamento. Veja <a href="#token">Token do equipamento</a>.</li>
+  <li><b>Ajuste os prazos de atendimento</b> em <span class="ui">Configurações → Chamados</span>. Veja <a href="#cfg-chamados">Chamados</a>.</li>
+  <li><b>Escolha seus alertas</b> em <span class="ui">Configurações → Alertas</span> e ative a notificação no celular. Peça para cada pessoa da equipe fazer o mesmo. Veja <a href="#alertas">Alertas</a>.</li>
+  <li><b>(Opcional) Telegram:</b> crie o robô e conecte em <span class="ui">Marketing → Integrações e IAs → Telegram</span>. Ele serve para os alertas e para aprovar posts. Veja <a href="#telegram-robo">Robô do Telegram</a>.</li>
+  <li><b>(Opcional) Asaas:</b> conecte primeiro a conta de testes, depois a de produção. Veja <a href="#asaas">Asaas</a>.</li>
+  <li><b>(Opcional) Marketing:</b> ligue as IAs, conecte as redes sociais e defina as preferências. Veja <a href="#marketing">Marketing</a>.</li>
+  <li><b>(Recomendado) Cron externo:</b> crie o cron no hPanel para os robôs nunca atrasarem. Veja <a href="#cron-externo">Manter os robôs acordados</a>.</li>
+</ol>
+</section>
+
+<!-- ============================================================ -->
+<section class="parte" id="basico">
+<h2><span class="n">3</span>O básico de todas as telas</h2>
+<p class="intro">Entrar, navegar, buscar e os recursos que se repetem em todas as listas e formulários.</p>
+
+<h3 id="entrar">Entrar no painel</h3>
+<ol class="passos">
+  <li>Abra <b>painel.neonsistemas.com</b>.</li>
+  <li>Digite seu <b>e-mail</b> e sua <b>senha</b> e toque em <span class="ui">Entrar</span>. O e-mail fica lembrado no aparelho para a próxima vez.</li>
+  <li>Se você ativou a verificação em duas etapas, o painel pede o <b>código de 6 dígitos</b> do aplicativo autenticador. Ao digitar o sexto número, ele entra sozinho.</li>
+</ol>
+<ul>
+  <li>A sessão dura <b>7 dias</b> no aparelho. Depois disso, o painel pede login de novo.</li>
+  <li>Depois de <b>20 tentativas erradas em 15 minutos</b>, o login fica bloqueado por alguns minutos.</li>
+  <li>Cada login, e cada tentativa que falhou, fica no <a href="#atividade">Registro de atividades</a>.</li>
+  <li>Para sair, use o botão de saída ao lado do seu nome, no rodapé do menu.</li>
+</ul>
+
+<h3 id="navegacao">A tela e o menu</h3>
+<p>O menu lateral é dividido em grupos:</p>
+<div class="mapa">
+  <div><b>Principal</b><span>Início, Clientes, Funil de vendas, Agenda, Relatórios</span></div>
+  <div><b>Operação</b><span>Instalações, Licenças e contratos, Atualizações, Chamados, Sinais dos equipamentos</span></div>
+  <div><b>Financeiro</b><span>Cobranças, Histórico de contatos</span></div>
+  <div><b>Marketing</b><span>Visão geral, Posts, Calendário, Campanhas, Depoimentos do site, Integrações e IAs</span></div>
+  <div><b>Sistema</b><span>Arquivos, Produtos, Equipe*, Robôs e tarefas*, Atividade*, API dos equipamentos, Configurações</span></div>
+</div>
+<p>Os itens com * aparecem só para administradores. Outros elementos da tela:</p>
+<ul>
+  <li><b>Contadores no menu:</b> <span class="ui">Chamados</span> mostra quantos estão em aberto; <span class="ui">Agenda</span> mostra os lembretes até hoje.</li>
+  <li><b>Seu nome</b> no rodapé do menu: um toque abre as Configurações; o ícone ao lado faz sair.</li>
+  <li><b>Sol/lua</b> no topo: alterna entre o tema escuro e o claro. A escolha fica salva no aparelho.</li>
+  <li><b>Sino</b> no topo: abre a Agenda. Um ponto no sino indica lembrete para hoje.</li>
+  <li><b>Botão laranja <span class="ui">+</span></b> no canto: cria algo novo de acordo com a tela. Numa lista, cria um registro daquele tipo; no Marketing, um post novo; nas outras telas, um cliente novo.</li>
+  <li><b>No celular:</b> o menu abre pelo ícone <span class="ui">☰</span>. Embaixo fica uma barra fixa com Início, Clientes, Chamados, Marketing e Mais (que abre o menu completo).</li>
+</ul>
+
+<h3 id="busca-global">Busca global</h3>
+<p>A caixa <span class="ui">Buscar clientes, instalações, chamados…</span> no topo procura em todo o sistema a partir de 2 letras:</p>
+<ul>
+  <li><b>Clientes:</b> nome fantasia, razão social, CNPJ/CPF, pessoa de contato, WhatsApp.</li>
+  <li><b>Instalações:</b> código e IP.</li>
+  <li><b>Licenças:</b> chave.</li>
+  <li><b>Chamados:</b> título ou número (digite <code>42</code> para achar o chamado #42).</li>
+  <li><b>Produtos:</b> nome e código.</li>
+</ul>
+<p>Atalho: <kbd>Ctrl</kbd> + <kbd>K</kbd> (ou <kbd>⌘</kbd> + <kbd>K</kbd> no Mac) leva direto à busca. Use as setas para escolher um resultado e <kbd>Enter</kbd> para abrir. No celular, a busca abre pela lupa do topo.</p>
+
+<h3 id="listas">Listas</h3>
+<p>As telas de cadastro (Clientes, Instalações, Licenças, Chamados, Cobranças etc.) abrem uma lista com os mesmos recursos:</p>
+<ul>
+  <li><b>Buscar na lista:</b> a caixa da lista procura nos campos principais daquele tipo (por exemplo, nos clientes: nome, razão social, CNPJ, contato, telefones, e-mail e cidade). Ao buscar números, telefones e CNPJs são encontrados mesmo digitados sem pontuação. Um número sozinho também acha pelo código (#).</li>
+  <li><b>Filtros rápidos:</b> os botões arredondados embaixo da busca (status, prioridade, tipo etc.) filtram com um toque. Toque de novo para tirar o filtro.</li>
+  <li><b>Ordenar:</b> toque no título de uma coluna para ordenar; toque de novo para inverter. A seta ↑/↓ mostra a ordem atual.</li>
+  <li><b>Páginas:</b> 50 registros por página, com setas no rodapé. O total aparece ao lado da busca.</li>
+  <li><b>Abrir:</b> toque numa linha para abrir a ficha. No celular, a lista vira cartões.</li>
+  <li><b><span class="ui">Novo</span>:</b> abre o formulário de cadastro.</li>
+  <li><b><span class="ui">Exportar</span>:</b> baixa a lista em planilha CSV (abre no Excel), respeitando a busca e os filtros que estiverem ligados. Valores aparecem com vírgula, e opções e relações com o nome legível.</li>
+  <li><b><span class="ui">Importar</span>:</b> cadastra vários registros de uma planilha. Veja a seção abaixo.</li>
+</ul>
+
+<h3 id="importar">Importar planilha (CSV)</h3>
+<ol class="passos">
+  <li>No Excel, monte a planilha com <b>uma linha de títulos</b> na primeira linha. Os títulos podem ser o nome do campo como aparece no formulário (ex.: <code>Nome fantasia</code>, <code>WhatsApp</code>, <code>Cidade</code>) ou o nome interno (ex.: <code>nome_fantasia</code>).</li>
+  <li>Salve como <b>CSV</b>. Tanto ponto e vírgula quanto vírgula funcionam como separador.</li>
+  <li>Na lista, toque em <span class="ui">Importar</span>, escolha o arquivo e confirme.</li>
+  <li>O painel mostra quantos registros entraram e, se houver erro, a linha e o motivo.</li>
+</ol>
+<ul>
+  <li>Até <b>5.000 linhas</b> por vez. Colunas com títulos desconhecidos são ignoradas.</li>
+  <li>Em campos de ligação (ex.: <code>Cliente</code> num chamado), você pode escrever o <b>nome</b> do cliente, que o painel acha o cadastro.</li>
+  <li>Em campos Sim/Não, valem <code>sim</code>, <code>s</code>, <code>1</code>, <code>x</code> ou <code>true</code>.</li>
+  <li>Os campos obrigatórios precisam estar preenchidos, senão a linha é recusada.</li>
+  <li>Dica: exporte primeiro uma lista para ver o formato exato das colunas.</li>
+  <li>Equipe, Sinais e telas somente leitura não aceitam importação.</li>
+</ul>
+
+<h3 id="formularios">Fichas e formulários</h3>
+<ul>
+  <li>Campos com <b>*</b> são obrigatórios.</li>
+  <li><b>Opções curtas</b> aparecem como botões; listas longas aparecem como caixa de seleção.</li>
+  <li><b>Campos de ligação</b> (Cliente, Instalação, Produto, Responsável…) têm busca: comece a digitar e escolha. O <span class="ui">✕</span> limpa. Em chamados, a lista de instalações mostra só as do cliente escolhido.</li>
+  <li><b>CEP:</b> ao digitar os 8 números, o painel preenche endereço, bairro, cidade e UF.</li>
+  <li><b>Telefone, WhatsApp e CNPJ/CPF</b> ganham a pontuação sozinhos.</li>
+  <li><b>Valores em dinheiro:</b> digite com vírgula (ex.: <code>299,90</code>).</li>
+  <li><b>Arquivos:</b> toque para escolher ou arraste para a área pontilhada. Cada arquivo pode ter até <b>2 GB</b>, é enviado em partes com barra de progresso e continua de onde parou se a internet cair. Depois de enviado, há botões para baixar, trocar e remover.</li>
+  <li><b>Barra de salvar</b> no rodapé: <span class="ui">Cadastrar</span> ou <span class="ui">Salvar alterações</span> (só fica ativo quando há mudança), <span class="ui">Descartar</span> (volta ao que estava salvo) e <span class="ui">Excluir</span> (só administradores).</li>
+  <li><b>Excluir com registros ligados:</b> se um cliente tiver instalações, chamados ou cobranças (ou uma instalação tiver licenças, ou um produto tiver instalações ou versões), o painel avisa e pergunta se é para apagar tudo junto. Ao apagar um cliente, o histórico de contatos dele também é apagado.</li>
+  <li><b>Abas da ficha:</b> além de <span class="ui">Dados</span>, várias fichas mostram os registros ligados em abas (ex.: a ficha do cliente tem Instalações, Licenças, Chamados, Cobranças e Histórico). Cada aba tem o botão <span class="ui">Adicionar</span>, que já vem com o vínculo preenchido.</li>
+  <li><b>Histórico de alterações:</b> toda ficha tem essa aba, com quem mudou o quê e quando, campo por campo (valor antigo → valor novo).</li>
+</ul>
+</section>
+
+<!-- ============================================================ -->
+<section class="parte" id="dia-a-dia">
+<h2><span class="n">4</span>Vendas e dia a dia</h2>
+<p class="intro">Início, Clientes, Funil, Agenda, Histórico de contatos e Relatórios.</p>
+
+<h3 id="inicio">Início</h3>
+<p>É o resumo do negócio em tempo real. No topo ficam os atalhos <span class="ui">+ Cliente</span> e <span class="ui">Chamado</span>.</p>
+<h4>Indicadores (cada cartão abre a lista correspondente)</h4>
+<div class="tabela"><table>
+<thead><tr><th>Cartão</th><th>O que mostra</th></tr></thead>
+<tbody>
+<tr><td>Clientes ativos</td><td>Clientes com status Ativo; embaixo, quantos estão em negociação (Lead + Em negociação).</td></tr>
+<tr><td>Instalações ativas</td><td>Instalações com status Ativa; embaixo, quantas estão online agora (deram sinal nas últimas 2 horas).</td></tr>
+<tr><td>Chamados abertos</td><td>Abertos + em andamento + aguardando cliente. Embaixo: quantos estão fora do prazo (o cartão fica destacado) ou quantos são de prioridade alta/urgente.</td></tr>
+<tr><td>Licenças vencendo</td><td>Licenças ativas que vencem nos próximos 30 dias.</td></tr>
+<tr><td>Receita mensal (licenças)</td><td>Soma do valor mensal de todas as licenças ativas.</td></tr>
+<tr><td>A receber</td><td>Soma das cobranças pendentes e atrasadas.</td></tr>
+<tr><td>Em atraso</td><td>Soma das cobranças vencidas e não pagas.</td></tr>
+<tr><td>Recebido no mês</td><td>Soma das cobranças pagas no mês atual.</td></tr>
+</tbody></table></div>
+<h4>Blocos</h4>
+<ul>
+  <li><b>Receita e novos clientes, 12 meses:</b> linha laranja com o valor recebido por mês e barras azuis com os clientes cadastrados por mês.</li>
+  <li><b>Funil de vendas:</b> quantidade e valor estimado em cada etapa.</li>
+  <li><b>Chamados em aberto:</b> os 8 mais importantes (urgentes primeiro), com o prazo de atendimento.</li>
+  <li><b>Equipamentos que deram sinal:</b> os últimos 8, com ponto verde (online) ou cinza (offline), versão e há quanto tempo.</li>
+  <li><b>Lembretes e próximos passos:</b> os lembretes da agenda, em vermelho quando já passaram.</li>
+  <li><b>Licenças vencendo:</b> as que vencem em até 30 dias (vermelho = já venceu).</li>
+  <li><b>Cobranças atrasadas:</b> com botão verde de <b>cobrar no WhatsApp</b>, que abre a conversa com a mensagem pronta.</li>
+  <li><b>Atalhos:</b> novo cliente, nova instalação, publicar atualização, nova cobrança, registrar contato e Marketing.</li>
+</ul>
+
+<h3 id="clientes">Clientes</h3>
+<p>Clientes e leads ficam no mesmo cadastro. O que muda é o <b>status</b>.</p>
+<h4>Campos</h4>
+<div class="tabela"><table>
+<thead><tr><th>Grupo</th><th>Campos</th></tr></thead>
+<tbody>
+<tr><td>Principal</td><td><b>Status*</b> (Lead, Em negociação, Ativo, Suspenso, Cancelado, Perdido), Tipo de estabelecimento (Motel, Hotel, Pousada, Empresa, Condomínio, Outro), <b>Nome fantasia*</b>, Razão social, CNPJ/CPF, Nº de suítes/quartos, Responsável (pessoa da equipe), Origem (Indicação, Instagram, Google, Site, Feira/evento, Prospecção ativa, Outro).</td></tr>
+<tr><td>Contato</td><td>Pessoa de contato, Telefone, WhatsApp (com DDD), E-mail.</td></tr>
+<tr><td>Endereço</td><td>CEP (preenche o resto), Endereço, Número, Bairro, Cidade, UF.</td></tr>
+<tr><td>Negócio</td><td>Etapa no funil, Valor mensal estimado, Cliente desde, Observações.</td></tr>
+<tr><td>Automático</td><td>Último contato (atualizado sozinho a cada contato registrado).</td></tr>
+</tbody></table></div>
+<ul>
+  <li>Ao mudar o status para <b>Ativo</b>, o campo <b>Cliente desde</b> é preenchido com a data de hoje, se estiver vazio.</li>
+  <li>O <b>CNPJ/CPF</b> é obrigatório para emitir boleto/Pix pelo Asaas.</li>
+  <li>O <b>e-mail</b> é usado nos e-mails automáticos dos chamados.</li>
+  <li>A <b>Pessoa de contato</b> aparece na saudação desses e-mails ("Olá, Carla!").</li>
+</ul>
+<h4>Ficha do cliente</h4>
+<ul>
+  <li>No topo: cidade, pessoa de contato, último contato e botões <span class="ui">WhatsApp</span>, <span class="ui">Ligar</span>, <span class="ui">Registrar contato</span> e <span class="ui">Chamado</span>.</li>
+  <li><b>Mini-resumo:</b> mensalidade (soma das licenças ativas), instalações (quantas online), chamados abertos, valor em atraso (em vermelho) e total já pago.</li>
+  <li><b>Abas:</b> Instalações, Licenças, Chamados, Cobranças, Histórico (contatos) e Histórico de alterações.</li>
+</ul>
+
+<h3 id="funil">Funil de vendas</h3>
+<p>Um quadro com uma coluna por etapa: <b>Novo contato → Qualificado → Demonstração → Proposta enviada → Fechamento → Ganho → Perdido</b>. Cada cartão mostra cidade, suítes, valor estimado, último contato e o botão do WhatsApp. O topo de cada coluna mostra quantos cartões há e a soma dos valores estimados.</p>
+<ul>
+  <li><b>Mover:</b> no computador, arraste o cartão para outra coluna. No celular, use a caixa <span class="ui">Mover para</span> do cartão.</li>
+  <li><b>Ganho:</b> o lead vira cliente <b>Ativo</b> e recebe a data "Cliente desde".</li>
+  <li><b>Perdido:</b> o status vira Perdido (conta como saída nos Relatórios).</li>
+  <li>Em Novo contato ou Qualificado, o status fica <b>Lead</b>. Nas demais etapas, <b>Em negociação</b>.</li>
+  <li>O quadro mostra os leads e os clientes em negociação, e também os que viraram Ganho ou Perdido nos últimos 30 dias.</li>
+  <li><span class="ui">Novo lead</span> abre o cadastro já com status Lead. Tocar num cartão abre a ficha do cliente.</li>
+</ul>
+
+<h3 id="agenda">Agenda</h3>
+<p>Reúne o que precisa de atenção, separado por quando:</p>
+<ul>
+  <li><b>Lembretes de contatos</b> não concluídos, agrupados em <b>Atrasados</b> (em vermelho), <b>Hoje</b>, <b>Amanhã</b>, <b>Esta semana</b> e <b>Mais adiante</b>. Cada um tem botões para marcar como feito (✓), abrir o WhatsApp e ligar.</li>
+  <li>Na lateral: <b>Cobranças</b> pendentes ou atrasadas que vencem nos próximos 15 dias, <b>Licenças</b> que vencem nos próximos 30 dias e <b>Prazos de chamados</b> (campo Prazo).</li>
+  <li><span class="ui">Novo lembrete</span> abre um registro de contato, onde você define o lembrete.</li>
+</ul>
+
+<h3 id="contatos">Histórico de contatos e lembretes</h3>
+<p>Aqui fica cada ligação, WhatsApp, visita, demonstração, reunião, e-mail ou proposta. É também onde se criam os lembretes.</p>
+<div class="tabela"><table>
+<thead><tr><th>Campo</th><th>Como usar</th></tr></thead>
+<tbody>
+<tr><td>Cliente*</td><td>Com quem foi o contato.</td></tr>
+<tr><td>Tipo*</td><td>Ligação, WhatsApp, Visita, Demonstração, Reunião, E-mail, Proposta.</td></tr>
+<tr><td>Data*</td><td>Já vem com agora.</td></tr>
+<tr><td>Quem atendeu</td><td>Já vem com você.</td></tr>
+<tr><td>Resumo da conversa*</td><td>O que foi conversado.</td></tr>
+<tr><td>Próximo passo</td><td>O que fazer depois (aparece na Agenda).</td></tr>
+<tr><td>Lembrar em</td><td>Data e hora do lembrete. Na hora marcada, quem registrou recebe o alerta "Lembrete da agenda".</td></tr>
+<tr><td>Lembrete concluído</td><td>Marque quando fizer (ou use o ✓ da Agenda, ou <span class="ui">Marcar como feito</span> na ficha).</td></tr>
+</tbody></table></div>
+<p>Cada contato registrado atualiza o "Último contato" do cliente.</p>
+
+<h3 id="relatorios">Relatórios</h3>
+<p>Números do negócio num período. Escolha <span class="ui">Este mês</span>, <span class="ui">Mês passado</span>, <span class="ui">3 meses</span>, <span class="ui">12 meses</span> ou <span class="ui">Este ano</span>, ou digite as datas e toque em <span class="ui">Ver</span>. O endereço da página guarda o período, então dá para salvar nos favoritos ou mandar o link para alguém.</p>
+<h4>Financeiro</h4>
+<div class="tabela"><table>
+<thead><tr><th>Número</th><th>Como é calculado</th></tr></thead>
+<tbody>
+<tr><td>Recebido no período</td><td>Cobranças pagas com data de pagamento no período, e quantos pagamentos.</td></tr>
+<tr><td>Faturado</td><td>Cobranças (menos as canceladas) com vencimento no período; embaixo, quanto delas ainda está em aberto.</td></tr>
+<tr><td>Inadimplência do período</td><td>Valor atrasado ÷ valor que já venceu no período, em %.</td></tr>
+<tr><td>Receita mensal recorrente</td><td>Soma das licenças ativas hoje, número de licenças e ticket médio por cliente ativo.</td></tr>
+<tr><td>Recebido por mês</td><td>Gráfico de barras do valor recebido mês a mês.</td></tr>
+<tr><td>Por produto</td><td>Recebido por produto (pela licença da cobrança). Cobranças sem licença aparecem como "Avulsas".</td></tr>
+<tr><td>Formas de pagamento</td><td>Recebido por Pix, boleto, cartão etc.</td></tr>
+<tr><td>Inadimplentes agora</td><td>Todos os clientes com cobrança atrasada: quantidade, total e desde quando, com botão para cobrar no WhatsApp.</td></tr>
+<tr><td>Atraso médio</td><td>Quantos dias, em média, os pagamentos chegaram depois do vencimento.</td></tr>
+</tbody></table></div>
+<h4>Clientes</h4>
+<ul>
+  <li><b>Clientes ativos</b> hoje.</li>
+  <li><b>Novos no período:</b> clientes com "Cliente desde" dentro do período.</li>
+  <li><b>Saídas:</b> clientes que passaram para Cancelado ou Perdido no período, com a taxa de cancelamento.</li>
+  <li><b>Receita perdida:</b> soma das licenças canceladas ou suspensas no período.</li>
+  <li>Listas de quem <b>entrou</b> e de quem <b>saiu</b>.</li>
+</ul>
+<h4>Suporte</h4>
+<ul>
+  <li>Chamados abertos no período e quantos foram resolvidos.</li>
+  <li>Percentual resolvido dentro do prazo.</li>
+  <li>Tempo médio de solução.</li>
+  <li>Chamados por prioridade, com o tempo médio de cada uma.</li>
+  <li>Clientes que mais abriram chamados.</li>
+</ul>
+<h4>Exportar</h4>
+<ul>
+  <li>Os blocos com <span class="ui">CSV</span> baixam a planilha daquele bloco.</li>
+  <li><span class="ui">Imprimir / PDF</span> abre a impressão já sem menus. Para salvar em arquivo, escolha "Salvar como PDF" na impressora.</li>
+</ul>
+<div class="nota info"><b>Bom saber</b><p>As saídas de clientes e licenças são contadas pelo Registro de atividades. Por isso só entram nos relatórios as mudanças feitas a partir da versão 1.5 do painel.</p></div>
+</section>
+
+<!-- ============================================================ -->
+<section class="parte" id="operacao">
+<h2><span class="n">5</span>Operação</h2>
+<p class="intro">Produtos, instalações, licenças, atualizações e sinais dos equipamentos.</p>
+
+<h3 id="produtos">Produtos</h3>
+<p>Os sistemas que a Neon vende. Já vêm cadastrados: <b>Painel Neon</b> (<code>painel-neon</code>), <b>Neon Motel</b> (<code>neon-motel</code>) e <b>PABX Neon</b> (<code>pabx-neon</code>).</p>
+<ul>
+  <li><b>Nome*</b>.</li>
+  <li><b>Código*:</b> minúsculas e hífen, único. É o código que os equipamentos usam na API para achar as versões, por isso não mude o código de um produto que já está em uso.</li>
+  <li><b>Mensalidade padrão</b>, Ativo e Descrição.</li>
+</ul>
+
+<h3 id="instalacoes">Instalações</h3>
+<p>Cada sistema instalado num cliente. Uma instalação é o "equipamento" que conversa com o painel.</p>
+<div class="tabela"><table>
+<thead><tr><th>Campo</th><th>Detalhes</th></tr></thead>
+<tbody>
+<tr><td>Cliente*, Produto*</td><td>De quem é e qual sistema.</td></tr>
+<tr><td>Código da instalação*</td><td>Único, em maiúsculas (espaços viram hífen). Ex.: <code>MOTEL-PARAISO-01</code>. É o código que o equipamento informa.</td></tr>
+<tr><td>Status*</td><td>Em implantação, Ativa, Suspensa, Cancelada. Instalação suspensa ou cancelada não consegue baixar atualizações.</td></tr>
+<tr><td>Canal de atualização</td><td>Estável (recebe só versões estáveis) ou Beta (recebe as versões beta).</td></tr>
+<tr><td>Versão instalada</td><td>Atualizada sozinha quando o equipamento envia sinal com a versão.</td></tr>
+<tr><td>IP, Acesso remoto, Observações</td><td>O IP também é atualizado pelo sinal. Em Acesso remoto, anote AnyDesk, TeamViewer, VPN…</td></tr>
+<tr><td>Último sinal</td><td>Automático. Na lista, o ponto verde indica <b>online</b> (sinal nas últimas 2 horas).</td></tr>
+</tbody></table></div>
+<p>Na ficha: abas <b>Licenças</b>, <b>Sinais</b> e <b>Chamados</b> da instalação. Se o equipamento ficar sem sinal além do tempo definido, a equipe recebe o alerta "Equipamento sem sinal" e, quando ele volta, o alerta "Equipamento voltou".</p>
+
+<h4 id="token">Token do equipamento (acesso à API)</h4>
+<p>Cada equipamento precisa de um token para consultar versões, baixar atualizações, conferir a licença e enviar sinais.</p>
+<ol class="passos">
+  <li>Abra a ficha da instalação. No quadro <b>Acesso do equipamento à API</b>, toque em <span class="ui">Gerar token</span>.</li>
+  <li><b>Copie na hora:</b> por segurança, o token aparece uma única vez. O painel mostra também o bloco pronto para configurar: endereço, token e código da instalação.</li>
+  <li>Configure esses três dados no equipamento.</li>
+</ol>
+<ul>
+  <li><span class="ui">Gerar novo token</span> troca o token: o antigo para de funcionar na hora.</li>
+  <li><span class="ui">Bloquear</span> apaga o token: o equipamento perde o acesso imediatamente.</li>
+  <li>A ficha mostra só o começo do token e quando ele foi criado.</li>
+</ul>
+
+<h3 id="licencas">Licenças e contratos</h3>
+<div class="tabela"><table>
+<thead><tr><th>Campo</th><th>Detalhes</th></tr></thead>
+<tbody>
+<tr><td>Chave da licença</td><td>Gerada sozinha ao salvar, no formato <code>NEON-XXXXX-XXXXX-XXXXX-XXXXX</code>.</td></tr>
+<tr><td>Instalação*</td><td>O cliente é preenchido sozinho a partir da instalação.</td></tr>
+<tr><td>Plano</td><td>Mensal, Trimestral, Semestral, Anual, Vitalício, Cortesia.</td></tr>
+<tr><td>Valor mensal</td><td>Entra na receita mensal e é o valor da mensalidade gerada.</td></tr>
+<tr><td>Status*</td><td>Ativa, Suspensa, Vencida, Cancelada.</td></tr>
+<tr><td>Início, Vencimento</td><td>Quando o vencimento passa, a licença vira <b>Vencida</b> sozinha.</td></tr>
+<tr><td>Gerar mensalidade todo mês</td><td>Ligado: cria a cobrança do mês sozinha (veja abaixo).</td></tr>
+<tr><td>Dia do vencimento da mensalidade</td><td>De 1 a 28. Padrão: 10.</td></tr>
+<tr><td>Contrato (PDF), Observações</td><td>Guarde o contrato assinado.</td></tr>
+</tbody></table></div>
+<h4>Na ficha</h4>
+<ul>
+  <li><span class="ui">Copiar</span> copia a chave.</li>
+  <li><span class="ui">Renovar</span> estende o vencimento pelo plano: mensal +1 mês, trimestral +3, semestral +6, anual +12 (os demais, +12). A conta parte do vencimento atual, se ainda não passou, ou de hoje, se já passou. A licença volta a ficar Ativa.</li>
+</ul>
+<h4 id="mensalidade-automatica">Como a mensalidade é gerada</h4>
+<p>A cada 15 minutos o sistema procura licenças que atendem a <b>todas</b> as condições abaixo e cria a cobrança do mês, <b>uma única vez por licença e mês</b>:</p>
+<ul>
+  <li>Status Ativa e "Gerar mensalidade todo mês" ligado.</li>
+  <li>Valor mensal maior que zero e cliente definido.</li>
+  <li>Início vazio ou anterior ao fim do mês.</li>
+</ul>
+<p>A cobrança nasce com a competência do mês (ex.: <code>2026-11</code>), o valor mensal, o vencimento no dia escolhido e a observação "Gerada automaticamente". Se o dia do vencimento já passou quando ela é criada, ela já nasce Atrasada. Com o Asaas ligado, o boleto/Pix é criado logo em seguida.</p>
+
+<h3 id="atualizacoes">Atualizações (versões)</h3>
+<p>Aqui você publica as versões novas dos sistemas. Os equipamentos consultam e baixam sozinhos.</p>
+<ol class="passos">
+  <li>Toque em <span class="ui">Novo</span>. Escolha o <b>Produto</b>, informe o <b>Número da versão</b> (formato <code>1.4.2</code>) e o <b>Canal</b>: Estável (todos) ou Beta (só instalações no canal beta).</li>
+  <li>Envie o <b>arquivo da atualização</b> (até 2 GB). O <b>SHA-256</b> é calculado sozinho; o equipamento usa esse código para conferir se o arquivo chegou inteiro.</li>
+  <li>Preencha a <b>data de lançamento</b> e as <b>notas da versão</b> (o que mudou). Marque <b>Atualização obrigatória</b> se for o caso.</li>
+  <li>Salve. Quando quiser liberar, toque em <span class="ui">Publicar agora</span> no topo da ficha (ou ligue "Publicada").</li>
+</ol>
+<ul>
+  <li>Só versões <b>Publicadas</b> aparecem para os equipamentos. <span class="ui">Retirar publicação</span> esconde de novo.</li>
+  <li>O sistema não deixa publicar sem arquivo nem cadastrar duas vezes o mesmo número no mesmo produto e canal.</li>
+  <li>O contador <b>Downloads</b> sobe a cada download feito por um equipamento.</li>
+</ul>
+
+<h3 id="sinais">Sinais dos equipamentos</h3>
+<p>Lista (somente leitura) de cada sinal recebido: data, código da instalação, evento, versão, mensagem, IP e detalhes técnicos. Os eventos possíveis são:</p>
+<ul>
+  <li><b>Online</b> (<code>heartbeat</code>): o equipamento está ligado.</li>
+  <li><b>Início</b>: o sistema foi iniciado.</li>
+  <li><b>Atualizado</b>: uma atualização foi aplicada.</li>
+  <li><b>Erro</b>: algo deu errado.</li>
+</ul>
+<p>Cada sinal atualiza o "Último sinal", o IP e, se vier a versão, a "Versão instalada" da instalação. Sinais com mais de 180 dias são apagados sozinhos.</p>
+</section>
+
+<!-- ============================================================ -->
+<section class="parte" id="suporte">
+<h2><span class="n">6</span>Suporte: chamados</h2>
+<p class="intro">Abertura, prazo de atendimento, conversa e e-mails para o cliente.</p>
+
+<h3 id="chamados">Abrir e acompanhar um chamado</h3>
+<div class="tabela"><table>
+<thead><tr><th>Campo</th><th>Detalhes</th></tr></thead>
+<tbody>
+<tr><td>Cliente*</td><td>Quem pediu.</td></tr>
+<tr><td>Instalação</td><td>Opcional; a lista mostra só as instalações do cliente escolhido.</td></tr>
+<tr><td>Título*</td><td>Resumo do problema.</td></tr>
+<tr><td>Prioridade*</td><td>Baixa, Média (padrão), Alta, Urgente. Define o prazo de atendimento.</td></tr>
+<tr><td>Status*</td><td>Aberto, Em andamento, Aguardando cliente, Resolvido, Fechado.</td></tr>
+<tr><td>Canal</td><td>WhatsApp, Telefone, E-mail, Acesso remoto, Presencial.</td></tr>
+<tr><td>Responsável</td><td>Quem cuida. Ao ser escolhido, a pessoa recebe o alerta "Chamado passado para mim".</td></tr>
+<tr><td>Prazo</td><td>Uma data combinada com o cliente (opcional, aparece na Agenda).</td></tr>
+<tr><td>Prazo de atendimento (SLA)</td><td>Automático (veja abaixo).</td></tr>
+<tr><td>Descrição, Solução aplicada, Anexos</td><td>A solução vai no e-mail de resolução para o cliente. Anexe prints e arquivos.</td></tr>
+<tr><td>Resolvido em</td><td>Preenchido sozinho quando o status vira Resolvido ou Fechado; volta a ficar vazio se o chamado for reaberto.</td></tr>
+</tbody></table></div>
+<p>No topo da ficha há botões para <b>mudar o status com um toque</b>. As abas são: Dados, <b>Conversa</b> e Histórico de alterações.</p>
+
+<h3 id="sla">Prazo de atendimento (SLA)</h3>
+<p>Ao abrir um chamado, o painel calcula até quando ele deve ser resolvido, em horas corridas a partir da abertura:</p>
+<div class="tabela"><table>
+<thead><tr><th>Prioridade</th><th>Prazo padrão</th></tr></thead>
+<tbody>
+<tr><td>Urgente</td><td>4 horas</td></tr>
+<tr><td>Alta</td><td>8 horas</td></tr>
+<tr><td>Média</td><td>24 horas</td></tr>
+<tr><td>Baixa</td><td>72 horas</td></tr>
+</tbody></table></div>
+<ul>
+  <li>Os prazos podem ser mudados em <a href="#cfg-chamados">Configurações → Chamados</a>.</li>
+  <li><b>Mudou a prioridade</b> com o chamado em aberto: o prazo é recalculado a partir da abertura.</li>
+  <li><b>Reabriu</b> um chamado resolvido: ganha um prazo novo a partir de agora.</li>
+  <li>O prazo não pode ser editado à mão.</li>
+  <li>Na lista, na ficha e no Início aparece: <b>vence em X</b> (cinza; amarelo quando faltam menos de 4 horas), <b>estourou há X</b> (vermelho), <b>resolvido no prazo</b> (verde) ou <b>resolvido fora do prazo</b>.</li>
+  <li>Quando o prazo estoura num chamado Aberto ou Em andamento, a equipe recebe o alerta "Chamado fora do prazo". Em "Aguardando cliente" esse alerta não é enviado.</li>
+  <li>Para ver primeiro os que vencem antes, ordene a lista pela coluna "Prazo de atendimento".</li>
+</ul>
+
+<h3 id="conversa">Conversa do chamado</h3>
+<p>A aba <span class="ui">Conversa</span> junta tudo o que aconteceu, do mais novo para o mais antigo:</p>
+<ul>
+  <li>Os <b>comentários</b> da equipe.</li>
+  <li>As <b>mudanças</b> de status, de prioridade e de responsável, e o registro da solução.</li>
+  <li>Os <b>e-mails automáticos</b> enviados ao cliente (ou o motivo de não terem saído, como "cliente sem e-mail").</li>
+</ul>
+<ol class="passos">
+  <li>Escreva a atualização na caixa de texto.</li>
+  <li>Para o cliente receber por e-mail, marque <b>Enviar também para o cliente por e-mail</b>. Sem marcar, o comentário fica só interno.</li>
+  <li>Toque em <span class="ui">Salvar comentário</span> (ou <span class="ui">Salvar e enviar</span>). Comentários enviados ganham a etiqueta "enviado ao cliente".</li>
+</ol>
+<p>Cada pessoa pode apagar os próprios comentários. O administrador pode apagar qualquer um. Um e-mail que já saiu não volta.</p>
+
+<h3 id="emails-cliente">E-mails automáticos para o cliente</h3>
+<ul>
+  <li><b>Na abertura:</b> "Recebemos seu chamado #N", com o título, a descrição e o prazo de atendimento.</li>
+  <li><b>Na resolução:</b> "Chamado #N resolvido", com o texto de <b>Solução aplicada</b>.</li>
+  <li><b>Comentários marcados para o cliente:</b> "Novidade no chamado #N", com o texto e o status atual.</li>
+</ul>
+<p>Os e-mails saem da caixa de avisos (<code>contato@neonsistemas.com</code>) para o e-mail do cadastro do cliente. Eles trazem o botão "Falar com o suporte no WhatsApp", com o WhatsApp da empresa. Quando o cliente responde, a resposta vai para o e-mail da empresa definido em <a href="#cfg-empresa">Configurações → Empresa</a>. Os e-mails de abertura e de resolução podem ser desligados em <a href="#cfg-chamados">Configurações → Chamados</a>.</p>
+</section>
+
+<!-- ============================================================ -->
+<section class="parte" id="financeiro">
+<h2><span class="n">7</span>Financeiro</h2>
+<p class="intro">Cobranças, cobrança pelo WhatsApp e Asaas.</p>
+
+<h3 id="cobrancas">Cobranças</h3>
+<div class="tabela"><table>
+<thead><tr><th>Campo</th><th>Detalhes</th></tr></thead>
+<tbody>
+<tr><td>Cliente*, Licença</td><td>A licença liga a cobrança a um produto nos relatórios.</td></tr>
+<tr><td>Competência*</td><td>Mês de referência (ex.: <code>2026-12</code>).</td></tr>
+<tr><td>Valor*, Vencimento*</td><td>—</td></tr>
+<tr><td>Status*</td><td>Pendente, Atrasado, Pago, Cancelado.</td></tr>
+<tr><td>Pago em, Forma de pagamento</td><td>Pix, Boleto, Transferência, Cartão, Dinheiro.</td></tr>
+<tr><td>Comprovante, Observações</td><td>Guarde o comprovante do pagamento.</td></tr>
+</tbody></table></div>
+<h4>Regras automáticas</h4>
+<ul>
+  <li>Pendente com vencimento já passado vira <b>Atrasado</b>, ao salvar e também na rotina de 15 em 15 minutos.</li>
+  <li>Atrasado com vencimento mudado para o futuro volta a <b>Pendente</b>.</li>
+  <li>Marcada como <b>Pago</b> sem data: "Pago em" recebe a data de hoje.</li>
+  <li>Na lista, o vencimento aparece em vermelho quando já passou e a cobrança não foi paga.</li>
+</ul>
+<h4>Na ficha da cobrança</h4>
+<ul>
+  <li><span class="ui">Marcar como pago</span> registra o pagamento com a data de hoje.</li>
+  <li><span class="ui">Cobrar no WhatsApp</span> abre a conversa com o cliente e a mensagem de cobrança pronta.</li>
+  <li>O quadro <b>Boleto / Pix (Asaas)</b> aparece quando o Asaas está ligado. Veja abaixo.</li>
+</ul>
+
+<h3 id="msg-cobranca">A mensagem de cobrança do WhatsApp</h3>
+<p>O texto é definido em <a href="#cfg-empresa">Configurações → Empresa → Mensagem de cobrança</a>. Você pode usar estes campos, que o painel troca pelos dados da cobrança:</p>
+<div class="tabela"><table>
+<thead><tr><th>Campo</th><th>Vira</th></tr></thead>
+<tbody>
+<tr><td><code>{cliente}</code></td><td>Nome fantasia do cliente</td></tr>
+<tr><td><code>{competencia}</code></td><td>Mês de referência</td></tr>
+<tr><td><code>{valor}</code></td><td>Valor em reais</td></tr>
+<tr><td><code>{vencimento}</code></td><td>Data de vencimento</td></tr>
+<tr><td><code>{link}</code></td><td>Link da fatura do Asaas (quando existir)</td></tr>
+</tbody></table></div>
+<p>Se a cobrança tem fatura no Asaas e o texto não usa <code>{link}</code>, o painel acrescenta no fim: "Pague por aqui (boleto ou Pix): [link]". Se não tem fatura, ele acrescenta a <b>Chave Pix</b> da empresa.</p>
+
+<h3 id="asaas">Asaas: boleto, Pix e baixa automática</h3>
+<p>Com o Asaas ligado, cada cobrança pode ganhar um boleto/Pix (e cartão, se você quiser). Quando o cliente paga, a cobrança fica paga sozinha no painel. Desligado, tudo continua manual, como sempre.</p>
+
+<h4 id="asaas-config">Configurar (Configurações → Asaas, só administradores)</h4>
+<ol class="passos">
+  <li><b>Crie a conta de testes</b> em <code>sandbox.asaas.com</code>. É grátis e não movimenta dinheiro de verdade.</li>
+  <li>No Asaas, vá em <span class="ui">Minha conta → Integrações → Gerar chave de API</span> e copie a chave.</li>
+  <li>No painel, em <span class="ui">Configurações → Asaas</span>, deixe <b>Testes (sandbox)</b> marcado, cole a <b>Chave de API</b> e toque em <span class="ui">Salvar</span>.</li>
+  <li>Toque em <span class="ui">Testar conexão</span>. O painel mostra o nome da conta conectada.</li>
+  <li>Toque em <span class="ui">Configurar aviso de pagamento</span>. Isso cadastra no Asaas o endereço que avisa o painel quando o cliente paga. Sem esse passo a baixa não é automática.</li>
+  <li>Ligue a chave <b>Ligado</b> e salve.</li>
+  <li><b>Teste:</b> abra uma cobrança de um cliente com CNPJ/CPF, toque em <span class="ui">Gerar boleto/Pix</span>, abra a fatura e pague pelo próprio sandbox. A cobrança fica paga sozinha no painel.</li>
+  <li><b>Produção:</b> crie a conta oficial no Asaas, troque para <b>Produção</b>, cole a chave nova, salve, toque em <span class="ui">Testar conexão</span> e em <span class="ui">Configurar aviso de pagamento</span> de novo.</li>
+</ol>
+<div class="nota atencao"><b>Atenção</b><p>Em produção as cobranças são reais. Ao trocar de ambiente, os clientes são recriados na conta nova na próxima emissão.</p></div>
+<h4>Opções de cobrança</h4>
+<div class="tabela"><table>
+<thead><tr><th>Opção</th><th>O que faz</th></tr></thead>
+<tbody>
+<tr><td>Forma de pagamento</td><td><b>Cliente escolhe</b> (abre uma página com boleto, Pix e cartão), <b>Só Pix</b> ou <b>Boleto + Pix</b>.</td></tr>
+<tr><td>Multa por atraso</td><td>Em %, no máximo 2%.</td></tr>
+<tr><td>Juros ao mês</td><td>Em %, no máximo 1% ao mês.</td></tr>
+<tr><td>Gerar boleto/Pix sozinho para as cobranças novas</td><td>Ligado: toda cobrança criada depois de ligar o Asaas (inclusive as mensalidades automáticas) é emitida em até 3 minutos. Desligado: só quando alguém clicar na cobrança. Cobranças antigas nunca são emitidas sozinhas.</td></tr>
+<tr><td>O Asaas avisa o cliente</td><td>Ligado: o Asaas manda ao cliente o e-mail/SMS de cobrança e os lembretes. Desligado: ele não manda.</td></tr>
+</tbody></table></div>
+<p>O quadro de status no topo mostra se está ligado, em qual ambiente, a conta, quantas cobranças já foram emitidas e quantas tiveram erro. Embaixo aparece a lista dos <b>últimos avisos recebidos do Asaas</b>.</p>
+
+<h4>Usar na cobrança</h4>
+<ul>
+  <li><span class="ui">Gerar boleto/Pix</span> cria a fatura no Asaas (e o cliente lá, se ainda não existir). Se der erro, a mensagem aparece em vermelho e o botão vira <span class="ui">Tentar de novo</span>.</li>
+  <li><span class="ui">Abrir fatura</span> e <span class="ui">Copiar link</span>: o link para mandar ao cliente.</li>
+  <li><span class="ui">Pix copia e cola</span> mostra o QR Code e o código para copiar.</li>
+  <li><span class="ui">Conferir</span> consulta no Asaas o estado atual, caso algum aviso tenha se perdido.</li>
+  <li>O status do Asaas aparece no quadro: Aguardando pagamento, Vencida no Asaas, Paga, Paga por fora, Estornada, Cancelada no Asaas, Erro ao gerar.</li>
+</ul>
+<h4>O que fica sincronizado</h4>
+<div class="tabela"><table>
+<thead><tr><th>Quando…</th><th>Acontece…</th></tr></thead>
+<tbody>
+<tr><td>O cliente paga (Pix, boleto ou cartão)</td><td>A cobrança vira <b>Pago</b>, com a data e a forma de pagamento, e a equipe recebe o alerta "Pagamento recebido".</td></tr>
+<tr><td>A fatura vence no Asaas</td><td>A cobrança pendente vira Atrasado.</td></tr>
+<tr><td>O pagamento é estornado ou contestado</td><td>A cobrança volta a Pendente ou Atrasado, e uma observação é registrada.</td></tr>
+<tr><td>A fatura é apagada no Asaas</td><td>A cobrança vira Cancelado. Se for restaurada, volta.</td></tr>
+<tr><td>Você muda valor ou vencimento no painel</td><td>A fatura é atualizada no Asaas.</td></tr>
+<tr><td>Você cancela a cobrança no painel</td><td>A fatura é apagada no Asaas.</td></tr>
+<tr><td>Você marca como paga no painel (pago por fora)</td><td>O Asaas registra "recebido em dinheiro" e para de cobrar o cliente.</td></tr>
+</tbody></table></div>
+<ul>
+  <li>O Asaas não aceita vencimento no passado. Por isso, uma cobrança já vencida é emitida com vencimento hoje.</li>
+  <li>Avisos repetidos do Asaas são ignorados. Nada é emitido duas vezes.</li>
+</ul>
+</section>
+
+<!-- ============================================================ -->
+<section class="parte" id="alertas">
+<h2><span class="n">8</span>Alertas automáticos</h2>
+<p class="intro">Avisos para a equipe por Telegram, e-mail e notificação no celular. Cada pessoa escolhe o que recebe e por onde.</p>
+
+<h3 id="alertas-meus">Escolher os seus alertas</h3>
+<ol class="passos">
+  <li>Abra <span class="ui">Configurações → Alertas</span>.</li>
+  <li>Prepare os canais nos três quadros do topo: <b>Telegram</b>, <b>E-mail</b> e <b>Notificação no celular</b> (veja abaixo).</li>
+  <li>Em <b>O que eu quero receber</b>, cada alerta tem três botões: <span class="ui">Telegram</span>, <span class="ui">E-mail</span> e <span class="ui">Celular</span>. Laranja com ✓ significa ligado.</li>
+  <li>Toque em <span class="ui">Salvar</span>. Use <span class="ui">Testar todos</span> para receber um teste em todos os canais prontos.</li>
+</ol>
+
+<h3 id="alertas-lista">Todos os alertas</h3>
+<div class="tabela"><table>
+<thead><tr><th>Alerta</th><th>Quando chega</th><th>Quem recebe</th><th>Padrão</th></tr></thead>
+<tbody>
+<tr><td>Chamado novo</td><td>Qualquer chamado aberto</td><td>Todos que ligaram</td><td>Celular</td></tr>
+<tr><td>Chamado de prioridade alta ou urgente</td><td>Na abertura ou quando a prioridade sobe</td><td>Todos que ligaram</td><td>Telegram, Celular, E-mail</td></tr>
+<tr><td>Chamado passado para mim</td><td>Quando você vira o responsável</td><td>Só o responsável</td><td>Celular, Telegram</td></tr>
+<tr><td>Chamado fora do prazo (SLA)</td><td>Quando o prazo estoura (Aberto ou Em andamento)</td><td>Todos que ligaram</td><td>Telegram, Celular</td></tr>
+<tr><td>Equipamento sem sinal</td><td>Instalação ativa sem sinal além do tempo definido (padrão 3 h); uma vez por queda</td><td>Todos que ligaram</td><td>Telegram, Celular</td></tr>
+<tr><td>Equipamento voltou</td><td>O equipamento que estava sem sinal voltou</td><td>Todos que ligaram</td><td>Celular</td></tr>
+<tr><td>Licença vencendo</td><td>Faltando 7, 3 e 0 dias (ajustável)</td><td>Todos que ligaram</td><td>Telegram, E-mail</td></tr>
+<tr><td>Cobrança atrasada</td><td>Quando uma cobrança passa do vencimento</td><td>Todos que ligaram</td><td>Telegram</td></tr>
+<tr><td>Pagamento recebido (Asaas)</td><td>Quando o cliente paga o boleto ou o Pix</td><td>Todos que ligaram</td><td>Telegram, Celular</td></tr>
+<tr><td>Lembrete da agenda</td><td>Na hora marcada no contato</td><td>Quem registrou o contato</td><td>Celular, Telegram</td></tr>
+<tr><td>Resumo do dia</td><td>Todo dia no horário escolhido (padrão 8h)</td><td>Todos que ligaram</td><td>E-mail, Telegram</td></tr>
+</tbody></table></div>
+<p>O <b>Resumo do dia</b> traz: chamados em aberto (urgentes e com prazo vencido), equipamentos sem sinal, cobranças atrasadas e as que vencem hoje (quantidade e valor), licenças que vencem em 7 dias e lembretes do dia. Se não houver nada pendente, vem "Tudo em dia".</p>
+<p>Cada alerta é enviado <b>uma única vez</b>, mesmo com os dois endereços do painel no ar. Os alertas trazem o link "Abrir no painel" para o registro.</p>
+
+<h3 id="alertas-telegram">Canal: Telegram</h3>
+<p>Antes, o administrador precisa configurar o robô do Telegram (veja <a href="#telegram-robo">Robô do Telegram</a>). Depois, cada pessoa:</p>
+<ol class="passos">
+  <li>Em <span class="ui">Configurações → Alertas</span>, toca em <span class="ui">Vincular meu Telegram</span>.</li>
+  <li>O Telegram abre na conversa com o robô. Toque em <span class="ui">Iniciar</span>. O robô responde "Pronto! Este chat vai receber os alertas…".</li>
+  <li>Volte ao painel e atualize a página. O quadro passa a mostrar "Vinculado".</li>
+</ol>
+<ul>
+  <li>Se o Telegram não abrir sozinho, use o link "abrir o robô" ou mande para o robô a mensagem <code>/start v_CÓDIGO</code> que o painel mostra. O código vale uma vez.</li>
+  <li>Outra forma: em <b>Já sei o ID do meu chat</b>, digite o número do seu chat. Para descobrir o número, mande <code>/start</code> para o robô de um chat ainda não autorizado: ele responde com o ID.</li>
+  <li><span class="ui">Testar</span> envia um teste. <span class="ui">Desvincular</span> para os alertas nesse chat.</li>
+</ul>
+
+<h3 id="alertas-email">Canal: E-mail</h3>
+<p>Os alertas vão para o <b>e-mail do seu usuário</b>. Antes, o administrador configura a caixa que envia (uma vez só):</p>
+<ol class="passos">
+  <li>Em <span class="ui">Configurações → Alertas</span>, desça até <b>Administração dos alertas → E-mail de avisos</b>.</li>
+  <li>O <b>E-mail (usuário)</b> já vem como <code>contato@neonsistemas.com</code>. Digite a <b>senha dessa caixa</b> (a mesma do webmail da Hostinger).</li>
+  <li>Confira o <b>Nome do remetente</b> ("Neon Gestão"), o <b>Servidor SMTP</b> (<code>smtp.hostinger.com</code>) e a <b>Porta</b> (<code>465</code>, SSL). Toque em <span class="ui">Salvar</span>.</li>
+  <li>Em <b>enviar teste para…</b>, digite um e-mail (vazio = o seu) e toque em <span class="ui">Enviar teste</span>.</li>
+</ol>
+<p>A senha fica guardada só no servidor: na tela ela aparece mascarada e nunca é enviada ao navegador. Para trocar a senha, digite a nova e salve. Essa mesma caixa envia os e-mails dos chamados para os clientes.</p>
+<div class="nota atencao"><b>Se trocar a senha do contato@ na Hostinger</b><p>Atualize também aqui, senão os e-mails param de sair. O erro aparece na lista "Últimos alertas enviados".</p></div>
+
+<h3 id="alertas-push">Canal: Notificação no celular</h3>
+<ol class="passos">
+  <li>No aparelho em que quer receber, abra o painel e vá em <span class="ui">Configurações → Alertas</span>.</li>
+  <li>Toque em <span class="ui">Ativar neste aparelho</span> e permita as notificações quando o navegador perguntar.</li>
+  <li>Toque em <span class="ui">Testar</span>.</li>
+</ol>
+<ul>
+  <li>Funciona no celular e no computador, mesmo com o painel fechado. Ative em cada aparelho que quiser.</li>
+  <li><b>iPhone:</b> antes, adicione o painel à Tela de Início (Compartilhar → Adicionar à Tela de Início) e abra pelo ícone; só então ative.</li>
+  <li>Tocar na notificação abre o painel direto no registro.</li>
+  <li>Alertas urgentes ficam na tela até você tocar.</li>
+  <li>Se aparecer "Permissão negada", libere as notificações do site nas configurações do navegador.</li>
+  <li><span class="ui">Desativar aqui</span> para de receber naquele aparelho.</li>
+</ul>
+
+<h3 id="alertas-admin">Regras gerais (administrador)</h3>
+<ul>
+  <li><b>Alertas ligados/desligados:</b> desligado, ninguém recebe nada (os testes continuam funcionando).</li>
+  <li><b>Avisar sem sinal depois de (horas):</b> de 1 a 168. Padrão: 3.</li>
+  <li><b>Hora do resumo do dia:</b> de 0 a 23, horário de Brasília. Padrão: 8. O resumo sai uma vez por dia, entre essa hora e até 3 horas depois.</li>
+  <li><b>Avisar licença faltando (dias):</b> lista separada por vírgula. Padrão: <code>7,3,0</code> (0 = no dia).</li>
+  <li><span class="ui">Mandar o resumo agora (para mim)</span>: envia o resumo de hoje só para você, para conferir.</li>
+  <li><b>Últimos alertas enviados:</b> os 60 últimos, com quantos envios deram certo e o motivo das falhas.</li>
+</ul>
+</section>
+
+<!-- ============================================================ -->
+<section class="parte" id="marketing">
+<h2><span class="n">9</span>Marketing</h2>
+<p class="intro">Posts com IA ou com modelos, campanhas, aprovação, publicação nas redes e no site, e robôs com horário.</p>
+
+<h3 id="mkt-visao">Visão geral do Marketing</h3>
+<ul>
+  <li><b>Indicadores:</b> posts aguardando aprovação, agendados, publicados nos últimos 30 dias e com erro.</li>
+  <li><b>Próximas publicações:</b> a fila, com imagem, redes, horário e status.</li>
+  <li><b>Conexões:</b> quais redes estão ligadas e quantas IAs de texto e de imagem estão prontas.</li>
+  <li><b>Atalhos:</b> todos os posts, campanhas, biblioteca do robô, robôs e horários, integrações e a página pública de novidades.</li>
+  <li>Botões <span class="ui">Criar com modelo</span> e <span class="ui">Criar com IA</span> (o segundo só aparece com a IA ligada).</li>
+</ul>
+
+<h3 id="post-ia">Criar um post com IA</h3>
+<ol class="passos">
+  <li>Toque em <span class="ui">Criar com IA</span>.</li>
+  <li>Descreva <b>a ideia do post</b>. Ex.: "Mostrar como o Painel Neon cria cenas na suíte com um toque. Chamar para demonstração gratuita."</li>
+  <li>Marque as <b>redes</b>. Já vêm marcadas as redes padrão.</li>
+  <li>Deixe <b>Gerar imagem com IA</b> ligado (ou desligue para enviar a sua imagem depois).</li>
+  <li>Opcional: escolha <b>Publicar em</b> (data e hora).</li>
+  <li>Toque em <span class="ui">Criar post</span>. Leva até um minuto: a IA escreve o título, o texto, as hashtags, um texto adaptado para cada rede e a imagem.</li>
+</ol>
+<p>Se uma IA falhar (erro, limite ou falta de saldo), a próxima da fila assume sozinha. Com <b>Exigir aprovação</b> ligado, o post nasce <b>Aguardando aprovação</b> e vai para o Telegram.</p>
+
+<h3 id="post-modelo">Criar um post com modelo (sem IA, sem custo)</h3>
+<ol class="passos">
+  <li>Toque em <span class="ui">Criar com modelo</span>.</li>
+  <li>Escolha o <b>modelo</b> de arte (tabela abaixo) e envie uma <b>foto</b>.</li>
+  <li>Preencha o <b>Título*</b> e o <b>Texto</b>. A primeira linha do texto entra na arte; o texto todo vai na legenda.</li>
+  <li>Preencha o <b>Destaque</b> (ex.: "20% OFF"), o <b>Botão/chamada</b> (padrão "Fale no WhatsApp") e as <b>Hashtags</b>.</li>
+  <li>Confira a <b>Prévia da arte</b> à direita. Ela se atualiza a cada mudança.</li>
+  <li>Marque as redes. Escolha <b>Publicar em</b> (pontual) <b>ou</b> ligue <b>Guardar na biblioteca</b> (o robô publica na vez dele).</li>
+  <li>Toque em <span class="ui">Criar post</span>.</li>
+</ol>
+<div class="tabela"><table>
+<thead><tr><th>Modelo</th><th>Formato</th><th>Como fica</th></tr></thead>
+<tbody>
+<tr><td>Destaque</td><td>1:1</td><td>Foto em tela cheia com título grande embaixo</td></tr>
+<tr><td>Moldura Neon</td><td>1:1</td><td>Foto dentro de uma moldura com brilho neon</td></tr>
+<tr><td>Oferta</td><td>1:1</td><td>Foto + bloco laranja com a oferta em destaque</td></tr>
+<tr><td>Depoimento / Frase</td><td>1:1</td><td>Texto grande sobre fundo da marca (foto opcional, como avatar)</td></tr>
+<tr><td>Lançamento</td><td>1:1</td><td>Selo "NOVO" com a foto do produto em destaque</td></tr>
+<tr><td>Story / Reels (vertical)</td><td>9:16</td><td>Formato para Stories, Reels e TikTok</td></tr>
+</tbody></table></div>
+
+<h3 id="post-editor">Editar um post</h3>
+<p>Abra um post em <span class="ui">Posts</span>. A tela tem:</p>
+<ul>
+  <li><b>Dados:</b> título, campanha, texto principal, hashtags e redes.</li>
+  <li><b>Imagem do post:</b>
+    <ul>
+      <li>Envie uma imagem pronta ou um vídeo (para TikTok, Reels e YouTube).</li>
+      <li>Ou crie com <span class="ui">Criar nova imagem com IA</span>.</li>
+      <li>Ou monte a arte com um modelo: escolha o modelo, a foto, o título na arte, o texto de apoio, o destaque e a chamada, veja a prévia e toque em <span class="ui">Usar esta arte no post</span>.</li>
+    </ul></li>
+  <li><b>Texto de cada rede:</b> uma aba por rede marcada.
+    <ul>
+      <li>Texto vazio usa o texto principal + hashtags.</li>
+      <li><span class="ui">Preencher com modelos</span> gera as legendas pelos modelos de legenda.</li>
+      <li><span class="ui">Reescrever com IA</span> refaz os textos; você pode fazer um pedido (ex.: "mais curto e com tom de urgência").</li>
+      <li>O contador mostra os caracteres.</li>
+      <li><span class="ui">Publicar com 1 toque (manual)</span> copia o texto, baixa a imagem e abre a rede para você colar. Serve para redes ainda não conectadas.</li>
+    </ul></li>
+  <li><b>Quando publicar:</b> data e hora, Publicar também no site, Guardar na biblioteca e Status.</li>
+  <li><b>Prévia</b> à direita, por rede. Depois de publicado, aparece o <b>resultado em cada rede</b> (✅/❌, link ou motivo do erro) e qual IA criou o texto e a imagem.</li>
+  <li><b>Botões do topo:</b>
+    <ul>
+      <li><span class="ui">Pedir aprovação</span> manda o post para o Telegram.</li>
+      <li><span class="ui">Aprovar</span> / <span class="ui">Aprovar e agendar</span> libera o post para o robô publicar no horário.</li>
+      <li><span class="ui">Publicar agora</span> publica em todas as redes marcadas na hora.</li>
+    </ul></li>
+</ul>
+
+<h3 id="post-status">Caminho de um post</h3>
+<div class="fluxo"><span>Rascunho</span><i>→</i><span>Aguardando aprovação</span><i>→</i><span>Aprovado / Agendado</span><i>→</i><span>Publicando…</span><i>→</i><span>Publicado</span><i>ou</i><span>Publicado em parte</span><i>ou</i><span>Erro</span></div>
+<ul>
+  <li><b>Agendado</b> precisa de data e hora. O robô publica sozinho quando chega o horário (ele confere a cada 2 minutos).</li>
+  <li><b>Publicado em parte:</b> saiu em algumas redes e falhou em outras. O resultado mostra onde.</li>
+  <li><b>Erro:</b> se falhou em todas, o sistema tenta de novo até 3 vezes, com 15 minutos de intervalo.</li>
+  <li>Depois de cada publicação, o resultado é avisado no Telegram.</li>
+</ul>
+
+<h3 id="aprovacao">Aprovar pelo Telegram</h3>
+<p>Com <b>Exigir aprovação</b> ligado e o robô configurado, cada post novo chega nos chats autorizados com a imagem, o texto, as redes, o horário e estes botões:</p>
+<div class="tabela"><table>
+<thead><tr><th>Botão</th><th>O que faz</th></tr></thead>
+<tbody>
+<tr><td>✅ Aprovar</td><td>Agenda no horário do post (ou publica já, se não tiver horário ou se o horário passou).</td></tr>
+<tr><td>⏰ Hoje 18h / ⏰ Amanhã 9h</td><td>Aprova e agenda para esse horário (Brasília).</td></tr>
+<tr><td>🔁 Refazer</td><td>Pede à IA uma nova versão, que chega para aprovação.</td></tr>
+<tr><td>🗑 Descartar</td><td>Volta para Rascunho (continua salvo no painel).</td></tr>
+<tr><td>✏️ Abrir no painel</td><td>Abre o post para editar.</td></tr>
+</tbody></table></div>
+
+<h3 id="calendario">Calendário</h3>
+<p>Mês a mês, com os posts no dia e no horário (agendados, ou publicados, ou criados), coloridos pelo status. Use <span class="ui">‹</span> <span class="ui">Hoje</span> <span class="ui">›</span> para navegar. Toque num post para abrir.</p>
+
+<h3 id="campanhas">Campanhas</h3>
+<p>Uma campanha agrupa posts com um mesmo objetivo e período.</p>
+<div class="tabela"><table>
+<thead><tr><th>Campo</th><th>Detalhes</th></tr></thead>
+<tbody>
+<tr><td>Nome*, Status*</td><td>Rascunho, Ativa, Pausada, Concluída.</td></tr>
+<tr><td>Objetivo</td><td>Gerar vendas/demonstrações, Fortalecer a marca, Lançamento de produto, Promoção/oferta, Relacionamento com clientes, Conteúdo educativo.</td></tr>
+<tr><td>Produto em destaque, Início, Fim, Orçamento</td><td>O período é usado pela IA para distribuir os horários.</td></tr>
+<tr><td>Tom de voz</td><td>Profissional, Descontraído, Sofisticado/premium, Urgente/oferta, Técnico.</td></tr>
+<tr><td>Público-alvo, Redes, Briefing</td><td>O que a IA precisa saber: ofertas, diferenciais, datas, links, o que evitar.</td></tr>
+</tbody></table></div>
+<p>Na ficha da campanha, escolha quantos posts quer (1 a 20) e toque em <span class="ui">Gerar posts com IA</span>: a IA monta a pauta, escreve, cria as imagens e distribui os horários no período (cerca de 1 minuto por post). Ou use <span class="ui">Post com modelo</span>. A aba <b>Posts</b> mostra os posts da campanha.</p>
+
+<h3 id="depoimentos">Depoimentos do site</h3>
+<p>Os depoimentos de clientes que aparecem no site neonsistemas.com.</p>
+<ul>
+  <li><b>Quem falou:</b> Nome*, Cargo, Estabelecimento, Tipo, Cidade, UF, Nº de suítes, Cliente desde (ano) e, se quiser, o cliente do cadastro.</li>
+  <li><b>O depoimento:</b> Nota* (1 a 5 estrelas), Frase de destaque (em negrito acima do texto), Depoimento* (palavras do próprio cliente, até 700 caracteres), Sistemas que usa e Foto ou logo (quadrada; sem foto, aparecem as iniciais).</li>
+  <li><b>Publicação no site:</b> <b>O cliente autorizou publicar</b>, <b>Mostrar no site</b>, <b>Destaque</b> (cartão maior, aparece primeiro) e <b>Ordem</b> (menor aparece antes).</li>
+</ul>
+<div class="nota info"><b>Para aparecer no site</b><p>Um depoimento só vai ao site com <b>as duas</b> marcações: "O cliente autorizou publicar" e "Mostrar no site". Sem nenhum depoimento publicado, a seção some do site.</p></div>
+
+<h3 id="integracoes">Integrações e IAs</h3>
+<p>Em <span class="ui">Marketing → Integrações e IAs</span> (administradores). As chaves ficam guardadas no servidor e aparecem mascaradas. Para editar, toque no campo, cole a chave nova e salve.</p>
+<div class="nota atencao"><b>Aviso PUBLIC_URL</b><p>Se aparecer "Falta definir PUBLIC_URL", o endereço público do painel não está nas variáveis do servidor. Sem ele, as redes não conseguem buscar as imagens.</p></div>
+
+<h4 id="ias">Aba IAs (texto e imagem)</h4>
+<p>O sistema tenta as IAs <b>de cima para baixo</b>. Se uma falhar, a próxima assume. Use as setas para mudar a ordem, a chave para ligar/desligar, <span class="ui">Configurar</span> para colar a chave e escolher o modelo, e <span class="ui">Testar</span> para conferir (o teste de imagem abre a imagem criada).</p>
+<div class="tabela"><table>
+<thead><tr><th>IA de texto</th><th>Custo</th><th>Onde pegar a chave</th></tr></thead>
+<tbody>
+<tr><td>Google Gemini</td><td>Grátis (camada gratuita), depois centavos</td><td><code>aistudio.google.com/apikey</code></td></tr>
+<tr><td>Groq (Llama)</td><td>Grátis com limite diário</td><td><code>console.groq.com/keys</code></td></tr>
+<tr><td>OpenRouter</td><td>Tem modelos grátis (:free)</td><td><code>openrouter.ai/keys</code></td></tr>
+<tr><td>Mistral AI</td><td>Grátis (plano experimental)</td><td><code>console.mistral.ai/api-keys</code></td></tr>
+<tr><td>DeepSeek</td><td>Muito barato</td><td><code>platform.deepseek.com/api_keys</code></td></tr>
+<tr><td>OpenAI (ChatGPT)</td><td>Pago, barato no modelo mini</td><td><code>platform.openai.com/api-keys</code></td></tr>
+<tr><td>Anthropic (Claude)</td><td>Pago, ótima escrita</td><td><code>console.anthropic.com/settings/keys</code></td></tr>
+<tr><td>xAI (Grok)</td><td>Pago</td><td><code>console.x.ai</code></td></tr>
+<tr><td>Compatível com OpenAI (Ollama, LM Studio…)</td><td>Grátis se rodar no seu servidor</td><td>Informe a URL base, a chave (se houver) e o modelo</td></tr>
+</tbody></table></div>
+<div class="tabela"><table>
+<thead><tr><th>IA de imagem</th><th>Custo</th><th>Onde pegar a chave</th></tr></thead>
+<tbody>
+<tr><td>Cloudflare Workers AI (FLUX)</td><td>Grátis (10 mil usos/dia)</td><td><code>dash.cloudflare.com/profile/api-tokens</code> (precisa do ID da conta e do token)</td></tr>
+<tr><td>Together AI (FLUX)</td><td>Grátis no modelo -Free</td><td><code>api.together.ai/settings/api-keys</code></td></tr>
+<tr><td>Pollinations</td><td>Grátis, nem precisa de chave</td><td><code>pollinations.ai</code> (token opcional remove limites)</td></tr>
+<tr><td>Google Gemini Imagem</td><td>Pago, barato</td><td><code>aistudio.google.com/apikey</code></td></tr>
+<tr><td>OpenAI Imagens</td><td>Pago</td><td><code>platform.openai.com/api-keys</code></td></tr>
+<tr><td>Stability AI</td><td>Pago (créditos)</td><td><code>platform.stability.ai/account/keys</code> (modelos core, ultra, sd3)</td></tr>
+<tr><td>Replicate</td><td>Pago por uso</td><td><code>replicate.com/account/api-tokens</code></td></tr>
+</tbody></table></div>
+
+<h4 id="redes">Aba Redes sociais</h4>
+<p>Cada rede tem um <b>passo a passo</b> dentro do cartão ("Passo a passo para conseguir as credenciais"), os campos, a chave <b>Ligada</b>, <span class="ui">Salvar</span> e <span class="ui">Testar conexão</span>. O último resultado do teste aparece no cartão.</p>
+<div class="tabela"><table>
+<thead><tr><th>Rede</th><th>O que pede</th><th>Como conseguir</th></tr></thead>
+<tbody>
+<tr><td>Instagram</td><td>ID da conta comercial, token de acesso (Meta, longa duração), versão da Graph API</td><td>
+  <ol>
+    <li>A conta precisa ser Comercial ou Criador e estar ligada a uma Página do Facebook.</li>
+    <li>Em developers.facebook.com, crie um app "Empresa" com os produtos "Instagram" e "Facebook Login".</li>
+    <li>Gere um token com instagram_basic, instagram_content_publish, pages_show_list e pages_read_engagement, e troque por um de longa duração.</li>
+    <li>O ID aparece no Graph API Explorer em <code>me/accounts?fields=instagram_business_account</code>.</li>
+    <li>Para publicar ao público, o app passa pela revisão da Meta.</li>
+  </ol></td></tr>
+<tr><td>Facebook</td><td>ID da Página, token da Página (longa duração), versão da Graph API</td><td>
+  <ul>
+    <li>Use o mesmo app da Meta.</li>
+    <li>Permissões: pages_manage_posts, pages_read_engagement e pages_show_list.</li>
+    <li>No Graph API Explorer, <code>me/accounts</code> mostra o ID e o token de cada Página.</li>
+  </ul></td></tr>
+<tr><td>TikTok</td><td>Client key, client secret, token de acesso, refresh token, privacidade</td><td>
+  <ul>
+    <li>Crie um app em developers.tiktok.com com "Content Posting API" e o escopo video.publish.</li>
+    <li>Verifique o domínio do painel no app.</li>
+    <li>Até a TikTok auditar o app, os posts saem como privados (SELF_ONLY).</li>
+  </ul></td></tr>
+<tr><td>YouTube</td><td>Client ID, client secret, refresh token, privacidade (public, unlisted, private)</td><td>
+  <ul>
+    <li>No Google Cloud Console, ative a "YouTube Data API v3" e crie credenciais OAuth (Aplicativo da Web).</li>
+    <li>Gere o refresh token com o escopo youtube.upload pelo OAuth Playground.</li>
+    <li>O YouTube <b>só aceita vídeo</b>: posts só com imagem são ignorados nessa rede.</li>
+  </ul></td></tr>
+<tr><td>LinkedIn</td><td>Autor (<code>urn:li:organization:ID</code> ou <code>urn:li:person:ID</code>), token, versão da API</td><td>
+  <ul>
+    <li>Crie um app em linkedin.com/developers ligado à Página da empresa.</li>
+    <li>Peça os produtos "Share on LinkedIn" e "Community Management API".</li>
+    <li>Gere o token com w_organization_social (empresa) ou w_member_social (perfil).</li>
+  </ul></td></tr>
+<tr><td>Canal do Telegram</td><td>ID ou @ do canal</td><td>
+  <ul>
+    <li>Usa o mesmo robô do Telegram.</li>
+    <li>Adicione o robô como administrador do canal e informe o @ (ex.: <code>@neonsistemas</code>).</li>
+  </ul></td></tr>
+</tbody></table></div>
+
+<h4 id="telegram-robo">Aba Telegram: o robô</h4>
+<p>O robô serve para pedir posts, aprovar posts, receber os resultados e receber os alertas da equipe.</p>
+<ol class="passos">
+  <li>No Telegram, abra o <b>@BotFather</b>, mande <code>/newbot</code>, escolha um nome e copie o <b>token</b>.</li>
+  <li>No painel (de preferência no painel.neonsistemas.com), cole o token em <b>Token do robô</b>, ligue e salve.</li>
+  <li>Toque em <span class="ui">Conectar robô</span>.</li>
+  <li>Mande <code>/start</code> para o robô: ele responde com o seu <b>ID</b>. Cole o ID em <b>Chats autorizados</b> (vários IDs separados por vírgula) e salve.</li>
+</ol>
+<div class="tabela"><table>
+<thead><tr><th>Comando no Telegram</th><th>O que faz</th></tr></thead>
+<tbody>
+<tr><td><code>/post ideia</code></td><td>Cria o texto e a imagem e manda para aprovação.</td></tr>
+<tr><td><code>/campanha descrição, N posts</code></td><td>Cria a campanha e os posts. Ex.: <code>/campanha Black Friday do Neon Motel com 20% de desconto na implantação, 5 posts</code>.</td></tr>
+<tr><td>Foto com legenda</td><td>Vira post usando a sua foto (com a IA desligada, a primeira linha da legenda vira o título e o post usa o modelo padrão).</td></tr>
+<tr><td><code>/fila</code></td><td>Lista os posts aguardando aprovação, aprovados, agendados e com erro, e reenvia os que aguardam aprovação.</td></tr>
+<tr><td><code>/status</code></td><td>Resumo do marketing.</td></tr>
+<tr><td><code>/start</code> ou <code>/ajuda</code></td><td>Mostra os comandos.</td></tr>
+<tr><td>Texto livre</td><td>É entendido como a ideia de um post.</td></tr>
+</tbody></table></div>
+<p>Só os <b>chats autorizados</b> usam os comandos e os botões. A única exceção é o vínculo dos alertas (<code>/start v_código</code>), que funciona de qualquer chat.</p>
+
+<h4 id="prefs-mkt">Aba Preferências e modelos</h4>
+<ul>
+  <li><b>Usar IA:</b> desligado, só modelos prontos, sem nenhum custo.</li>
+  <li><b>Exigir aprovação antes de publicar:</b> posts novos chegam no Telegram com os botões.</li>
+  <li><b>Redes padrão</b> dos posts novos (de fábrica: Instagram, Facebook e LinkedIn).</li>
+  <li><b>Modelo de arte padrão</b>.</li>
+  <li><b>Rodapé das artes:</b> deixe vazio para não mostrar.</li>
+  <li><b>Sobre a empresa:</b> a IA usa esse texto para escrever.</li>
+  <li><b>Estilo das imagens de IA</b>.</li>
+  <li><b>Modelos de legenda (sem IA)</b>, um por rede. Campos disponíveis:
+    <ul>
+      <li><code>{titulo}</code> e <code>{texto}</code>: título e texto do post.</li>
+      <li><code>{hashtags}</code>: as hashtags do post.</li>
+      <li><code>{whatsapp}</code> e <code>{whatsapp_link}</code>: o WhatsApp da empresa e o link para ele.</li>
+      <li><code>{site}</code> e <code>{empresa}</code>: o site e o nome da empresa.</li>
+    </ul></li>
+</ul>
+<p>Toque em <span class="ui">Salvar preferências</span>.</p>
+
+<h4 id="robos">Aba Robôs e a tela Robôs e tarefas</h4>
+<p>Há três jeitos de publicar sozinho:</p>
+<ul>
+  <li><b>Pontual:</b> um post aprovado com data e hora sai sozinho no horário.</li>
+  <li><b>Programado:</b> posts guardados na <b>Biblioteca</b> são publicados um por vez, nos horários da tarefa "Publicar o próximo post da biblioteca".</li>
+  <li><b>IA agendada:</b> a tarefa "Criar posts com IA" gera posts novos para uma campanha e manda para aprovação.</li>
+</ul>
+<div class="nota atencao"><b>Posts da Biblioteca</b><p>O robô da biblioteca só pega posts com <b>Guardar na biblioteca</b> ligado e status <b>Aprovado</b>. Para liberar um post da biblioteca, escolha <b>Aprovado</b> no campo Status (em "Quando publicar") e salve. Não use o botão <span class="ui">Aprovar</span> nem o ✅ do Telegram nesses posts: eles agendam o post e ele sai na hora, fora da vez.</p></div>
+<p>Em <span class="ui">Sistema → Robôs e tarefas</span> (administradores), cada tarefa tem:</p>
+<ul>
+  <li><b>Nome</b>.</li>
+  <li><b>O que faz</b> (tabela abaixo).</li>
+  <li><b>Quando</b>, no formato cron, com botões prontos: a cada 2 min, a cada hora, todo dia 9h, Seg/Qua/Sex 18h, Seg a sex 8h30, toda segunda 9h, dia 1 às 8h.</li>
+  <li><b>Ativa</b>.</li>
+  <li><b>Parâmetros</b>.</li>
+</ul>
+<p>Na ficha da tarefa aparecem a última e a próxima execução, o último resultado e o botão <span class="ui">Rodar agora</span>.</p>
+<div class="tabela"><table>
+<thead><tr><th>Tipo de tarefa</th><th>O que faz</th><th>Parâmetros</th></tr></thead>
+<tbody>
+<tr><td>Publicar posts agendados</td><td>Publica os posts cujo horário chegou e tenta de novo os que deram erro. <b>De fábrica, a cada 2 minutos.</b></td><td>—</td></tr>
+<tr><td>Rotinas da gestão</td><td>Atrasa cobranças vencidas, vence licenças, gera mensalidades e limpa sinais antigos. <b>De fábrica, a cada 15 minutos.</b></td><td>—</td></tr>
+<tr><td>Criar posts com IA para uma campanha</td><td>Gera posts novos.</td><td><code>{"campanha_id": 1, "quantidade": 3}</code></td></tr>
+<tr><td>Publicar o próximo post da biblioteca</td><td>Publica o próximo da biblioteca (com <code>repetir</code>, recomeça quando acabar).</td><td><code>{"campanha_id": 1, "repetir": true}</code> (campanha opcional)</td></tr>
+<tr><td>Listar cobranças para lembrar no WhatsApp</td><td>Manda ao Telegram as cobranças atrasadas e as que vencem em até 3 dias, com o link do WhatsApp de cada cliente. Vem criada <b>desligada</b> (seg a sex, 8h30).</td><td>—</td></tr>
+</tbody></table></div>
+<h4>Como ler o formato cron</h4>
+<p>São 5 partes: <code>minuto hora dia mês dia-da-semana</code>, em horário de Brasília. O dia da semana vai de 0 (domingo) a 6 (sábado). Exemplos:</p>
+<ul>
+  <li><code>*/5 * * * *</code>: a cada 5 minutos.</li>
+  <li><code>0 9 * * 1</code>: segunda às 9h.</li>
+  <li><code>30 8 * * 1-5</code>: de segunda a sexta às 8h30.</li>
+  <li><code>0 18 * * 1,3,5</code>: segunda, quarta e sexta às 18h.</li>
+  <li><code>0 8 1 * *</code>: dia 1 de cada mês às 8h.</li>
+</ul>
+
+<h4 id="cron-externo">Manter os robôs acordados</h4>
+<p>Na hospedagem, o painel pode "dormir" quando ninguém acessa. Para os horários nunca atrasarem, crie no <b>hPanel → Avançado → Cron Jobs</b> um cron <b>a cada 5 minutos</b> com o comando que aparece na aba Robôs:</p>
+<pre><code>curl -s https://painel.neonsistemas.com/publico/cron/SUA_CRON_KEY</code></pre>
+<p>A <code>CRON_KEY</code> é definida nas variáveis do servidor (hPanel → Sites → domínio → Node.js).</p>
+</section>
+
+<!-- ============================================================ -->
+<section class="parte" id="site">
+<h2><span class="n">10</span>Integração com o site</h2>
+<p class="intro">O que o painel publica para o neonsistemas.com.</p>
+<ul>
+  <li><b>Depoimentos:</b> o site lê os depoimentos autorizados e marcados para mostrar (endereço público <code>/publico/depoimentos.json</code>). Os destaques vêm primeiro, depois pela Ordem. Sem nenhum publicado, a seção some.</li>
+  <li><b>Novidades:</b> posts com <b>Publicar também no site</b> entram, depois de publicados, na página <code>painel.neonsistemas.com/novidades</code> (cada post tem a sua página, com botão de WhatsApp) e no feed do site (<code>/publico/novidades.json</code>).</li>
+  <li><b>Widget de novidades:</b> para mostrar as novidades em qualquer página, cole:
+<pre><code>&lt;div id="neon-novidades" data-limite="6"&gt;&lt;/div&gt;
+&lt;script src="https://painel.neonsistemas.com/publico/widget.js" defer&gt;&lt;/script&gt;</code></pre></li>
+</ul>
+</section>
+
+<!-- ============================================================ -->
+<section class="parte" id="sistema">
+<h2><span class="n">11</span>Sistema</h2>
+<p class="intro">Arquivos, equipe, registro de atividades, API dos equipamentos e configurações.</p>
+
+<h3 id="arquivos">Arquivos</h3>
+<ul>
+  <li><b>Pastas:</b> Todos os arquivos, Atualizações, Chamados, Comprovantes, Contratos, Marketing, Geral e <b>Meus arquivos</b> (enviados por você), com a quantidade e o espaço usado em cada uma.</li>
+  <li><b>Buscar pelo nome</b> e <b>enviar</b> (arraste ou toque). O arquivo vai para a pasta aberta (ou Geral). Até 2 GB por arquivo, com retomada se a internet cair.</li>
+  <li>Toque num arquivo para ver tamanho, pasta, quem enviou e quando, tipo e SHA-256, e para <span class="ui">Abrir</span>, <span class="ui">Baixar</span> ou <span class="ui">Apagar</span> (só administradores). Se o arquivo estiver em uso num cadastro, o painel avisa antes de apagar.</li>
+  <li>Os arquivos enviados nos formulários (contratos, comprovantes, anexos, imagens) também aparecem aqui, na pasta correspondente.</li>
+</ul>
+
+<h3 id="equipe">Equipe</h3>
+<p>Só administradores. Campos: <b>Nome*</b>, <b>E-mail*</b> (é o login), <b>Função*</b> (Administrador, Equipe, Só leitura; veja <a href="#perfis">Perfis</a>), <b>Ativo</b> e <b>Senha</b> (mínimo 8 caracteres; obrigatória ao criar, em branco mantém a atual). A lista mostra se a pessoa tem 2FA ativo e o último acesso.</p>
+<ul>
+  <li><b>Desativar</b> (desligar "Ativo") bloqueia o acesso sem apagar o histórico da pessoa.</li>
+  <li>Ao trocar a senha ou a função, ou ao desativar, a pessoa é <b>desconectada de todos os aparelhos</b>.</li>
+</ul>
+
+<h3 id="atividade">Registro de atividades</h3>
+<p>Só administradores. Mostra quem fez o quê e quando, com IP:</p>
+<ul>
+  <li>Logins e tentativas que falharam.</li>
+  <li>Cadastros, edições e exclusões.</li>
+  <li>Exportações e importações.</li>
+  <li>Geração de tokens, mudanças de configuração e backups.</li>
+  <li>Aprovações pelo Telegram.</li>
+  <li>Baixas feitas pelo Asaas.</li>
+</ul>
+<p>Toque num item para abrir o registro. Há 50 por página.</p>
+
+<h3 id="api">API dos equipamentos</h3>
+<p>A tela <span class="ui">API dos equipamentos</span> explica, com exemplos prontos para Windows (PowerShell) e Linux (curl), como os sistemas instalados conversam com o painel. Toda chamada leva o token da instalação: <code>Authorization: Bearer TOKEN</code> (ou <code>?access_token=TOKEN</code>).</p>
+<div class="tabela"><table>
+<thead><tr><th>Chamada</th><th>Para quê</th></tr></thead>
+<tbody>
+<tr><td><code>GET /api/v1/equipamento</code></td><td>Dados da instalação, licenças e última versão.</td></tr>
+<tr><td><code>GET /api/v1/equipamento/versao?atual=1.0.0</code></td><td>Diz se há atualização disponível e qual é.</td></tr>
+<tr><td><code>GET /api/v1/equipamento/licenca</code></td><td>Licenças da instalação.</td></tr>
+<tr><td><code>POST /api/v1/equipamento/sinal</code></td><td>Envia sinal: <code>{"versao":"1.4.0","evento":"heartbeat","mensagem":"OK"}</code>. Eventos: heartbeat, inicio, atualizado, erro.</td></tr>
+<tr><td><code>GET /assets/ID?download</code></td><td>Baixa o arquivo da versão. Aceita download retomável e devolve o SHA-256 no cabeçalho <code>X-Checksum-SHA256</code>.</td></tr>
+<tr><td>Compatíveis com o painel antigo</td><td><code>GET /items/versoes</code>, <code>GET /items/licencas</code>, <code>GET /items/instalacoes</code>, <code>POST /items/checkins</code>.</td></tr>
+</tbody></table></div>
+<p>Problemas comuns:</p>
+<ul>
+  <li><b>401:</b> token errado ou bloqueado.</li>
+  <li><b>403:</b> instalação suspensa/cancelada, arquivo não liberado ou código de instalação que não pertence ao token.</li>
+  <li><b>Versão não aparece:</b> confira se está Publicada, no canal certo e com o código de produto certo.</li>
+</ul>
+<p>Limite: 100 chamadas por segundo.</p>
+
+<h3 id="configuracoes">Configurações</h3>
+<p>Cada aba de <span class="ui">Configurações</span>:</p>
+
+<h4 id="cfg-conta">Minha conta</h4>
+<p>Troque o seu nome. O e-mail (login) só o administrador muda, em Equipe.</p>
+
+<h4 id="cfg-seguranca">Senha e 2FA</h4>
+<ul>
+  <li><b>Trocar senha:</b> senha atual, nova (mínimo 8 caracteres) e repetição. Os outros aparelhos são desconectados.</li>
+  <li><b>Verificação em duas etapas (2FA):</b>
+    <ol>
+      <li>Toque em <span class="ui">Ativar 2FA</span>.</li>
+      <li>Leia o QR Code com o Google Authenticator, Microsoft Authenticator ou similar (ou digite a chave manual).</li>
+      <li>Digite o código de 6 dígitos e toque em <span class="ui">Ativar</span>.</li>
+    </ol>
+    A partir daí, o login pede o código. Para desativar, digite sua senha. Se o código não for aceito, confira se o horário do celular está automático.</li>
+</ul>
+
+<h4 id="cfg-alertas">Alertas</h4>
+<p>Seus canais e escolhas e, para administradores, as regras gerais e o e-mail de avisos. Veja a <a href="#alertas">parte 8</a>.</p>
+
+<h4 id="cfg-empresa">Empresa (administradores)</h4>
+<ul>
+  <li><b>Nome da empresa:</b> aparece nos e-mails para clientes e na prévia dos posts.</li>
+  <li><b>CNPJ</b>.</li>
+  <li><b>WhatsApp:</b> usado no botão dos e-mails para clientes e nos modelos de legenda.</li>
+  <li><b>E-mail:</b> recebe as respostas dos clientes aos e-mails de chamados.</li>
+  <li><b>Chave Pix:</b> vai junto na mensagem de cobrança quando não há fatura do Asaas.</li>
+  <li><b>Mensagem de cobrança no WhatsApp:</b> veja <a href="#msg-cobranca">os campos</a>.</li>
+</ul>
+
+<h4 id="cfg-chamados">Chamados (administradores)</h4>
+<ul>
+  <li><b>Indicadores:</b> fora do prazo agora, vencem em até 4 horas, resolvidos em 30 dias, % no prazo e tempo médio.</li>
+  <li><b>Prazo de atendimento</b> de cada prioridade, em horas (1 a 1440).</li>
+  <li><b>E-mails para o cliente:</b> ligar ou desligar o aviso de abertura e o aviso de resolução.</li>
+</ul>
+
+<h4 id="cfg-asaas">Asaas (administradores)</h4>
+<p>Veja <a href="#asaas-config">Configurar o Asaas</a>.</p>
+
+<h4 id="cfg-backup">Backup (administradores)</h4>
+<p><span class="ui">Baixar backup completo</span> baixa um arquivo JSON com todos os cadastros (clientes, instalações, licenças, versões, chamados, cobranças, contatos, arquivos, configurações, campanhas, posts, depoimentos, tarefas e a lista da equipe), <b>sem senhas nem tokens</b>. Os arquivos enviados ficam na hospedagem e entram no backup do hPanel; deixe os backups automáticos ligados em <b>hPanel → Sites → painel.neonsistemas.com → Backups</b>.</p>
+
+<h4 id="cfg-aparencia">Aparência</h4>
+<p>Tema <b>Escuro</b> ou <b>Claro</b>, salvo por aparelho. Também dá para trocar pelo sol/lua do topo.</p>
+</section>
+
+<!-- ============================================================ -->
+<section class="parte" id="automatico">
+<h2><span class="n">12</span>Tudo o que o sistema faz sozinho</h2>
+<p class="intro">Rotinas automáticas, com a frequência de cada uma. Os horários são de Brasília.</p>
+<div class="tabela"><table>
+<thead><tr><th>Quando</th><th>O que acontece</th></tr></thead>
+<tbody>
+<tr><td>Na hora</td><td>
+  <ul>
+    <li>Alertas de chamado novo, urgente e passado para alguém.</li>
+    <li>E-mail de abertura e de resolução para o cliente.</li>
+    <li>Prazo (SLA) calculado ao abrir ou mudar a prioridade.</li>
+    <li>Mudanças de cobrança enviadas ao Asaas.</li>
+    <li>Baixa do pagamento quando o Asaas avisa.</li>
+    <li>Atualização da versão, do IP e do último sinal quando o equipamento envia sinal.</li>
+  </ul></td></tr>
+<tr><td>A cada 2 minutos</td><td>Publica os posts agendados cujo horário chegou; tenta de novo os que deram erro (até 3 vezes, de 15 em 15 min).</td></tr>
+<tr><td>A cada 3 minutos</td><td>Com o Asaas ligado e a emissão automática ativa, cria o boleto/Pix das cobranças novas.</td></tr>
+<tr><td>A cada 5 minutos</td><td>
+  <ul>
+    <li>Confere e envia os alertas: equipamento sem sinal e de volta, chamados fora do prazo, licenças vencendo, cobranças atrasadas, lembretes da agenda e o resumo do dia (uma vez por dia).</li>
+    <li>Apaga o histórico de controle de alertas com mais de 120 dias e o registro de envios com mais de 180 dias.</li>
+  </ul></td></tr>
+<tr><td>A cada 15 minutos</td><td>
+  <ul>
+    <li>Cobranças vencidas viram Atrasado.</li>
+    <li>Licenças vencidas viram Vencida.</li>
+    <li>Gera as mensalidades do mês.</li>
+    <li>Apaga sinais com mais de 180 dias e envios de arquivo que ficaram pela metade.</li>
+  </ul></td></tr>
+<tr><td>Nos horários das tarefas</td><td>Tarefas criadas por você em Robôs e tarefas: posts com IA, biblioteca e lembrete de cobranças no Telegram.</td></tr>
+</tbody></table></div>
+<p>Nenhuma rotina roda em dobro, mesmo com os dois endereços no ar.</p>
+</section>
+
+<!-- ============================================================ -->
+<section class="parte" id="tecnico">
+<h2><span class="n">13</span>Administração técnica</h2>
+<p class="intro">Para quem mantém o servidor. O uso diário não precisa disso.</p>
+<ul>
+  <li><b>Onde roda:</b> Hostinger, aplicativo Node.js 22 (Express), arquivo de entrada <code>server.js</code>. Banco MySQL <code>u277642544_painel</code>, compartilhado pelos dois endereços. Os arquivos ficam em <code>…/domains/painel.neonsistemas.com/storage</code>, fora do <code>public_html</code>, e não somem em novas publicações.</li>
+  <li><b>Código:</b> GitHub <code>araujojp/nitec</code>, pasta <code>painel-app/</code>.</li>
+  <li><b>Variáveis do servidor</b> (hPanel → Sites → domínio → Node.js): <code>DB_HOST</code>, <code>DB_PORT</code>, <code>DB_DATABASE</code>, <code>DB_USER</code>, <code>DB_PASSWORD</code>, <code>SECRET</code> (segredo das sessões), <code>ADMIN_EMAIL</code>/<code>ADMIN_PASSWORD</code> (só criam o primeiro administrador), <code>PUBLIC_URL</code> (diferente em cada endereço), <code>STORAGE_DIR</code>, <code>MAX_UPLOAD_MB</code> e <code>CRON_KEY</code>. Nunca coloque senhas em arquivos do código.</li>
+  <li><b>Senhas e chaves das integrações</b> (e-mail de avisos, Asaas, Telegram, IAs, redes) ficam no banco, na tabela de integrações, e nunca voltam para o navegador.</li>
+  <li><b>Publicar uma versão nova:</b> o roteiro <code>scripts/publicar.sh</code> faz tudo em sequência: roda os testes automáticos, baixa um backup do banco, envia o pacote, faz o build e confere a versão em <code>/saude</code>. Publique primeiro no gestao, teste, e depois no painel. As mudanças no banco são sempre aditivas, então a versão antiga continua funcionando no outro endereço durante o teste.</li>
+  <li><b>Conferir se está no ar:</b> <code>https://painel.neonsistemas.com/saude</code> responde com a versão.</li>
+</ul>
+</section>
+
+<!-- ============================================================ -->
+<section class="parte" id="problemas">
+<h2><span class="n">14</span>Problemas comuns</h2>
+
+<h4>Os e-mails não estão saindo</h4>
+<p>Veja em <span class="ui">Configurações → Alertas → Últimos alertas enviados</span> o motivo da falha.</p>
+<ul>
+  <li>O mais comum é a senha do <code>contato@</code> errada ou trocada na Hostinger: digite a senha atual e salve.</li>
+  <li>Use <span class="ui">Enviar teste</span> para confirmar.</li>
+  <li>Para os clientes, confira se o cadastro tem e-mail. A Conversa do chamado mostra "cliente sem e-mail" quando falta.</li>
+</ul>
+
+<h4>Não recebo notificação no celular</h4>
+<ul>
+  <li>Confira se ativou naquele aparelho e se o navegador permite notificações do site.</li>
+  <li>No iPhone, abra pelo ícone da Tela de Início.</li>
+  <li>Use <span class="ui">Testar</span>.</li>
+  <li>Confira se o alerta está ligado em "Celular" e se os alertas não estão desligados pelo administrador.</li>
+</ul>
+
+<h4>O Telegram não vincula</h4>
+<ul>
+  <li>O robô precisa estar configurado e conectado (<span class="ui">Conectar robô</span>), de preferência no endereço principal.</li>
+  <li>Se o vínculo automático não funcionar, use <b>Já sei o ID do meu chat</b>.</li>
+</ul>
+
+<h4>A cobrança não ficou paga sozinha (Asaas)</h4>
+<ul>
+  <li>Confira se o aviso de pagamento foi configurado (<span class="ui">Configurações → Asaas</span>: "O Asaas avisa este painel quando o cliente paga").</li>
+  <li>Na cobrança, toque em <span class="ui">Conferir</span> para buscar o estado atual no Asaas.</li>
+</ul>
+
+<h4>Erro "preencha o CNPJ ou CPF" ao gerar boleto/Pix</h4>
+<p>Complete o CNPJ/CPF no cadastro do cliente e toque em <span class="ui">Tentar de novo</span>.</p>
+
+<h4>A mensalidade do mês não foi criada</h4>
+<p>Confira na licença:</p>
+<ul>
+  <li>Status Ativa.</li>
+  <li>"Gerar mensalidade todo mês" ligado.</li>
+  <li>Valor mensal preenchido.</li>
+  <li>Instalação com cliente.</li>
+  <li>Início anterior ao fim do mês.</li>
+</ul>
+<p>O sistema confere a cada 15 minutos. Um administrador pode forçar abrindo <span class="ui">Robôs e tarefas → Rotinas da gestão → Rodar agora</span>.</p>
+
+<h4>O equipamento aparece offline</h4>
+<ul>
+  <li>Online significa sinal nas últimas 2 horas.</li>
+  <li>Veja a aba Sinais da instalação e confira se o token está ativo e se o código da instalação no equipamento é o mesmo do painel.</li>
+</ul>
+
+<h4>Um post ficou com Erro</h4>
+<ul>
+  <li>Abra o post e veja o resultado por rede.</li>
+  <li>Na maioria das vezes é token vencido ou falta de permissão na rede: teste a conexão em Integrações.</li>
+  <li>O sistema tenta de novo até 3 vezes. Você também pode tocar em <span class="ui">Publicar agora</span>.</li>
+</ul>
+
+<h4>Os robôs atrasam</h4>
+<p>Crie o <a href="#cron-externo">cron externo</a> no hPanel.</p>
+
+<h4>Esqueci a senha</h4>
+<p>Peça a um administrador para definir uma senha nova em <span class="ui">Equipe</span>. Se ninguém conseguir entrar, use a conta de administrador de emergência guardada com a Neon.</p>
+
+<hr>
+<footer>Manual do Neon Gestão · versão do sistema 1.5.1 · Neon Sistemas, novembro de 2026.</footer>
+</section>
+</main>
+</div>
+
+<script>
+(function () {
+  var secoes = document.querySelectorAll('main section.parte');
+  function montar(alvo) {
+    if (!alvo) return;
+    secoes.forEach(function (s) {
+      var h2 = s.querySelector('h2'); if (!h2) return;
+      var li = document.createElement('li');
+      var a = document.createElement('a'); a.href = '#' + s.id; a.textContent = h2.textContent.replace(/^\d+/, function (n) { return n + '. '; });
+      li.appendChild(a);
+      var subs = s.querySelectorAll('h3[id]');
+      if (subs.length) {
+        var ol = document.createElement('ol');
+        subs.forEach(function (h3) { var l = document.createElement('li'); var x = document.createElement('a'); x.href = '#' + h3.id; x.textContent = h3.textContent; l.appendChild(x); ol.appendChild(l); });
+        li.appendChild(ol);
+      }
+      alvo.appendChild(li);
+    });
+  }
+  montar(document.getElementById('toc-lista'));
+  montar(document.getElementById('toc-lista-m'));
+  document.querySelectorAll('#toc-lista-m a').forEach(function (a) { a.addEventListener('click', function () { var d = document.querySelector('details.toc-m'); if (d) d.open = false; }); });
+})();
+</script>
